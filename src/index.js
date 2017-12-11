@@ -20,7 +20,7 @@ const apiConfig = {
   server: pathParams.appServer || defaultApiConfig.server,
 };
 
-const redirectUri = pathParams.redirectUri;
+const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
 
 const phone = createPhone({

@@ -15,12 +15,11 @@ if (fs.existsSync(apiConfigFile)) {
     appKey: process.env.API_KEY,
     appSecret: process.env.API_SECRET,
     server: process.env.API_SERVER,
+    redirectUri: process.env.REDIRECT_URI,
   };
 }
 const version = packageConfig.version;
 
-const hostingUrl =
-  process.env.HOSTING_URL || 'https://ringcentral.github.io/ringcentral-web-widget';
 const config = {
   entry: {
     index: './src/index.js',
@@ -39,14 +38,12 @@ const config = {
       output: {
         comments: false,
       },
-      exclude: /[Aa]dapter/
     }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
         API_CONFIG: JSON.stringify(apiConfig),
         APP_VERSION: JSON.stringify(version),
-        HOSTING_URL: JSON.stringify(hostingUrl),
       },
     }),
     new CopyWebpackPlugin([
