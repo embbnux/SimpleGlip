@@ -1,0 +1,36 @@
+@import 'ringcentral-widgets/lib/commonStyles/full-size';
+@import 'ringcentral-widgets/lib/commonStyles/fonts';
+@import 'ringcentral-widgets/lib/commonStyles/colors';
+
+.root {
+  @include full-size;
+  @include primary-font;
+  text-align: center;
+  padding: 60px 20px 0 20px;
+}
+
+.avatar {
+  text-align: center;
+  margin-bottom: 20px;
+
+  img {
+    height: 70px;
+    border-radius: 5px;
+  }
+}
+
+.name {
+  font-size: 15px;
+  color: $night;
+}
+
+.email {
+  font-size: 13px;
+  color: $ash;
+}
+
+.welcome {
+  font-size: 25px;
+  color: #2F2F2F;
+  margin-top: 20%;
+}

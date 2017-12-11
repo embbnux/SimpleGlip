@@ -1,0 +1,37 @@
+@import 'ringcentral-widgets/lib/commonStyles/full-size';
+@import 'ringcentral-widgets/lib/commonStyles/colors.scss';
+
+.side {
+  @include full-size;
+  background: $primary-color;
+  position: relative;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-top: 50px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.menus {
+  margin-top: 35px;
+  text-align: center;
+}
+
+.setting {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  margin-left: -15px;
+}

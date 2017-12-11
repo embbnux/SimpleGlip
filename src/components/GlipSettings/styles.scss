@@ -1,0 +1,34 @@
+@import 'ringcentral-widgets/lib/commonStyles/full-size';
+@import 'ringcentral-widgets/lib/commonStyles/colors';
+@import 'ringcentral-widgets/lib/commonStyles/fonts';
+@import 'ringcentral-widgets/lib/commonStyles/buttons';
+
+.root {
+  @include full-size;
+  @include primary-font;
+  position: relative;
+}
+
+.button {
+  display: block;
+  margin-top: 20px;
+  @include big-submit-button;
+
+  &.disabled {
+    @include big-submit-button-disabled
+  }
+}
+
+.logoutSection {
+  margin-top: 20%;
+  max-width: 200px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.welcome {
+  font-size: 25px;
+  color: #2F2F2F;
+  margin-top: 20%;
+  text-align: center;
+}

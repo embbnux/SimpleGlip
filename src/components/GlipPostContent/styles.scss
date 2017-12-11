@@ -1,0 +1,23 @@
+@import 'ringcentral-widgets/lib/commonStyles/colors.scss';
+
+.root {
+  margin-top: 0;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 80%;
+  background: $egg;
+  word-break: break-word;
+  position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: -10px;
+    height: 0;
+    width: 0;
+    border-style: solid;
+    border-width: 5px;
+    border-color: transparent $egg transparent transparent;
+  }
+}
