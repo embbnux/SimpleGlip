@@ -1,4 +1,4 @@
-# [Simple Glip](https://embbnux.github.io/ringcentral-web-widget/)
+# [Simple Glip](https://embbnux.github.io/SimpleGlip/)
 
 ## Introduction
 
@@ -18,7 +18,7 @@ Built with:
 
 ## Visit Online
 
-Visit [website](https://embbnux.github.io/ringcentral-web-widget/) in github pages.
+Visit [website](https://embbnux.github.io/SimpleGlip/) in github pages.
 
 ## How to develop based on this app
 
