@@ -15,7 +15,7 @@ import actionTypes from './actionTypes';
 const glipGroupRegExp = /glip\/groups$/;
 const subscriptionFilter = '/glip/groups';
 
-const DEFAULT_PER_PAGE = 10;
+const DEFAULT_PER_PAGE = 20;
 const DEFAULT_TTL = 30 * 60 * 1000;
 const DEFAULT_RETRY = 62 * 1000;
 
@@ -203,8 +203,10 @@ export default class GlipGroups extends Pollable {
         if (isBlank(searchFilter)) {
           return allGroups;
         }
+        const filterString = searchFilter.toLowerCase();
         return allGroups.filter((group) => {
-          if (group.name && group.name.indexOf(searchFilter) > -1) {
+          const name = group.name && group.name.toLowerCase();
+          if (name && name.indexOf(filterString) > -1) {
             return true;
           }
           return false;
