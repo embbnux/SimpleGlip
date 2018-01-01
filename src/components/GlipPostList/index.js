@@ -31,6 +31,7 @@ export default class GlipPostList extends Component {
       className,
       dateTimeFormatter,
       showName,
+      atRender,
     } = this.props;
     let lastDate;
     return (
@@ -54,6 +55,7 @@ export default class GlipPostList extends Component {
                 key={post.id}
                 creationTime={time}
                 showName={showName}
+                atRender={atRender}
               />
             );
           })
@@ -69,6 +71,7 @@ GlipPostList.propTypes = {
   groupId: PropTypes.string,
   showName: PropTypes.bool,
   dateTimeFormatter: PropTypes.func.isRequired,
+  atRender: PropTypes.func,
 };
 
 GlipPostList.defaultProps = {
@@ -76,4 +79,5 @@ GlipPostList.defaultProps = {
   posts: [],
   showName: true,
   groupId: undefined,
+  atRender: undefined,
 };

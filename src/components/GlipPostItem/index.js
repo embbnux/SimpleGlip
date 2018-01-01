@@ -86,6 +86,7 @@ export default function GlipPost({
   className,
   creationTime,
   showName,
+  atRender,
 }) {
   return (
     <div
@@ -105,7 +106,7 @@ export default function GlipPost({
           <PostName creator={post.creator} showName={showName} />
           <PostStatus sendStatus={post.sendStatus} />
         </div>
-        <GlipPostContent post={post} />
+        <GlipPostContent post={post} atRender={atRender} />
       </div>
     </div>
   );
@@ -116,6 +117,7 @@ GlipPost.propTypes = {
   post: PropTypes.object,
   creationTime: PropTypes.string,
   showName: PropTypes.bool,
+  atRender: PropTypes.func,
 };
 
 GlipPost.defaultProps = {
@@ -123,4 +125,5 @@ GlipPost.defaultProps = {
   creationTime: undefined,
   post: {},
   showName: true,
+  atRender: undefined,
 };
