@@ -51,6 +51,7 @@ function formatGroup(group, personsMap, postsMap = {}) {
     detailMembers,
     avatars,
     name,
+    updatedTime: (new Date(group.lastModifiedTime)).getTime(),
   };
   const latestPost =
     postsMap[group.id] && postsMap[group.id][0];
@@ -59,6 +60,10 @@ function formatGroup(group, personsMap, postsMap = {}) {
       ...latestPost,
       creator: personsMap[latestPost.creatorId],
     };
+    const postCreationTime = (new Date(latestPost.creationTime)).getTime();
+    if (postCreationTime > newGroup.updatedTime) {
+      newGroup.updatedTime = postCreationTime;
+    }
   }
   return newGroup;
 }
@@ -222,8 +227,15 @@ export default class GlipGroups extends Pollable {
       () => (this._glipPosts && this._glipPosts.postsMap) || {},
       (filteredGroups, pageNumber, personsMap, postsMap) => {
         const count = pageNumber * this._perPage;
-        const items = filteredGroups.slice(0, count);
-        return items.map(group => formatGroup(group, personsMap, postsMap));
+        const sortedGroups =
+          filteredGroups.map(group => formatGroup(group, personsMap, postsMap))
+                        .sort((a, b) => {
+                          if (a.updatedTime === b.updatedTime) return 0;
+                          return a.updatedTime > b.updatedTime ?
+                            -1 :
+                            1;
+                        });
+        return sortedGroups.slice(0, count);
       },
     );
 

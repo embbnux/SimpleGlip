@@ -30,6 +30,7 @@ export default class GlipChatPage extends Component {
       textValue,
       dateTimeFormatter,
       showSpinner,
+      atRender,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -45,6 +46,7 @@ export default class GlipChatPage extends Component {
         <div className={styles.content}>
           <GlipPostList
             posts={posts}
+            atRender={atRender}
             groupId={group.id}
             showName={group.members && (group.members.length > 2)}
             dateTimeFormatter={dateTimeFormatter}
@@ -75,6 +77,7 @@ GlipChatPage.propTypes = {
   updateText: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   dateTimeFormatter: PropTypes.func.isRequired,
+  atRender: PropTypes.func,
 };
 
 GlipChatPage.defaultProps = {
@@ -84,4 +87,5 @@ GlipChatPage.defaultProps = {
   posts: [],
   textValue: '',
   showSpinner: false,
+  atRender: undefined,
 };

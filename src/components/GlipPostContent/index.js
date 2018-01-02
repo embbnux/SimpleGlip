@@ -6,7 +6,7 @@ import Markdown from '../Markdown';
 
 import styles from './styles.scss';
 
-function PostContent({ post, className }) {
+function PostContent({ post, className, atRender }) {
   if (!post.text) {
     return (
       <div className={classnames(styles.root, className)}>
@@ -16,7 +16,7 @@ function PostContent({ post, className }) {
   }
   return (
     <div className={classnames(styles.root, className)}>
-      <Markdown text={post.text} />
+      <Markdown text={post.text} atRender={atRender} />
     </div>
   );
 }
@@ -24,10 +24,12 @@ function PostContent({ post, className }) {
 PostContent.propTypes = {
   post: PropTypes.object.isRequired,
   className: PropTypes.string,
+  atRender: PropTypes.func,
 };
 
 PostContent.defaultProps = {
   className: undefined,
+  atRender: undefined,
 };
 
 export default PostContent;

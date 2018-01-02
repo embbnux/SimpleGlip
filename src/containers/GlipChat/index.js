@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import withPhone from 'ringcentral-widgets/lib/withPhone';
 
@@ -26,7 +27,9 @@ function mapToFunctions(_, {
   phone: {
     glipGroups,
     glipPosts,
+    glipPersons,
     dateTimeFormat,
+    routerInteraction,
   },
   dateTimeFormatter = time =>
     dateTimeFormat.formatDateTime({ utcTimestamp: time }),
@@ -45,6 +48,24 @@ function mapToFunctions(_, {
         text,
         groupId: glipGroups.currentGroupId,
       });
+    },
+    atRender: ({ id, type }) => {
+      let name;
+      if (type === 'Team') {
+        name = glipGroups.currentGroup && glipGroups.currentGroup.name;
+      } else {
+        const person = glipPersons.personsMap[id];
+        name = (person && `${person.firstName} ${person.lastName}`) || id;
+      }
+      const onClickAtLink = (e) => {
+        e.preventDefault();
+        if (type === 'Person') {
+          routerInteraction.push(`/glip/persons/${id}`);
+        }
+      };
+      return (
+        <a href={`#${id}`} onClick={onClickAtLink}>{name}</a>
+      );
     },
     dateTimeFormatter,
   };
