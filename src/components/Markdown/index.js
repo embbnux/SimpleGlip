@@ -5,21 +5,6 @@ import ReactMarkdown from 'react-markdown';
 
 import styles from './styles.scss';
 
-// const renderer = new marked.Renderer();
-// renderer.link = (href, title, text) =>
-//   `<a target="_blank" href="${href}" title="${title}">${text}</a>`;
-// const defaultImageRender = renderer.image.bind(renderer);
-
-// marked.setOptions({
-//   gfm: true,
-//   tables: true,
-//   breaks: false,
-//   pedantic: false,
-//   sanitize: false,
-//   smartLists: true,
-//   smartypants: false,
-// });
-
 function ImageRender(props) {
   if (props.alt === ':Person' || props.alt === ':Team') {
     if (typeof props.atRender === 'function') {
@@ -65,18 +50,8 @@ function Markdown({
   text,
   atRender,
 }) {
-  // renderer.image = (href, title, text) => {
-  //   if (text === ':Person' || text === ':Team') {
-  //     if (typeof atRender === 'function') {
-  //       return atRender({ id: href, type: text });
-  //     }
-  //     return `<a href="#${href}">@${href}</a>`;
-  //   }
-  //   return defaultImageRender(href, title, text);
-  // };
-  /* eslint-disable react/no-danger */
   const renderers = {
-    image: (props) => <ImageRender {...props} atRender={atRender} />,
+    image: props => <ImageRender {...props} atRender={atRender} />,
     link: LinkRender,
   };
   return (
