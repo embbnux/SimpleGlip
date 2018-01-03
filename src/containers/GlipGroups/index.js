@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import withPhone from 'ringcentral-widgets/lib/withPhone';
 
@@ -19,6 +20,7 @@ function mapToFunctions(_, {
   phone: {
     routerInteraction,
     glipGroups,
+    glipPersons,
   }
 }) {
   return {
@@ -32,6 +34,16 @@ function mapToFunctions(_, {
     },
     onNextPage: (pageNumber) => {
       glipGroups.updateFilter({ pageNumber });
+    },
+    atRender: ({ id, type }) => {
+      let name;
+      if (type === 'Team') {
+        name = glipGroups.currentGroup && glipGroups.currentGroup.name;
+      } else {
+        const person = glipPersons.personsMap[id];
+        name = (person && `${person.firstName} ${person.lastName}`) || id;
+      }
+      return `@${name}`;
     },
   };
 }

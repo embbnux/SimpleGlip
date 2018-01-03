@@ -1,19 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import defaultAvatar from '../../assets/images/default_avatar.png';
 import styles from './styles.scss';
 
 function GroupAvatar({ avatars, alt, className }) {
   let image;
-  if (avatars.length === 1) {
-    image = (<img className={styles.big} src={avatars[0]} alt={alt} />);
+  if (avatars.length <= 1) {
+    image =
+      (<img className={styles.big} src={avatars[0] || defaultAvatar} alt={alt} />);
   } else {
     image = (
       <div className={styles.images}>
         {
           avatars.slice(0, 9).map(
             (avatar, index) =>
-              <img key={`${avatar}${index}`} className={styles.small} src={avatar} alt={`${alt}${index}`} />
+              <img
+                key={`${avatar}${index}`}
+                className={styles.small}
+                src={avatar || defaultAvatar}
+                alt={`${alt}${index}`}
+              />
           )
         }
       </div>

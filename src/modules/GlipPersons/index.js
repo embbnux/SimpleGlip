@@ -125,7 +125,7 @@ export default class GlipPersons extends RcModule {
     }
     const lastIds = newPersonIds.slice(MaximumBatchGetPersons);
     if (lastIds.length > 0) {
-      await sleep(500);
+      await sleep(300);
       await this.loadPersons(lastIds);
     }
   }

@@ -50,6 +50,7 @@ export default class GlipGroupList extends Component {
       className,
       currentGroupId,
       goToGroup,
+      atRender,
     } = this.props;
     return (
       <div
@@ -67,6 +68,7 @@ export default class GlipGroupList extends Component {
               key={group.id}
               active={group.id === currentGroupId}
               goToGroup={() => { goToGroup(group.id); }}
+              atRender={atRender}
             />
           ))
         }
@@ -82,6 +84,7 @@ GlipGroupList.propTypes = {
   currentGroupId: PropTypes.string,
   currentPage: PropTypes.number,
   onNextPage: PropTypes.func,
+  atRender: PropTypes.func,
 };
 
 GlipGroupList.defaultProps = {
@@ -90,4 +93,5 @@ GlipGroupList.defaultProps = {
   currentGroupId: undefined,
   currentPage: 1,
   onNextPage: undefined,
+  atRender: undefined,
 };

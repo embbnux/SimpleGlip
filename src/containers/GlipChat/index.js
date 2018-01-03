@@ -64,7 +64,7 @@ function mapToFunctions(_, {
         }
       };
       return (
-        <a href={`#${id}`} onClick={onClickAtLink}>{name}</a>
+        <a href={`#${id}`} onClick={onClickAtLink}>@{name}</a>
       );
     },
     dateTimeFormatter,

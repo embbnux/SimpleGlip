@@ -37,6 +37,7 @@ export default class GlipGroupsPanel extends Component {
       showSpinner,
       currentPage,
       onNextPage,
+      atRender,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -56,6 +57,7 @@ export default class GlipGroupsPanel extends Component {
             currentGroupId={currentGroupId}
             onNextPage={onNextPage}
             currentPage={currentPage}
+            atRender={atRender}
           />
         </div>
         {spinner}
@@ -74,6 +76,7 @@ GlipGroupsPanel.propTypes = {
   showSpinner: PropTypes.bool,
   currentPage: PropTypes.number,
   onNextPage: PropTypes.func,
+  atRender: PropTypes.func,
 };
 
 GlipGroupsPanel.defaultProps = {
@@ -84,4 +87,5 @@ GlipGroupsPanel.defaultProps = {
   showSpinner: false,
   currentPage: 1,
   onNextPage: undefined,
+  atRender: undefined,
 };
