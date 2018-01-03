@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import defaultAvatar from '../../assets/images/default_avatar.png';
 import status from '../../modules/GlipPosts/status';
 import styles from './styles.scss';
 
@@ -8,10 +9,12 @@ import GlipPostContent from '../GlipPostContent';
 
 function PostAvatar({ creator }) {
   if (!creator) {
-    return null;
+    return (
+      <img src={defaultAvatar} alt="default avatar" />
+    );
   }
   return (
-    <img src={creator.avatar} alt={creator.id} />
+    <img src={creator.avatar || defaultAvatar} alt={creator.id} />
   );
 }
 

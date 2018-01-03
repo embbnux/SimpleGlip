@@ -37,7 +37,9 @@ function formatGroup(group, personsMap, postsMap = {}) {
         ) {
           avatars.push(personsMap[memberId].avatar);
           if (isBlank(name)) {
-            groupNames.push(`${personsMap[memberId].firstName} ${personsMap[memberId].lastName}`);
+            groupNames.push(
+              `${personsMap[memberId].firstName || ''} ${personsMap[memberId].lastName || ''}`
+            );
           }
         }
       }
@@ -182,25 +184,6 @@ export default class GlipGroups extends Pollable {
     );
 
     this.addSelector(
-      'uniqueGroupMainMemberIds',
-      () => this.allGroups,
-      (groups) => {
-        const memberIds = [];
-        const memberIdsMap = {};
-        groups.forEach((group) => {
-          group.members.slice(0, 9).forEach((memberId) => {
-            if (memberIdsMap[memberId]) {
-              return;
-            }
-            memberIdsMap[memberId] = true;
-            memberIds.push(memberId);
-          });
-        });
-        return memberIds;
-      },
-    );
-
-    this.addSelector(
       'filteredGroups',
       () => this.allGroups,
       () => this.searchFilter,
@@ -284,7 +267,7 @@ export default class GlipGroups extends Pollable {
         type: this.actionTypes.initSuccess,
       });
       if (this._glipPersons) {
-        this._glipPersons.loadPersons(this.uniqueGroupMainMemberIds);
+        this._glipPersons.loadPersons(this.uniqueMemberIds);
       }
       if (this.currentGroupId && !this.currentGroup.id) {
         this.updateCurrentGroupId(this.groups[0] && this.groups[0].id);
@@ -347,7 +330,7 @@ export default class GlipGroups extends Pollable {
     ) {
       await this.fetchData();
       if (this._glipPersons) {
-        this._glipPersons.loadPersons(this.uniqueGroupMainMemberIds);
+        this._glipPersons.loadPersons(this.uniqueMemberIds);
       }
       this._preloadGroupPosts();
     }
@@ -355,12 +338,7 @@ export default class GlipGroups extends Pollable {
 
   _shouldFetch() {
     return (
-      (!this._tabManager || this._tabManager.active) &&
-      (
-        this._auth.isFreshLogin ||
-        !this.timestamp ||
-        Date.now() - this.timestamp > this.ttl
-      )
+      !this._tabManager || this._tabManager.active
     );
   }
 
@@ -394,7 +372,7 @@ export default class GlipGroups extends Pollable {
   async _preloadGroupPosts() {
     for (const group of this.groups) {
       if (this._glipPosts) {
-        await sleep(1000);
+        await sleep(800);
         await this._glipPosts.loadPosts(group.id);
       }
     }
@@ -515,10 +493,6 @@ export default class GlipGroups extends Pollable {
 
   get uniqueMemberIds() {
     return this._selectors.uniqueMemberIds();
-  }
-
-  get uniqueGroupMainMemberIds() {
-    return this._selectors.uniqueGroupMainMemberIds();
   }
 
   get status() {
