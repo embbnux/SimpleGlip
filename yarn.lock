@@ -5165,9 +5165,9 @@ rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1:
     form-data "^2.1.2"
     isomorphic-fetch "^2.2.1"
 
-ringcentral-integration@^0.7.26:
-  version "0.7.29"
-  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.29.tgz#a7ffbb26baca38023053dac6e5d4c1061889e43c"
+ringcentral-integration@^0.7.35:
+  version "0.7.35"
+  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.35.tgz#a1c77e50d63bd5a1789d3f164d78ba6c0a54707c"
   dependencies:
     file-loader "^0.11.2"
     json-mask "^0.3.8"
@@ -5188,9 +5188,9 @@ ringcentral-web-phone@^0.4.5:
   dependencies:
     sip.js "^0.7.8"
 
-ringcentral-widgets@^0.5.4:
-  version "0.5.4"
-  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.4.tgz#5018dc21bf538b4038ca73d3d14c28acc8aa2ddf"
+ringcentral-widgets@^0.5.10:
+  version "0.5.10"
+  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.10.tgz#cc7df454a9b1d69ec300c267f486feaf8f59c9c0"
   dependencies:
     animate.css "^3.5.2"
     classnames "^2.2.5"
@@ -5205,6 +5205,7 @@ ringcentral-widgets@^0.5.4:
     react-widgets "^4.1.1"
     react-widgets-moment "^4.0.4"
     through2 "^2.0.3"
+    uuid "^3.1.0"
 
 ringcentral@^3.1.3:
   version "3.1.3"
@@ -5984,6 +5985,10 @@ uuid@^3.0.0:
 uuid@^3.0.1:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
+
+uuid@^3.1.0:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
 
 validate-npm-package-license@^3.0.1:
   version "3.0.1"

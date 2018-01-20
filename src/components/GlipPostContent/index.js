@@ -2,21 +2,79 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
+import DownloadIcon from 'ringcentral-widgets/assets/images/Download.svg';
 import Markdown from '../Markdown';
 
 import styles from './styles.scss';
 
+const picExtensions = ['jpg', 'jpeg', 'gif', 'svg', 'png'];
+function isPicture(uri) {
+  if (!uri) {
+    return false;
+  }
+  let isPic = false;
+  picExtensions.forEach((ext) => {
+    if (uri.indexOf(`.${ext}?`) > 0) {
+      isPic = true;
+    }
+  });
+  return isPic;
+}
+
+function Attachments({ attachments }) {
+  const attachmentFiles = attachments.map((attachment) => {
+    if (isPicture(attachment.contentUri)) {
+      return (
+        <img
+          key={attachment.name}
+          src={attachment.contentUri}
+          alt={attachment.name}
+          className={styles.attachmentImg}
+        />
+      );
+    }
+    return (
+      <a
+        key={attachment.name}
+        download
+        href={attachment.contentUri}
+        className={styles.attachmentFile}
+      >
+        {attachment.name}
+        <span title="Download" className={styles.downloadIcon}>
+          <DownloadIcon width="18" height="18" />
+        </span>
+      </a>
+    );
+  });
+  return (
+    <div className={styles.attachments}>
+      {attachmentFiles}
+    </div>
+  );
+}
+
+Attachments.propTypes = {
+  attachments: PropTypes.array.isRequired,
+};
+
 function PostContent({ post, className, atRender }) {
-  if (!post.text) {
+  if (!post.text && (!post.attachments || post.attachments.length === 0)) {
     return (
       <div className={classnames(styles.root, className)}>
         Unsupported message
       </div>
     );
   }
+  const textContent = post.text ?
+    (<Markdown text={post.text} atRender={atRender} />) : null;
+  const attachments = post.attachments ? (<Attachments attachments={post.attachments} />) : null;
   return (
     <div className={classnames(styles.root, className)}>
-      <Markdown text={post.text} atRender={atRender} />
+      <div className={styles.content}>
+        {textContent}
+        {attachments}
+      </div>
     </div>
   );
 }
