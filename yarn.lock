@@ -4759,6 +4759,10 @@ react-dom@^16.0.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+react-emojione@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-emojione/-/react-emojione-5.0.0.tgz#230fef5e85aa9e1183b9506a15fff37d59ef472f"
+
 react-markdown@^3.1.4:
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/react-markdown/-/react-markdown-3.1.4.tgz#4f37aa5ac4f78f64f93b41b12ad0c08e92eb1680"
