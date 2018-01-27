@@ -189,6 +189,26 @@ export default class GlipPosts extends RcModule {
     }
   }
 
+  async sendFile({ fileName, groupId, rawFile }) {
+    try {
+      const platform = this._client.service.platform();
+      const body = rawFile;
+      const response = await platform.post(
+        '/glip/files',
+        body,
+        { groupId, name: fileName },
+        {
+          headers: {
+            'Content-Type': 'application/octet-stream',
+          }
+        }
+      );
+      console.log(response.json());
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   updatePostInput({ text, groupId }) {
     this.store.dispatch({
       type: this.actionTypes.updatePostInput,

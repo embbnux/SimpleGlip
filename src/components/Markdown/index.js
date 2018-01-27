@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ReactMarkdown from 'react-markdown';
+import Emojify from 'react-emojione';
+import emojiones from '../../assets/images/emojione.png';
 
 import styles from './styles.scss';
 
@@ -29,7 +31,7 @@ ImageRender.defaultProps = {
 
 function LinkRender(props) {
   return (
-    <a target="_blank" href={props.href} title={props.title}>
+    <a target="_blank" rel="noopener noreferrer" href={props.href} title={props.title}>
       {props.children}
     </a>
   );
@@ -45,6 +47,24 @@ LinkRender.defaultProps = {
   title: undefined,
 };
 
+function TextRender(props) {
+  return (
+    <p>
+      <Emojify
+        style={{
+          backgroundImage: `url("${emojiones}")`,
+        }}
+      >
+        {props.children}
+      </Emojify>
+    </p>
+  );
+}
+
+TextRender.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 function Markdown({
   className,
   text,
@@ -53,6 +73,7 @@ function Markdown({
   const renderers = {
     image: props => <ImageRender {...props} atRender={atRender} />,
     link: LinkRender,
+    paragraph: TextRender,
   };
   return (
     <div className={classnames(styles.root, className)}>
