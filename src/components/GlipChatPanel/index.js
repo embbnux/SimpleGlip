@@ -31,6 +31,7 @@ export default class GlipChatPage extends Component {
       dateTimeFormatter,
       showSpinner,
       atRender,
+      uploadFile,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -58,6 +59,7 @@ export default class GlipChatPage extends Component {
             onTextChange={updateText}
             groupId={group.id}
             onSubmit={createPost}
+            onUploadFile={uploadFile}
           />
         </div>
         {spinner}
@@ -76,6 +78,7 @@ GlipChatPage.propTypes = {
   loadGroup: PropTypes.func.isRequired,
   updateText: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
+  uploadFile: PropTypes.func.isRequired,
   dateTimeFormatter: PropTypes.func.isRequired,
   atRender: PropTypes.func,
 };

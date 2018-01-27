@@ -49,6 +49,11 @@ function mapToFunctions(_, {
         groupId: glipGroups.currentGroupId,
       });
     },
+    uploadFile: (fileName, rawFile) => glipPosts.sendFile({
+        fileName,
+        rawFile,
+        groupId: glipGroups.currentGroupId,
+      }),
     atRender: ({ id, type }) => {
       let name;
       if (type === 'Team') {

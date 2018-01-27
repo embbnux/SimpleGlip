@@ -31,7 +31,7 @@ ImageRender.defaultProps = {
 
 function LinkRender(props) {
   return (
-    <a target="_blank" href={props.href} title={props.title}>
+    <a target="_blank" rel="noopener noreferrer" href={props.href} title={props.title}>
       {props.children}
     </a>
   );
