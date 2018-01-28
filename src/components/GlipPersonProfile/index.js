@@ -1,40 +1,98 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
+import Button from 'ringcentral-widgets/components/Button';
 
+import defaultAvatar from '../../assets/images/default_avatar.png';
 import styles from './styles.scss';
 
-export default function PersonProfile({
-  className,
-  person,
-  isMe,
-  showSpinner,
-}) {
-  const spinner = showSpinner ? (<SpinnerOverlay />) : null;
-  return (
-    <div
-      className={classnames(
-        styles.root,
-        className,
-      )}
-    >
-      <div className={styles.avatar}>
-        <img src={person.avatar} alt={person.id} />
+export default class PersonProfile extends Component {
+  constructor() {
+    super();
+    this.state = {
+      buttonDisabled: false,
+    };
+
+    this.onStartChat = async () => {
+      this.setState({
+        buttonDisabled: true,
+      });
+      await this.props.startChat(this.props.person.id);
+      if (!this._mounted) {
+        return;
+      }
+      this.setState({
+        buttonDisabled: false,
+      });
+    };
+  }
+
+  componentDidMount() {
+    this._mounted = true;
+    if (typeof this.props.onVisit === 'function') {
+      this.props.onVisit(this.props.person && this.props.person.id);
+    }
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
+  render() {
+    const {
+      className,
+      person,
+      isMe,
+      showSpinner,
+    } = this.props;
+
+    if (!person) {
+      return null;
+    }
+
+    const spinner = showSpinner ? (<SpinnerOverlay />) : null;
+    return (
+      <div
+        className={classnames(
+          styles.root,
+          className,
+        )}
+      >
+        <div className={styles.avatar}>
+          <img src={person.avatar || defaultAvatar} alt={person.id} />
+        </div>
+        <div className={styles.name}>
+          {person.firstName} {person.lastName}
+        </div>
+        <div className={styles.email}>
+          {person.email}
+        </div>
+        {
+          isMe && (
+            <div className={styles.welcome}>
+              Welcome Back
+            </div>
+          )
+        }
+        {
+          !isMe && (
+            <div className={styles.welcome}>
+              <Button
+                className={styles.chatButton}
+                onClick={this.onStartChat}
+                disabled={this.state.buttonDisabled}
+              >
+                Chat
+              </Button>
+            </div>
+          )
+        }
+        {spinner}
       </div>
-      <div className={styles.name}>
-        {person.firstName} {person.lastName}
-      </div>
-      <div className={styles.email}>
-        {person.email}
-      </div>
-      <div className={styles.welcome}>
-        {isMe ? 'Welcome Back' : null}
-      </div>
-      {spinner}
-    </div>
-  );
+    );
+  }
 }
 
 PersonProfile.propTypes = {
@@ -42,6 +100,8 @@ PersonProfile.propTypes = {
   person: PropTypes.object,
   isMe: PropTypes.bool,
   showSpinner: PropTypes.bool,
+  onVisit: PropTypes.func,
+  startChat: PropTypes.func.isRequired
 };
 
 PersonProfile.defaultProps = {
@@ -49,4 +109,5 @@ PersonProfile.defaultProps = {
   person: {},
   isMe: false,
   showSpinner: false,
+  onVisit: undefined,
 };

@@ -24,35 +24,20 @@ function formatGroup(group, personsMap, postsMap = {}) {
     return {};
   }
   const detailMembers = [];
-  const avatars = [];
   let name = group.name;
   if (group.members) {
-    const groupNames = [];
     group.members.forEach((memberId) => {
       if (personsMap[memberId]) {
-        detailMembers.push(personsMap[memberId]);
-        if (
-          !(personsMap.me && personsMap.me.id === memberId) ||
-          group.members.length === 1
-        ) {
-          avatars.push(personsMap[memberId].avatar);
-          if (isBlank(name)) {
-            groupNames.push(
-              `${personsMap[memberId].firstName || ''} ${personsMap[memberId].lastName || ''}`
-            );
-          }
-        }
+        detailMembers.push({
+          ...personsMap[memberId],
+          isMe: personsMap.me && personsMap.me.id === memberId,
+        });
       }
     });
-    if (isBlank(name)) {
-      name = groupNames.join(',');
-    }
   }
   const newGroup = {
     ...group,
     detailMembers,
-    avatars,
-    name,
     updatedTime: (new Date(group.lastModifiedTime)).getTime(),
   };
   const latestPost =
@@ -328,11 +313,25 @@ export default class GlipGroups extends Pollable {
       glipGroupRegExp.test(message.event) &&
       message.body
     ) {
-      await this.fetchData();
-      if (this._glipPersons) {
-        this._glipPersons.loadPersons(this.uniqueMemberIds);
+      const {
+        eventType,
+        ...group
+      } = message.body;
+      if (eventType === 'GroupLeft') {
+        this.store.dispatch({
+          type: this.actionTypes.removeGroup,
+          group,
+        });
+        return;
       }
-      this._preloadGroupPosts();
+      this.store.dispatch({
+        type: this.actionTypes.updateGroup,
+        group,
+      });
+      if (this._glipPersons) {
+        this._glipPersons.loadPersons(group.members);
+      }
+      this._glipPosts.loadPosts(group.id);
     }
   }
 
@@ -372,7 +371,7 @@ export default class GlipGroups extends Pollable {
   async _preloadGroupPosts() {
     for (const group of this.groups) {
       if (this._glipPosts) {
-        await sleep(800);
+        await sleep(200);
         await this._glipPosts.loadPosts(group.id);
       }
     }
@@ -447,6 +446,28 @@ export default class GlipGroups extends Pollable {
       this._promise = this._fetchData();
     }
     return this._promise;
+  }
+
+  async startChat(personId) {
+    try {
+      const group = await this._client.glip().groups().post({
+        type: 'PrivateChat',
+        members: [this._auth.ownerId, personId]
+      });
+      group.lastModifiedTime = Date.now();
+      this.store.dispatch({
+        type: this.actionTypes.updateGroup,
+        group,
+      });
+      this.store.dispatch({
+        type: this.actionTypes.updateCurrentGroupId,
+        groupId: group.id,
+      });
+      return group;
+    } catch (e) {
+      console.error(e);
+    }
+    return null;
   }
 
   get allGroups() {

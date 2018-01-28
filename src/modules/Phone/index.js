@@ -14,8 +14,10 @@ import GlobalStorage from 'ringcentral-integration/modules/GlobalStorage';
 import Locale from 'ringcentral-integration/modules/Locale';
 import RateLimiter from 'ringcentral-integration/modules/RateLimiter';
 import Storage from 'ringcentral-integration/modules/Storage';
+import AccountExtension from 'ringcentral-integration/modules/AccountExtension';
 import Subscription from 'ringcentral-integration/modules/Subscription';
 import TabManager from 'ringcentral-integration/modules/TabManager';
+import Contacts from 'ringcentral-integration/modules/Contacts';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
@@ -27,6 +29,7 @@ import GlipCompany from '../GlipCompany';
 import GlipGroups from '../GlipGroups';
 import GlipPosts from '../GlipPosts';
 import GlipPersons from '../GlipPersons';
+import GlipContacts from '../GlipContacts';
 
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
@@ -43,6 +46,15 @@ import GlipPersons from '../GlipPersons';
     { provide: 'Storage', useClass: Storage },
     { provide: 'RateLimiter', useClass: RateLimiter },
     { provide: 'Subscription', useClass: Subscription },
+    { provide: 'AccountExtension', useClass: AccountExtension },
+    { provide: 'Contacts', useClass: Contacts },
+    { provide: 'GlipContacts', useClass: GlipContacts },
+    {
+      provide: 'ContactSources',
+      useFactory: ({ glipContacts }) =>
+        [glipContacts],
+      deps: ['GlipContacts']
+    },
     { provide: 'DateTimeFormat', useClass: DateTimeFormat },
     { provide: 'RouterInteraction', useClass: RouterInteraction },
     { provide: 'Auth', useClass: Auth },

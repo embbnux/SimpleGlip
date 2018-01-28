@@ -7,31 +7,36 @@ import styles from './styles.scss';
 
 import GlipPostContent from '../GlipPostContent';
 
-function PostAvatar({ creator }) {
+function PostAvatar({ creator, viewProfile }) {
   if (!creator) {
     return (
       <img src={defaultAvatar} alt="default avatar" />
     );
   }
   return (
-    <img src={creator.avatar || defaultAvatar} alt={creator.id} />
+    <img
+      onClick={() => viewProfile(creator.id)}
+      src={creator.avatar || defaultAvatar}
+      alt={creator.id}
+    />
   );
 }
 
 PostAvatar.propTypes = {
   creator: PropTypes.object,
+  viewProfile: PropTypes.func.isRequired,
 };
 
 PostAvatar.defaultProps = {
   creator: null,
 };
 
-function PostName({ creator, showName }) {
+function PostName({ creator, showName, viewProfile }) {
   if (!creator || !showName) {
     return null;
   }
   return (
-    <span>
+    <span className={styles.name} onClick={() => viewProfile(creator.id)}>
       {creator.firstName} {creator.lastName}
     </span>
   );
@@ -39,6 +44,7 @@ function PostName({ creator, showName }) {
 
 PostName.propTypes = {
   creator: PropTypes.object,
+  viewProfile: PropTypes.func.isRequired,
   showName: PropTypes.bool.isRequired,
 };
 
@@ -90,6 +96,7 @@ export default function GlipPost({
   creationTime,
   showName,
   atRender,
+  viewProfile,
 }) {
   return (
     <div
@@ -102,11 +109,11 @@ export default function GlipPost({
         creationTime={creationTime}
       />
       <div className={styles.avatar}>
-        <PostAvatar creator={post.creator} />
+        <PostAvatar creator={post.creator} viewProfile={viewProfile} />
       </div>
       <div className={styles.content}>
         <div className={styles.title}>
-          <PostName creator={post.creator} showName={showName} />
+          <PostName creator={post.creator} showName={showName} viewProfile={viewProfile} />
           <PostStatus sendStatus={post.sendStatus} />
         </div>
         <GlipPostContent post={post} atRender={atRender} />
@@ -121,6 +128,7 @@ GlipPost.propTypes = {
   creationTime: PropTypes.string,
   showName: PropTypes.bool,
   atRender: PropTypes.func,
+  viewProfile: PropTypes.func.isRequired,
 };
 
 GlipPost.defaultProps = {

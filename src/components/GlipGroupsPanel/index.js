@@ -21,12 +21,6 @@ export default class GlipGroupsPanel extends Component {
       });
       this.props.updateSearchFilter(searchString);
     };
-    this.goToGroup = (id) => {
-      if (id === this.props.currentGroupId) {
-        return;
-      }
-      this.props.goToGroup(id);
-    };
   }
 
   render() {
@@ -38,6 +32,7 @@ export default class GlipGroupsPanel extends Component {
       currentPage,
       onNextPage,
       atRender,
+      goToGroup,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -53,7 +48,7 @@ export default class GlipGroupsPanel extends Component {
         <div className={styles.content}>
           <GlipGroupList
             groups={groups}
-            goToGroup={this.goToGroup}
+            goToGroup={goToGroup}
             currentGroupId={currentGroupId}
             onNextPage={onNextPage}
             currentPage={currentPage}

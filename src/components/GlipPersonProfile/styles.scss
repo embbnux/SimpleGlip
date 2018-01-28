@@ -31,6 +31,24 @@
 
 .welcome {
   font-size: 25px;
-  color: #2F2F2F;
+  color: $night;
   margin-top: 20%;
+}
+
+.chatButton {
+  border: none;
+  outline: 0;
+  background-color: $primary-color;
+  color: $snow;
+  width: 100px;
+  height: 35px;
+  line-height: 35px;
+  font-size: 15px;
+  border-radius: 100px;
+  margin-left: auto;
+  margin-right: auto;
+
+  &:hover {
+    color: $snow;
+  }
 }

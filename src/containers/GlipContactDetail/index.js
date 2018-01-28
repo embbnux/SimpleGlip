@@ -6,27 +6,34 @@ import GlipPersonProfile from '../../components/GlipPersonProfile';
 function mapToProps(_, {
   params = {},
   phone: {
+    locale,
+    contacts,
     glipPersons,
   },
 }) {
-  const personId = params.personId;
-  const person = glipPersons.personsMap[personId] || {};
+  const { contactId, contactType } = params;
+  const person = contacts.find({ id: contactId, type: contactType });
   const me = glipPersons.personsMap.me || {};
 
   return {
     person,
-    isMe: personId === 'me' || personId === me.id,
-    showSpinner: !glipPersons.ready,
+    currentLocale: locale.currentLocale,
+    isMe: contactId === 'me' || contactId === me.id,
+    showSpinner: !contacts.ready,
   };
 }
 
 function mapToFunctions(_, {
   phone: {
     routerInteraction,
+    glipPersons,
     glipGroups,
   }
 }) {
   return {
+    onVisit: (contactId) => {
+      glipPersons.loadPerson(contactId);
+    },
     startChat: async (personId) => {
       const group = await glipGroups.startChat(personId);
       if (group) {

@@ -4,22 +4,33 @@ import classnames from 'classnames';
 import defaultAvatar from '../../assets/images/default_avatar.png';
 import styles from './styles.scss';
 
-function GroupAvatar({ avatars, alt, className }) {
+function GroupAvatar({ persons, className }) {
   let image;
-  if (avatars.length <= 1) {
+  if (persons.length <= 2) {
+    let noMes = persons.filter(p => !p.isMe);
+    if (noMes.length === 0) {
+      noMes = persons;
+    }
+    const person = noMes && noMes[0];
     image =
-      (<img className={styles.big} src={avatars[0] || defaultAvatar} alt={alt} />);
+      (
+        <img
+          className={styles.big}
+          src={(person && person.avatar) || defaultAvatar}
+          alt={person && person.id}
+        />
+      );
   } else {
     image = (
       <div className={styles.images}>
         {
-          avatars.slice(0, 9).map(
-            (avatar, index) =>
+          persons.slice(0, 9).map(
+            person =>
               <img
-                key={`${avatar}${index}`}
+                key={person.id}
                 className={styles.small}
-                src={avatar || defaultAvatar}
-                alt={`${alt}${index}`}
+                src={(person && person.avatar) || defaultAvatar}
+                alt={person && person.id}
               />
           )
         }
@@ -35,13 +46,12 @@ function GroupAvatar({ avatars, alt, className }) {
 
 GroupAvatar.propTypes = {
   className: PropTypes.string,
-  avatars: PropTypes.array,
-  alt: PropTypes.string.isRequired,
+  persons: PropTypes.array,
 };
 
 GroupAvatar.defaultProps = {
   className: undefined,
-  avatars: [],
+  persons: [],
 };
 
 export default GroupAvatar;

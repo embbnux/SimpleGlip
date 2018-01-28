@@ -8,6 +8,7 @@ import styles from './styles.scss';
 
 import GlipPostList from '../GlipPostList';
 import GlipChatForm from '../GlipChatForm';
+import GlipGroupName from '../GlipGroupName';
 
 export default class GlipChatPage extends Component {
   componentDidMount() {
@@ -32,6 +33,7 @@ export default class GlipChatPage extends Component {
       showSpinner,
       atRender,
       uploadFile,
+      viewProfile,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -42,7 +44,7 @@ export default class GlipChatPage extends Component {
         )}
       >
         <div className={styles.header}>
-          {group.name}
+          <GlipGroupName group={group} />
         </div>
         <div className={styles.content}>
           <GlipPostList
@@ -51,6 +53,7 @@ export default class GlipChatPage extends Component {
             groupId={group.id}
             showName={group.members && (group.members.length > 2)}
             dateTimeFormatter={dateTimeFormatter}
+            viewProfile={viewProfile}
           />
         </div>
         <div className={styles.inputArea}>
@@ -81,6 +84,7 @@ GlipChatPage.propTypes = {
   uploadFile: PropTypes.func.isRequired,
   dateTimeFormatter: PropTypes.func.isRequired,
   atRender: PropTypes.func,
+  viewProfile: PropTypes.func.isRequired,
 };
 
 GlipChatPage.defaultProps = {

@@ -19,6 +19,7 @@
   background: transparent;
   float: left;
   text-align: center;
+  cursor: pointer;
 
   img {
     height: 100%;
@@ -48,4 +49,8 @@
   clear: both;
   text-align: center;
   margin: 5px 0 10px 0;
+}
+
+.name {
+  cursor: pointer;
 }

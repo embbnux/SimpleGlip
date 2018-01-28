@@ -50,10 +50,10 @@ function mapToFunctions(_, {
       });
     },
     uploadFile: (fileName, rawFile) => glipPosts.sendFile({
-        fileName,
-        rawFile,
-        groupId: glipGroups.currentGroupId,
-      }),
+      fileName,
+      rawFile,
+      groupId: glipGroups.currentGroupId,
+    }),
     atRender: ({ id, type }) => {
       let name;
       if (type === 'Team') {
@@ -71,6 +71,11 @@ function mapToFunctions(_, {
       return (
         <a href={`#${id}`} onClick={onClickAtLink}>@{name}</a>
       );
+    },
+    viewProfile: (personId) => {
+      if (personId) {
+        routerInteraction.push(`/glip/persons/${personId}`);
+      }
     },
     dateTimeFormatter,
   };
