@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
 import styles from './styles.scss';
 
 import SideView from '../SideView';
@@ -29,18 +31,23 @@ export default function SideBarView({
           </div>
           <div className={styles.menus}>
             {menus.map((menu) => {
+              const isActive = menu.isActive(currentPath);
               let Icon = menu.Icon;
-              if (menu.isActive(currentPath)) {
+              if (isActive) {
                 Icon = menu.ActiveIcon;
               }
               return (
-                <Icon
-                  width={29}
-                  height={30}
+                <div
                   key={menu.name}
-                  onClick={() => onSelectMenu(menu)}
-                  title={menu.name}
-                />
+                  className={classnames(styles.iconHolder, isActive ? styles.active : null)}
+                >
+                  <Icon
+                    width={29}
+                    height={30}
+                    onClick={() => onSelectMenu(menu)}
+                    title={menu.name}
+                  />
+                </div>
               );
             })}
           </div>

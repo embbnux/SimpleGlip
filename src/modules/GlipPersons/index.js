@@ -5,7 +5,7 @@ import moduleStatuses from 'ringcentral-integration/enums/moduleStatuses';
 import { batchGetApi } from 'ringcentral-integration/lib/batchApiHelper';
 
 import actionTypes from './actionTypes';
-import getReducer from './getReducer';
+import getReducer, { getGlipPersonStoreReducer } from './getReducer';
 
 const MaximumBatchGetPersons = 30;
 
@@ -13,6 +13,8 @@ const MaximumBatchGetPersons = 30;
   deps: [
     'Client',
     'Auth',
+    { dep: 'Storage', optional: true },
+    { dep: 'TabManager', optional: true },
     { dep: 'GlipPersonsOptions', optional: true }
   ]
 })
@@ -20,18 +22,34 @@ export default class GlipPersons extends RcModule {
   constructor({
     client,
     auth,
+    storage,
+    tabManager,
     ...options
   }) {
     super({
       ...options,
       actionTypes,
     });
-    this._reducer = getReducer(this.actionTypes);
 
     this._client = client;
     this._auth = auth;
+    this._tabManager = tabManager;
+    this._storage = storage;
 
     this._fetchingIds = {};
+
+    this._dataStorageKey = 'glipPersonsData';
+    if (this._storage) {
+      this._reducer = getReducer(this.actionTypes);
+      this._storage.registerReducer({
+        key: this._dataStorageKey,
+        reducer: getGlipPersonStoreReducer(this.actionTypes),
+      });
+    } else {
+      this._reducer = getReducer(this.actionTypes, {
+        glipPersonStore: getGlipPersonStoreReducer(this.actionTypes),
+      });
+    }
   }
 
   initialize() {
@@ -43,6 +61,11 @@ export default class GlipPersons extends RcModule {
       this.store.dispatch({
         type: this.actionTypes.init,
       });
+      if (this._auth.isFreshLogin) {
+        this.store.dispatch({
+          type: this.actionTypes.cleanUp,
+        });
+      }
       await this.loadMe();
       this.store.dispatch({
         type: this.actionTypes.initSuccess,
@@ -57,6 +80,8 @@ export default class GlipPersons extends RcModule {
   _shouldInit() {
     return (
       this._auth.loggedIn &&
+      (!this._storage || this._storage.ready) &&
+      (!this._tabManager || this._tabManager.ready) &&
       this.pending
     );
   }
@@ -64,6 +89,8 @@ export default class GlipPersons extends RcModule {
   _shouldReset() {
     return (
       (
+        (this._storage && !this._storage.ready) ||
+        (this._tabManager && !this._tabManager.ready) ||
         !this._auth.loggedIn
       ) &&
       this.ready
@@ -71,14 +98,18 @@ export default class GlipPersons extends RcModule {
   }
 
   async loadMe() {
+    await this.loadPerson('me');
+  }
+
+  async loadPerson(id) {
     try {
       this.store.dispatch({
         type: this.actionTypes.fetch,
       });
-      const person = await this._client.glip().persons('~').get();
+      const person = await this._client.glip().persons(id === 'me' ? '~' : id).get();
       this.store.dispatch({
         type: this.actionTypes.fetchSuccess,
-        personId: 'me',
+        personId: id,
         person,
       });
     } catch (e) {
@@ -96,13 +127,15 @@ export default class GlipPersons extends RcModule {
     personIds.forEach((id) => {
       if (!this.personsMap[id] && !this._fetchingIds[id]) {
         newPersonIds.push(id);
-        this._fetchingIds[id] = 1;
       }
     });
     if (newPersonIds.length === 0) {
       return;
     }
     const ids = newPersonIds.slice(0, MaximumBatchGetPersons);
+    ids.forEach((id) => {
+      this._fetchingIds[id] = 1;
+    });
     try {
       this.store.dispatch({
         type: this.actionTypes.fetch,
@@ -125,7 +158,7 @@ export default class GlipPersons extends RcModule {
     }
     const lastIds = newPersonIds.slice(MaximumBatchGetPersons);
     if (lastIds.length > 0) {
-      await sleep(300);
+      await sleep(100);
       await this.loadPersons(lastIds);
     }
   }
@@ -143,7 +176,7 @@ export default class GlipPersons extends RcModule {
       platform: this._client.service.platform(),
       url: `/glip/persons/${ids}`,
     });
-    const responses = multipartResponse.map(x => x.json());
+    const responses = multipartResponse.filter(r => r.ok()).map(x => x.json());
     return responses;
   }
 
@@ -152,6 +185,9 @@ export default class GlipPersons extends RcModule {
   }
 
   get personsMap() {
+    if (this._storage) {
+      return this._storage.getItem(this._dataStorageKey) || {};
+    }
     return this.state.glipPersonStore;
   }
 

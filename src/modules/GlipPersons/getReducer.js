@@ -37,6 +37,9 @@ export function getGlipPersonStoreReducer(types) {
           }
         });
         return newState;
+      case types.cleanUp:
+      case types.resetSuccess:
+        return {};
       default:
         return state;
     }
@@ -48,6 +51,5 @@ export default function getGlipPostsReducer(types, reducers = {}) {
     ...reducers,
     status: getModuleStatusReducer(types),
     glipPostsStatus: getGlipPersonsStatusReducer(types),
-    glipPersonStore: getGlipPersonStoreReducer(types),
   });
 }

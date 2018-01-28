@@ -7,6 +7,8 @@ import PhoneProvider from 'ringcentral-widgets/lib/PhoneProvider';
 
 import WelcomePage from 'ringcentral-widgets/containers/WelcomePage';
 import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
+import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
+
 import getAlertRenderer from '../../components/AlertRenderer';
 
 import MainView from '../MainView';
@@ -16,6 +18,7 @@ import SideView from '../../components/SideView';
 import GlipGroups from '../GlipGroups';
 import GlipChat from '../GlipChat';
 import GlipPersonProfile from '../GlipPersonProfile';
+import GlipContactDetail from '../GlipContactDetail';
 import GlipSettings from '../GlipSettings';
 
 export default function App({
@@ -75,6 +78,25 @@ export default function App({
                       <GlipChat params={routerProps.params} />
                     )
                   }
+                />
+              </Route>
+              <Route
+                path="/contacts"
+                component={routerProps => (
+                  <SideView
+                    side={
+                      <ContactsPage />
+                    }
+                  >
+                    {routerProps.children}
+                  </SideView>
+                )}
+              >
+                <Route
+                  path=":contactType/:contactId"
+                  component={routerProps => (
+                    <GlipContactDetail params={routerProps.params} />
+                  )}
                 />
               </Route>
               <Route

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import styles from './styles.scss';
 
 import GlipGroupAvatar from '../GlipGroupAvatar';
+import GlipGroupName from '../GlipGroupName';
 
 function simpleFormatPostText(text, atRender) {
   if (text === undefined || text === null) {
@@ -75,11 +76,14 @@ export default function GlipGroup({
     >
       <GlipGroupAvatar
         avatars={group.avatars}
+        persons={group.detailMembers}
         alt={group.id}
         className={styles.avatar}
       />
       <div className={styles.content}>
-        <div className={styles.name} title={group.name}>{group.name}</div>
+        <div className={styles.name} title={name}>
+          <GlipGroupName group={group} />
+        </div>
         <LatestPost
           isGroup={group.members.length > 2}
           latestPost={group.latestPost}

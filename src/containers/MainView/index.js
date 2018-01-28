@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import withPhone from 'ringcentral-widgets/lib/withPhone';
 
 import ComposeTextIcon from 'ringcentral-widgets/assets/images/ComposeText.svg';
+import ContactIcon from 'ringcentral-widgets/assets/images/Contact.svg';
 import ComposeTextHoverIcon from 'ringcentral-widgets/assets/images/ComposeTextHover.svg';
+import ContactHoverIcon from 'ringcentral-widgets/assets/images/ContactHover.svg';
 import MoreMenuIcon from 'ringcentral-widgets/assets/images/MoreMenu.svg';
 import MoreMenuHoverIcon from 'ringcentral-widgets/assets/images/MoreMenuHover.svg';
 
 import SideBarView from '../../components/SideBarView';
+import styles from './styles.scss';
 
 const menus = [
   {
@@ -17,6 +20,15 @@ const menus = [
     Icon: ComposeTextIcon,
     ActiveIcon: ComposeTextHoverIcon,
     isActive: currentPath => currentPath.indexOf('/glip') !== -1,
+  },
+  {
+    name: 'Contacts',
+    path: '/contacts',
+    Icon: props => <ContactIcon {...props} className={styles.contactIcon} />,
+    ActiveIcon:
+      props =>
+        <ContactHoverIcon {...props} className={styles.contactHoverIcon} />,
+    isActive: currentPath => currentPath.indexOf('/contacts') !== -1,
   }
 ];
 

@@ -7,4 +7,5 @@ export default new Enum([
   'fetchError',
   'fetchSuccess',
   'batchFetchSuccess',
+  'cleanUp',
 ], 'glipPersons');

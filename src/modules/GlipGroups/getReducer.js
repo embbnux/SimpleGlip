@@ -2,10 +2,14 @@ import { combineReducers } from 'redux';
 import getModuleStatusReducer from 'ringcentral-integration/lib/getModuleStatusReducer';
 
 export function getDataReducer(types) {
-  return (state = [], { type, data }) => {
+  return (state = [], { type, data, group }) => {
     switch (type) {
       case types.fetchSuccess:
         return data && data.records;
+      case types.updateGroup:
+        return [group].concat(state.filter(g => g.id !== group.id));
+      case types.removeGroup:
+        return state.filter(g => g.id !== group.id);
       case types.resetSuccess:
         return [];
       default:
