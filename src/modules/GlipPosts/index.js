@@ -15,7 +15,6 @@ const subscriptionFilter = '/glip/posts';
   deps: [
     'Client',
     'Auth',
-    'GlipPersons',
     'Subscription',
     { dep: 'GlipPostsOptions', optional: true }
   ]
@@ -24,7 +23,6 @@ export default class GlipPosts extends RcModule {
   constructor({
     client,
     auth,
-    glipPersons,
     subscription,
     ...options
   }) {
@@ -37,7 +35,6 @@ export default class GlipPosts extends RcModule {
     this._client = client;
     this._auth = auth;
     this._subscription = subscription;
-    this._glipPersons = glipPersons;
     this._fetchPromises = {};
     this._lastMessage = null;
   }
@@ -65,7 +62,6 @@ export default class GlipPosts extends RcModule {
   _shouldInit() {
     return (
       this._auth.loggedIn &&
-      this._glipPersons.ready &&
       this._subscription.ready &&
       this.pending
     );
@@ -75,8 +71,7 @@ export default class GlipPosts extends RcModule {
     return (
       (
         !this._auth.loggedIn ||
-        !this._subscription.ready ||
-        !this._glipPersons.ready
+        !this._subscription.ready
       ) &&
       this.ready
     );
@@ -112,12 +107,12 @@ export default class GlipPosts extends RcModule {
         groupId: post.groupId,
         record: post,
         oldRecordId: post.id,
-        isSendByMe: (post.creatorId === this.myId && eventType === 'PostAdded')
+        isSendByMe: (post.creatorId === this._auth.ownerId && eventType === 'PostAdded')
       });
     }
   }
 
-  async loadPosts(groupId) {
+  async loadPosts(groupId, recordCount = 20) {
     if (!groupId) {
       return;
     }
@@ -127,7 +122,7 @@ export default class GlipPosts extends RcModule {
           this.store.dispatch({
             type: this.actionTypes.fetch,
           });
-          const response = await this._client.glip().posts().list({ groupId, recordCount: 20 });
+          const response = await this._client.glip().posts().list({ groupId, recordCount });
           this.store.dispatch({
             type: this.actionTypes.fetchSuccess,
             groupId,
@@ -154,7 +149,7 @@ export default class GlipPosts extends RcModule {
     const fakeRecord = {
       id: fakeId,
       groupId,
-      creatorId: this._glipPersons.me && this._glipPersons.me.id,
+      creatorId: this._auth.ownerId,
       sendStatus: status.creating,
       creationTime: `${new Date(Date.now())}`,
       text,
@@ -231,9 +226,5 @@ export default class GlipPosts extends RcModule {
 
   get postInputs() {
     return this.state.postInputs;
-  }
-
-  get myId() {
-    return this._glipPersons && this._glipPersons.me && this._glipPersons.me.id;
   }
 }

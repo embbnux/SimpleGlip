@@ -3,7 +3,7 @@ import Pollable from 'ringcentral-integration/lib/Pollable';
 import isBlank from 'ringcentral-integration/lib/isBlank';
 import sleep from 'ringcentral-integration/lib/sleep';
 import moduleStatuses from 'ringcentral-integration/enums/moduleStatuses';
-import ensureExist from 'ringcentral-integration/lib//ensureExist';
+import ensureExist from 'ringcentral-integration/lib/ensureExist';
 
 import getReducer, {
   getDataReducer,
@@ -394,7 +394,7 @@ export default class GlipGroups extends Pollable {
       type: this.actionTypes.updateCurrentGroupId,
       groupId,
     });
-    this._glipPosts.loadPosts(groupId);
+    this._glipPosts.loadPosts(groupId, 50);
     if (this._glipPersons) {
       this._glipPersons.loadPersons(
         this.currentGroup && this.currentGroup.members
