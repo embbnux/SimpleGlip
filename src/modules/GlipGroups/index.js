@@ -343,7 +343,7 @@ export default class GlipGroups extends Pollable {
 
   _isDataReady() {
     return this.status === moduleStatuses.initializing &&
-      this.data !== null;
+      this.timestamp !== null;
   }
 
   async _init() {
@@ -352,6 +352,7 @@ export default class GlipGroups extends Pollable {
         await this.fetchData();
       } catch (e) {
         console.error('fetchData error:', e);
+        this._retry();
       }
     } else if (this._polling) {
       this._startPolling();

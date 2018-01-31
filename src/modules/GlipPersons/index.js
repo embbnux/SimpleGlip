@@ -120,6 +120,9 @@ export default class GlipPersons extends RcModule {
   }
 
   async loadPersons(personIds) {
+    if (!this._auth.loggedIn) {
+      return;
+    }
     if (!personIds) {
       return;
     }
@@ -140,6 +143,9 @@ export default class GlipPersons extends RcModule {
       this.store.dispatch({
         type: this.actionTypes.fetch,
       });
+      if (ids[0] === 'glip-21217845251') {
+        debugger;
+      }
       const persons = await this._batchGetPersons(ids);
       this.store.dispatch({
         type: this.actionTypes.batchFetchSuccess,

@@ -59,8 +59,14 @@ export function getCurrentGroupIdReducer(types) {
 
 export function getTimestampReducer(types) {
   return (state = null, { type, timestamp }) => {
-    if (type === types.fetchSuccess) return timestamp;
-    return state;
+    switch (type) {
+      case types.fetchSuccess:
+        return timestamp;
+      case types.resetSuccess:
+        return null;
+      default:
+        return state;
+    }
   };
 }
 
