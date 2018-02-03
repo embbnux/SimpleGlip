@@ -5125,7 +5125,7 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-requires-port@1.0.x, requires-port@1.x.x:
+requires-port@1.0.x, requires-port@1.x.x, requires-port@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
 
@@ -5162,16 +5162,16 @@ rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.6.1:
   dependencies:
     glob "^7.0.5"
 
-"ringcentral-client@https://github.com/embbnux/ringcentral-js-client#releases":
-  version "1.0.0-rc1"
-  resolved "https://github.com/embbnux/ringcentral-js-client#28bd2c90b67c12e64f3b1d2b39c8593beb791aed"
+ringcentral-client@^1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/ringcentral-client/-/ringcentral-client-1.0.0-beta.1.tgz#79837692d788ff75409b36cd153d59f732782591"
   dependencies:
     form-data "^2.1.2"
     isomorphic-fetch "^2.2.1"
 
-ringcentral-integration@^0.7.35:
-  version "0.7.35"
-  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.35.tgz#a1c77e50d63bd5a1789d3f164d78ba6c0a54707c"
+ringcentral-integration@^0.7.37:
+  version "0.7.37"
+  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.37.tgz#6da882bddba05280b368abe3355308ff2bf6e637"
   dependencies:
     file-loader "^0.11.2"
     json-mask "^0.3.8"
@@ -5192,9 +5192,9 @@ ringcentral-web-phone@^0.4.5:
   dependencies:
     sip.js "^0.7.8"
 
-ringcentral-widgets@^0.5.10:
-  version "0.5.10"
-  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.10.tgz#cc7df454a9b1d69ec300c267f486feaf8f59c9c0"
+ringcentral-widgets@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.14.tgz#93d4662e383ff1ce03cb0aae6eebdb24ac1a03ce"
   dependencies:
     animate.css "^3.5.2"
     classnames "^2.2.5"
@@ -5209,6 +5209,7 @@ ringcentral-widgets@^0.5.10:
     react-widgets "^4.1.1"
     react-widgets-moment "^4.0.4"
     through2 "^2.0.3"
+    url-parse "^1.2.0"
     uuid "^3.1.0"
 
 ringcentral@^3.1.3:
@@ -5950,6 +5951,13 @@ url-parse@^1.1.1:
   dependencies:
     querystringify "~1.0.0"
     requires-port "1.0.x"
+
+url-parse@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.2.0.tgz#3a19e8aaa6d023ddd27dcc44cb4fc8f7fec23986"
+  dependencies:
+    querystringify "~1.0.0"
+    requires-port "~1.0.0"
 
 url@^0.11.0:
   version "0.11.0"

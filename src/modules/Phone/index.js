@@ -18,17 +18,17 @@ import AccountExtension from 'ringcentral-integration/modules/AccountExtension';
 import Subscription from 'ringcentral-integration/modules/Subscription';
 import TabManager from 'ringcentral-integration/modules/TabManager';
 import Contacts from 'ringcentral-integration/modules/Contacts';
+import Auth from 'ringcentral-integration/modules/Auth';
+import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
+import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
+import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
+import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
+import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
-import Auth from '../Auth';
-import OAuth from '../ImplicitOAuth';
 import Environment from '../Environment';
 
-import GlipCompany from '../GlipCompany';
-import GlipGroups from '../GlipGroups';
-import GlipPosts from '../GlipPosts';
-import GlipPersons from '../GlipPersons';
 import GlipContacts from '../GlipContacts';
 
 // user Dependency Injection with decorator to create a phone class
