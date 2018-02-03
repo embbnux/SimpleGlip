@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+
+import isPicture from '../../lib/isPicture';
+
 import styles from './styles.scss';
 
 import GlipGroupAvatar from '../GlipGroupAvatar';
@@ -32,7 +35,31 @@ function LatestPost({ isGroup, latestPost, atRender }) {
   if (!latestPost) {
     return null;
   }
-  const formatedText = simpleFormatPostText(latestPost.text, atRender);
+  let formatedText;
+  if (latestPost.attachments && latestPost.attachments.length > 0) {
+    const attachment = latestPost.attachments[0];
+    if (isPicture(attachment.contentUri)) {
+      formatedText = 'shared a picture';
+    } else {
+      formatedText = 'shared a file';
+    }
+  }
+
+  if (latestPost.type === 'PersonJoined') {
+    formatedText = 'joined the team';
+  }
+
+  if (latestPost.type === 'PersonsAdded') {
+    const addedPersons = latestPost.addedPersonIds.map(id =>
+      atRender({ id, type: 'Person' })
+    );
+    formatedText = `added ${addedPersons.join(' ')} to the team`;
+  }
+
+  if (!formatedText) {
+    formatedText = simpleFormatPostText(latestPost.text, atRender);
+  }
+
   if (!isGroup || !latestPost.creator) {
     return (
       <div className={styles.latestPost}>

@@ -60,7 +60,10 @@ function mapToFunctions(_, {
         name = glipGroups.currentGroup && glipGroups.currentGroup.name;
       } else {
         const person = glipPersons.personsMap[id];
-        name = (person && `${person.firstName} ${person.lastName}`) || id;
+        name = (
+          person &&
+          `${person.firstName}${person.lastName ? ` ${person.lastName}` : ''}`
+        ) || id;
       }
       const onClickAtLink = (e) => {
         e.preventDefault();

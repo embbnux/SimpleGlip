@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import status from 'ringcentral-integration/modules/GlipPosts/status';
+
 import defaultAvatar from '../../assets/images/default_avatar.png';
-import status from '../../modules/GlipPosts/status';
 import styles from './styles.scss';
 
 import GlipPostContent from '../GlipPostContent';
@@ -98,6 +99,15 @@ export default function GlipPost({
   atRender,
   viewProfile,
 }) {
+  let addedPersons = null;
+  if (post.type === 'PersonsAdded') {
+    addedPersons = post.addedPersonIds && post.addedPersonIds.map((id) => {
+      const peronName = atRender({ id, type: 'Person' });
+      return (
+        <span key={id}>{peronName}</span>
+      );
+    });
+  }
   return (
     <div
       className={classnames(
@@ -113,10 +123,20 @@ export default function GlipPost({
       </div>
       <div className={styles.content}>
         <div className={styles.title}>
-          <PostName creator={post.creator} showName={showName} viewProfile={viewProfile} />
+          <PostName
+            creator={post.creator}
+            showName={showName || post.type !== 'TextMessage'}
+            viewProfile={viewProfile}
+          />
+          { post.type === 'PersonJoined' ? 'joined the team' : null }
+          { post.type === 'PersonsAdded' ? 'added ' : null }
+          { addedPersons }
+          { post.type === 'PersonsAdded' ? 'to the team' : null }
           <PostStatus sendStatus={post.sendStatus} />
         </div>
-        <GlipPostContent post={post} atRender={atRender} />
+        {
+          post.type === 'TextMessage' ? <GlipPostContent post={post} atRender={atRender} /> : null
+        }
       </div>
     </div>
   );

@@ -3,23 +3,12 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import DownloadIcon from 'ringcentral-widgets/assets/images/Download.svg';
+
+import isPicture from '../../lib/isPicture';
+
 import Markdown from '../Markdown';
 
 import styles from './styles.scss';
-
-const picExtensions = ['jpg', 'jpeg', 'gif', 'svg', 'png'];
-function isPicture(uri) {
-  if (!uri) {
-    return false;
-  }
-  let isPic = false;
-  picExtensions.forEach((ext) => {
-    if (uri.indexOf(`.${ext}?`) > 0) {
-      isPic = true;
-    }
-  });
-  return isPic;
-}
 
 function Attachments({ attachments }) {
   const attachmentFiles = attachments.map((attachment) => {
