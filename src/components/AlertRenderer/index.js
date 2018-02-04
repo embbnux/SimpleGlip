@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import authErrors from '../../modules/ImplicitOAuth/authErrors';
+// import authErrors from '../../modules/ImplicitOAuth/authErrors';
 
-const messages = {
-  [authErrors.popWindowError]: 'Pop up login window failed. Please update your browser configure on popup',
-};
+// const messages = {
+//   [authErrors.popWindowError]: 'Pop up login window failed. Please update your browser configure on popup',
+// };
 
 function ErrorAlert(props) {
   const msg = messages[props.message.message];
@@ -20,7 +20,7 @@ ErrorAlert.propTypes = {
 };
 
 ErrorAlert.handleMessage = ({ message }) => (
-  message === authErrors.popWindowError
+  false
 );
 
 export default function getAlertRenderer() {
