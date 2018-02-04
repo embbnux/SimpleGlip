@@ -1,0 +1,69 @@
+@import 'ringcentral-widgets/lib/commonStyles/full-size';
+@import 'ringcentral-widgets/lib/commonStyles/no-select';
+@import 'ringcentral-widgets/lib/commonStyles/colors';
+@import 'ringcentral-widgets/lib/commonStyles/fonts';
+
+.root {
+  @include full-size;
+  background: $snow;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  color: $snow;
+  min-width: 250px;
+  text-align: center;
+}
+
+.loginButton {
+  @include no-select;
+  display: block;
+  border: none;
+  outline: 0;
+  background-color: $primary-color;
+  color: #fff;
+  border-radius: 5px;
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 0 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loginButton:active {
+  background-color: $primary-color-highlight;
+}
+
+.loginButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+.versionContainer{
+  @include secondary-font;
+  color: $darkgray;
+  position: absolute;
+  bottom: 1%;
+  right: 1%;
+}
+
+.description {
+  display: block;
+}
+
+.background {
+  @include full-size;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #3360A3;
+}
+
+.title {
+  font-size: 30px;
+}

@@ -2,6 +2,24 @@
 # yarn lockfile v1
 
 
+"@types/lodash.clonedeep@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@types/lodash.clonedeep/-/lodash.clonedeep-4.5.3.tgz#d42cfba3d929a4e1177a775142ce2a9444e384cf"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  version "4.14.100"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.100.tgz#f353dd9d3a9785638b6cb8023e6639097bd31969"
+
+"@types/node@^8.0.32":
+  version "8.5.9"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.5.9.tgz#7155cfb4ae405bca4dd8df1a214c339e939109bf"
+
+"@types/react@^16.0.8":
+  version "16.0.36"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.36.tgz#ceb5639013bdb92a94147883052e69bb2c22c69b"
+
 abbrev@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.0.tgz#d0554c2256636e2f56e7c2e5ad183f859428d81f"
@@ -3540,7 +3558,7 @@ lodash.camelcase@^4.3.0:
   version "4.3.0"
   resolved "https://registry.yarnpkg.com/lodash.camelcase/-/lodash.camelcase-4.3.0.tgz#b28aa6288a2b9fc651035c7711f65ab6190331a6"
 
-lodash.clonedeep@^4.3.2:
+lodash.clonedeep@^4.3.2, lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
 
@@ -4772,6 +4790,15 @@ react-markdown@^3.1.4:
     unified "^6.1.5"
     unist-util-visit "^1.1.3"
     xtend "^4.0.1"
+
+react-particles-js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-particles-js/-/react-particles-js-2.1.0.tgz#e28afbafefa33c225b2ecdc014f2e40bc4d97ea5"
+  dependencies:
+    "@types/lodash.clonedeep" "^4.5.3"
+    "@types/node" "^8.0.32"
+    "@types/react" "^16.0.8"
+    lodash.clonedeep "^4.5.0"
 
 react-prop-types@^0.4.0:
   version "0.4.0"

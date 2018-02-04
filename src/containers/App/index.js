@@ -5,7 +5,6 @@ import { Router, Route, IndexRoute } from 'react-router';
 
 import PhoneProvider from 'ringcentral-widgets/lib/PhoneProvider';
 
-import WelcomePage from 'ringcentral-widgets/containers/WelcomePage';
 import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
 import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
 
@@ -20,6 +19,7 @@ import GlipChat from '../GlipChat';
 import GlipPersonProfile from '../GlipPersonProfile';
 import GlipContactDetail from '../GlipContactDetail';
 import GlipSettings from '../GlipSettings';
+import WelcomePage from '../WelcomePage';
 
 export default function App({
   phone,
