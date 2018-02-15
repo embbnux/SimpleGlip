@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import defaultAvatar from '../../assets/images/default_avatar.png';
 import styles from './styles.scss';
 
-function GroupAvatar({ persons, className }) {
+function GroupAvatar({ persons, className, unread }) {
   let image;
   if (persons.length <= 2) {
     let noMes = persons.filter(p => !p.isMe);
@@ -37,9 +37,18 @@ function GroupAvatar({ persons, className }) {
       </div>
     );
   }
+  let unreadEl;
+  if (unread > 0) {
+    unreadEl = (
+      <span className={styles.unread}>
+        {unread > 99 ? '99+' : unread}
+      </span>
+    );
+  }
   return (
     <div className={classnames(styles.root, className)}>
       {image}
+      {unreadEl}
     </div>
   );
 }
@@ -47,10 +56,12 @@ function GroupAvatar({ persons, className }) {
 GroupAvatar.propTypes = {
   className: PropTypes.string,
   persons: PropTypes.array,
+  unread: PropTypes.number,
 };
 
 GroupAvatar.defaultProps = {
   className: undefined,
+  unread: 0,
   persons: [],
 };
 

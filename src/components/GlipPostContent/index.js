@@ -22,6 +22,9 @@ function Attachments({ attachments }) {
         />
       );
     }
+    if (attachment.type === 'Card') {
+      return 'Unsupported message';
+    }
     return (
       <a
         key={attachment.name}

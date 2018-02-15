@@ -21,7 +21,6 @@ import Contacts from 'ringcentral-integration/modules/Contacts';
 import Auth from 'ringcentral-integration/modules/Auth';
 import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
 import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
-import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
 import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
@@ -30,6 +29,7 @@ import Environment from '../Environment';
 
 import GlipGroups from '../GlipGroups';
 import GlipContacts from '../GlipContacts';
+import GlipPosts from '../GlipPosts';
 
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
@@ -152,7 +152,7 @@ export function createPhone({
         useValue: { name: brandConfig.appName, version: appVersion },
       },
       { provide: 'BrandOptions', useValue: brandConfig, spread: true },
-      { provide: 'ImplicitOAuthOptions', useValue: { redirectUri }, spread: true },
+      { provide: 'OAuthOptions', useValue: { redirectUri }, spread: true },
       { provide: 'InteractionOptions', useValue: { stylesUri }, spread: true },
       {
         provide: 'WebphoneOptions',

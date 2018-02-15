@@ -48,6 +48,18 @@ LinkRender.defaultProps = {
 };
 
 function TextRender(props) {
+  const children = props.children.map((child) => {
+    if (child && child.split) {
+      return child.split('\n').reduce((lines, line) => {
+        if (lines.length > 0) {
+          lines.push(<br />);
+        }
+        lines.push(line);
+        return lines;
+      }, []);
+    }
+    return child;
+  });
   return (
     <p>
       <Emojify
@@ -55,7 +67,7 @@ function TextRender(props) {
           backgroundImage: `url("${emojiones}")`,
         }}
       >
-        {props.children}
+        {children}
       </Emojify>
     </p>
   );

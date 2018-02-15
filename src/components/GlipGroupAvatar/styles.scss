@@ -4,13 +4,15 @@
   width: 45px;
   height: 45px;
   background: $smoke;
-  border-radius: 2px;
-  overflow: hidden;
+  position: relative;
 }
 
 .big {
   width: 100%;
+  height: 100%;
   text-indent: -9999px;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
 .images {
@@ -18,6 +20,8 @@
   width: 100%;
   height: 100%;
   padding: 1px;
+  overflow: hidden;
+  border-radius: 2px;
 }
 
 .small {
@@ -38,4 +42,18 @@
 
 .defaultAvatar {
   width: 100%;
+}
+
+.unread {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  height: 14px;
+  line-height: 14px;
+  background-color: $tomato;
+  font-family: Lato;
+  border-radius: 7px;
+  font-size: 12px;
+  padding: 0 4px;
+  color: $snow;
 }

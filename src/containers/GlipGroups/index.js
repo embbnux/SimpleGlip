@@ -10,7 +10,7 @@ function mapToProps(_, {
   },
 }) {
   return {
-    groups: glipGroups.groups,
+    groups: glipGroups.groupsWithUnread,
     currentGroupId: glipGroups.currentGroupId,
     seachFilter: glipGroups.seachFilter,
     currentPage: glipGroups.pageNumber,

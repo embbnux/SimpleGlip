@@ -106,6 +106,7 @@ export default function GlipGroup({
         persons={group.detailMembers}
         alt={group.id}
         className={styles.avatar}
+        unread={group.unread}
       />
       <div className={styles.content}>
         <div className={styles.name} title={name}>
