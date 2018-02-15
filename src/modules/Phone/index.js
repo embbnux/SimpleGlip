@@ -31,6 +31,8 @@ import GlipGroups from '../GlipGroups';
 import GlipContacts from '../GlipContacts';
 import GlipPosts from '../GlipPosts';
 
+import Notification from '../../lib/notification';
+
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
 @ModuleFactory({
@@ -87,9 +89,24 @@ export default class BasePhone extends RcModule {
       appConfig,
     } = options;
     this._appConfig = appConfig;
+    this._notification = new Notification();
   }
 
   initialize() {
+    this.glipPosts.addNewPostListener((post) => {
+      if (this.glipGroups.currentGroupId === post.groupId) {
+        return;
+      }
+      const creator = this.glipPersons.personsMap[post.creatorId];
+      this._notification.notify({
+        title: creator && creator.firstName,
+        text: post.text,
+        icon: creator && creator.avatar,
+        onClick: () => {
+          this.glipGroups.updateCurrentGroupId(post.groupId);
+        }
+      });
+    });
     this.store.subscribe(() => {
       if (this.auth.ready) {
         if (

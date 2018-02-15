@@ -45,7 +45,7 @@ export default class GlipChatPage extends Component {
         )}
       >
         <div className={styles.header}>
-          <GlipGroupName group={group} />
+          <GlipGroupName group={group} showNumber />
         </div>
         <div className={styles.content}>
           <GlipPostList

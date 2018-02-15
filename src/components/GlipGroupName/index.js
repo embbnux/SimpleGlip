@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function GlipGroupName({
   group,
+  showNumber,
 }) {
   let name = group.name;
   if (!name && group.detailMembers) {
@@ -15,11 +16,20 @@ export default function GlipGroupName({
     );
     name = names.join(', ');
   }
+  let number;
+  if (showNumber && group.members.length > 2) {
+    number = ` (${group.members.length})`;
+  }
   return (
-    <span>{name}</span>
+    <span>{name}{number}</span>
   );
 }
 
 GlipGroupName.propTypes = {
   group: PropTypes.object.isRequired,
+  showNumber: PropTypes.bool,
+};
+
+GlipGroupName.defaultProps = {
+  showNumber: false,
 };
