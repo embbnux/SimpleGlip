@@ -15,6 +15,11 @@ export default class NewGlipGroups extends GlipGroups {
     }
   }
 
+  async _fetchFunction() {
+    const result = await this._client.glip().groups().list({ recordCount: 250 });
+    return result;
+  }
+
   onNewPost(post) {
     if (post.groupId === this.currentGroupId && this._glipPosts) {
       this._glipPosts.updateReadTime(post.groupId);
@@ -59,6 +64,7 @@ export default class NewGlipGroups extends GlipGroups {
         const creator = personsMap[post.creatorId];
         return {
           ...post,
+          sentByMe: post.creatorId === this._auth.ownerId,
           creator,
         };
       });

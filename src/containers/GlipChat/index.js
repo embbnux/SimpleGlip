@@ -38,6 +38,9 @@ function mapToFunctions(_, {
     loadGroup: (groupId) => {
       glipGroups.updateCurrentGroupId(groupId);
     },
+    loadNextPage: async () => {
+      await glipPosts.loadNextPage(glipGroups.currentGroupId);
+    },
     createPost: async () => {
       await glipPosts.create({
         groupId: glipGroups.currentGroupId,

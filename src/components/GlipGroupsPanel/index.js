@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from 'ringcentral-widgets/components/SearchInput';
@@ -8,7 +8,7 @@ import GlipGroupList from '../GlipGroupList';
 
 import styles from './styles.scss';
 
-export default class GlipGroupsPanel extends Component {
+export default class GlipGroupsPanel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

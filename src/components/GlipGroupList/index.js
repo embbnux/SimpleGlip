@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import styles from './styles.scss';
 
 import GlipGroupItem from '../GlipGroupItem';
 
-export default class GlipGroupList extends Component {
+export default class GlipGroupList extends PureComponent {
   constructor(props) {
     super(props);
     this._downwards = false;

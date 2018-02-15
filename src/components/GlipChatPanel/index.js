@@ -34,6 +34,7 @@ export default class GlipChatPage extends Component {
       atRender,
       uploadFile,
       viewProfile,
+      loadNextPage,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -54,6 +55,7 @@ export default class GlipChatPage extends Component {
             showName={group.members && (group.members.length > 2)}
             dateTimeFormatter={dateTimeFormatter}
             viewProfile={viewProfile}
+            loadNextPage={loadNextPage}
           />
         </div>
         <div className={styles.inputArea}>
@@ -85,6 +87,7 @@ GlipChatPage.propTypes = {
   dateTimeFormatter: PropTypes.func.isRequired,
   atRender: PropTypes.func,
   viewProfile: PropTypes.func.isRequired,
+  loadNextPage: PropTypes.func.isRequired,
 };
 
 GlipChatPage.defaultProps = {

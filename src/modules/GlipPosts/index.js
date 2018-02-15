@@ -4,42 +4,11 @@ import isBlank from 'ringcentral-integration/lib/isBlank';
 import status from 'ringcentral-integration/modules/GlipPosts/status';
 import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
 
-import Enum from 'ringcentral-integration/lib/Enum';
-
-const storageActionTypes = new Enum([
-  'updateFooter',
-  'updateReadTime',
-  'resetSuccess',
-], 'glipPosts');
-
-function getGlipPostsFooterReducer(types) {
-  return (state = null, { type, footer }) => {
-    switch (type) {
-      case types.updateFooter:
-        return footer;
-      default:
-        return state;
-    }
-  };
-}
-
-function getGlipPostsReadTimeReducer(types) {
-  return (state = {}, { type, groupId, time = Date.now() }) => {
-    let newState;
-    switch (type) {
-      case types.updateReadTime:
-        newState = {
-          ...state,
-        };
-        newState[groupId] = time;
-        return newState;
-      case types.resetSuccess:
-        return {};
-      default:
-        return state;
-    }
-  };
-}
+import actionTypes from './actionTypes';
+import getReducer, {
+  getGlipPostsFooterReducer,
+  getGlipPostsReadTimeReducer,
+} from './getReducer';
 
 const glipPostsRegExp = /glip\/posts$/;
 
@@ -55,13 +24,15 @@ export default class NewGlipPosts extends GlipPosts {
     this._storage = storage;
     this._footerStorageKey = 'glipPostFooter';
     this._readTimeStorageKey = 'glipPostReadTime';
+    this._reducer = getReducer(this.actionTypes);
+
     this._storage.registerReducer({
       key: this._footerStorageKey,
-      reducer: getGlipPostsFooterReducer(storageActionTypes),
+      reducer: getGlipPostsFooterReducer(this.actionTypes),
     });
     this._storage.registerReducer({
       key: this._readTimeStorageKey,
-      reducer: getGlipPostsReadTimeReducer(storageActionTypes),
+      reducer: getGlipPostsReadTimeReducer(this.actionTypes),
     });
     this._newPostListeners = [];
   }
@@ -90,6 +61,49 @@ export default class NewGlipPosts extends GlipPosts {
         });
       }
     }
+  }
+
+  async loadPosts(groupId, recordCount = 20, pageToken) {
+    if (!groupId) {
+      return;
+    }
+    if (!this._fetchPromises[groupId]) {
+      this._fetchPromises[groupId] = (async () => {
+        try {
+          this.store.dispatch({
+            type: this.actionTypes.fetch,
+          });
+          const params = { recordCount };
+          if (pageToken) {
+            params.pageToken = pageToken;
+          }
+          const response = await this._client.glip().groups(groupId).posts().list(params);
+          this.store.dispatch({
+            type: this.actionTypes.fetchSuccess,
+            groupId,
+            records: response.records,
+            lastPageToken: pageToken,
+            navigation: response.navigation,
+          });
+        } catch (e) {
+          this.store.dispatch({
+            type: this.actionTypes.fetchError,
+          });
+        }
+        this._fetchPromises[groupId] = null;
+      })();
+    }
+    const promise = this._fetchPromises[groupId];
+    await promise;
+  }
+
+  async loadNextPage(groupId, recordCount) {
+    const pageInfo = this.pageInfos[groupId];
+    const pageToken = pageInfo && pageInfo.prevPageToken;
+    if (!pageToken) {
+      return;
+    }
+    await this.loadPosts(groupId, recordCount, pageToken);
   }
 
   async create({ groupId }) {
@@ -140,14 +154,14 @@ export default class NewGlipPosts extends GlipPosts {
 
   updateFooter(footer) {
     this.store.dispatch({
-      type: storageActionTypes.updateFooter,
+      type: this.actionTypes.updateFooter,
       footer,
     });
   }
 
   updateReadTime(groupId, time) {
     this.store.dispatch({
-      type: storageActionTypes.updateReadTime,
+      type: this.actionTypes.updateReadTime,
       groupId,
       time
     });
@@ -159,5 +173,13 @@ export default class NewGlipPosts extends GlipPosts {
 
   get readTimeMap() {
     return this._storage.getItem(this._readTimeStorageKey);
+  }
+
+  get actionTypes() {
+    return actionTypes;
+  }
+
+  get pageInfos() {
+    return this.state.pageInfos;
   }
 }

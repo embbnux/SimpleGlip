@@ -52,7 +52,6 @@ export default class GlipChatForm extends Component {
     };
 
     this._onSelectFile = (e) => {
-      console.log(e.target.files);
       const file = e.target.files[0];
       if (!file) {
         return;

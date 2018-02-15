@@ -10,11 +10,11 @@ function mapToProps(_, {
   },
 }) {
   const personId = params.personId;
-  const person = glipPersons.personsMap[personId] || {};
-  const me = glipPersons.personsMap.me || {};
-
+  const me = glipPersons.me || {};
+  const person =
+    personId === 'me' ? me : glipPersons.personsMap[personId];
   return {
-    person,
+    person: person || {},
     isMe: personId === 'me' || personId === me.id,
     showSpinner: !glipPersons.ready,
   };
