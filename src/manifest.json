@@ -1,0 +1,15 @@
+{
+  "name": "Simple Glip",
+  "short_name": "Simple Glip",
+  "display": "standalone",
+  "start_url": "./index.html",
+  "theme_color": "#8888ff",
+  "background_color": "#aaaaff",
+  "icons": [
+    {
+      "src": "./assets/images/favicon.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}
