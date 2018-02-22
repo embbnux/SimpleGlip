@@ -6,12 +6,46 @@ import sleep from 'ringcentral-integration/lib/sleep';
 
 import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
 
-@Module({ deps: [] })
+@Module({ deps: ['ConnectivityMonitor'] })
 export default class NewGlipGroups extends GlipGroups {
-  constructor(options) {
+  constructor({
+    connectivityMonitor,
+    ...options
+  }) {
     super(options);
     if (this._glipPosts) {
       this._glipPosts.addNewPostListener(post => this.onNewPost(post));
+    }
+    this._connectivityMonitor = connectivityMonitor;
+  }
+
+  _shouldInit() {
+    return super._shouldInit() && this._connectivityMonitor.ready;
+  }
+
+  _shouldReset() {
+    return super._shouldReset() || !this._connectivityMonitor.ready;
+  }
+
+  async _init() {
+    await super._init();
+    this._connectivity = this._connectivityMonitor.connectivity;
+  }
+
+  async _onStateChange() {
+    await super._onStateChange();
+    if (this.ready && !this._shouldReset() && this._connectivityMonitor.ready) {
+      if (
+        this._connectivity === this._connectivityMonitor.connectivity
+      ) {
+        return;
+      }
+      this._connectivity = this._connectivityMonitor.connectivity;
+      if (!this._connectivity) {
+        return;
+      }
+      await this.fetchData();
+      this._preloadGroupPosts(true);
     }
   }
 
@@ -31,11 +65,11 @@ export default class NewGlipGroups extends GlipGroups {
     this._glipPosts.updateReadTime(groupId);
   }
 
-  async _preloadGroupPosts() {
+  async _preloadGroupPosts(force) {
     for (const group of this.groups) {
       if (this._glipPosts) {
-        if (!this._glipPosts.postsMap[group.id]) {
-          await sleep(200);
+        if (!this._glipPosts.postsMap[group.id] || force) {
+          await sleep(300);
           await this._glipPosts.loadPosts(group.id);
         }
         if (!this._glipPosts.readTimeMap[group.id]) {
