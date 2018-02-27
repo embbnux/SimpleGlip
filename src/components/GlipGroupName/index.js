@@ -17,7 +17,7 @@ export default function GlipGroupName({
     name = names.join(', ');
   }
   let number;
-  if (showNumber && group.members.length > 2) {
+  if (showNumber && group.members &&group.members.length > 2) {
     number = ` (${group.members.length})`;
   }
   return (

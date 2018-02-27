@@ -24,7 +24,7 @@ const menus = [
   {
     name: 'Contacts',
     path: '/contacts',
-    Icon: props => <ContactIcon {...props} className={styles.contactIcon} />,
+    Icon: ContactIcon,
     ActiveIcon:
       props =>
         <ContactHoverIcon {...props} className={styles.contactHoverIcon} />,

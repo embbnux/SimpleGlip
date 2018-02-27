@@ -4860,7 +4860,7 @@ react-svg-loader@^1.1.1:
     svgo "~0.6.3"
     yargs "~4.8.0"
 
-react-transition-group@^2.2.0:
+react-transition-group@^2.2.0, react-transition-group@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.2.1.tgz#e9fb677b79e6455fd391b03823afe84849df4a10"
   dependencies:
@@ -5207,7 +5207,7 @@ ringcentral-client@^1.0.0-beta.1:
     form-data "^2.1.2"
     isomorphic-fetch "^2.2.1"
 
-ringcentral-integration@^0.7.37:
+ringcentral-integration@^0.7.45:
   version "0.7.45"
   resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.45.tgz#396d853fba345ec4abecf1fce895d817b06052d1"
   dependencies:
@@ -5230,9 +5230,9 @@ ringcentral-web-phone@^0.4.5:
   dependencies:
     sip.js "^0.7.8"
 
-ringcentral-widgets@^0.5.14:
-  version "0.5.16"
-  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.16.tgz#83ef5f63b2ea5195f6141069c8eca7b0ec3e6bde"
+ringcentral-widgets@^0.5.17:
+  version "0.5.17"
+  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.5.17.tgz#4342fc1cc8fcbaa8a344e3f668129e31c5d3e384"
   dependencies:
     animate.css "^3.5.2"
     classnames "^2.2.5"
@@ -5244,6 +5244,7 @@ ringcentral-widgets@^0.5.14:
     ramda "^0.25.0"
     rc-tooltip "^3.4.6"
     react-svg-loader "^1.1.1"
+    react-transition-group "^2.2.1"
     react-widgets "^4.1.1"
     react-widgets-moment "^4.0.4"
     through2 "^2.0.3"
