@@ -7,6 +7,8 @@ import {
   getGlipPostsInputsReducer
 } from 'ringcentral-integration/modules/GlipPosts/getReducer';
 
+import status from 'ringcentral-integration/modules/GlipPosts/status';
+
 export function getGlipPostsFooterReducer(types) {
   return (state = null, { type, footer }) => {
     switch (type) {
@@ -93,10 +95,10 @@ export function getGlipPostsStoreReducer(types) {
             p.sendStatus === status.creating
           );
           if (oldPostIndex === -1) {
-            newState[groupId] = [record].concat(newPosts);
+            newState[groupId] = [record].concat(newPosts.filter(p => p.id !== record.id));
           }
         } else {
-          newState[groupId] = [record].concat(newPosts);
+          newState[groupId] = [record].concat(newPosts.filter(p => p.id !== record.id));
         }
         return newState;
       case types.resetSuccess:

@@ -66,6 +66,11 @@ import Notification from '../../lib/notification';
     { provide: 'GlipPosts', useClass: GlipPosts },
     { provide: 'GlipPersons', useClass: GlipPersons },
     {
+      provide: 'GlipPersonsOptions',
+      useValue: { batchFetchDelay: 1000 },
+      spread: true,
+    },
+    {
       provide: 'EnvironmentOptions',
       useFactory: ({ sdkConfig }) => sdkConfig,
       deps: [
