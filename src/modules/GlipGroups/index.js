@@ -61,7 +61,12 @@ export default class NewGlipGroups extends GlipGroups {
   }
 
   updateCurrentGroupId(groupId) {
+    if (groupId === this.currentGroupId) {
+      return;
+    }
+    const lastGroupId = this.currentGroupId;
     super.updateCurrentGroupId(groupId);
+    this._glipPosts.loadPosts(lastGroupId);
     this._glipPosts.updateReadTime(groupId);
   }
 
