@@ -65,8 +65,11 @@ export default class NewGlipGroups extends GlipGroups {
       return;
     }
     const lastGroupId = this.currentGroupId;
+    const lastGroupPosts = this.currentGroupPosts;
     super.updateCurrentGroupId(groupId);
-    this._glipPosts.loadPosts(lastGroupId);
+    if (lastGroupPosts.length > 20) {
+      this._glipPosts.fetchPosts(lastGroupId);
+    }
     this._glipPosts.updateReadTime(groupId);
   }
 
@@ -75,7 +78,7 @@ export default class NewGlipGroups extends GlipGroups {
       if (this._glipPosts) {
         if (!this._glipPosts.postsMap[group.id] || force) {
           await sleep(300);
-          await this._glipPosts.loadPosts(group.id);
+          await this._glipPosts.fetchPosts(group.id);
         }
         if (!this._glipPosts.readTimeMap[group.id]) {
           this._glipPosts.updateReadTime(group.id, (Date.now() - (1000 * 3600 * 2)));

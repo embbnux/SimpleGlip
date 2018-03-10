@@ -11,6 +11,7 @@ import getReducer, {
 } from './getReducer';
 
 const glipPostsRegExp = /glip\/posts$/;
+const LOAD_TTL = 30 * 60 * 1000;
 
 @Module({ deps: ['Storage'] })
 export default class NewGlipPosts extends GlipPosts {
@@ -63,7 +64,18 @@ export default class NewGlipPosts extends GlipPosts {
     }
   }
 
-  async loadPosts(groupId, recordCount = 20, pageToken) {
+  async loadPosts(groupId, recordCount = 20) {
+    const lastPosts = this.postsMap[groupId];
+    const fetchTime = this.fetchTimeMap[groupId];
+    if (
+      lastPosts && fetchTime && Date.now() - fetchTime < LOAD_TTL
+    ) {
+      return;
+    }
+    await this.fetchPosts(groupId, recordCount);
+  }
+
+  async fetchPosts(groupId, recordCount = 20, pageToken) {
     if (!groupId) {
       return;
     }
@@ -103,7 +115,7 @@ export default class NewGlipPosts extends GlipPosts {
     if (!pageToken) {
       return;
     }
-    await this.loadPosts(groupId, recordCount, pageToken);
+    await this.fetchPosts(groupId, recordCount, pageToken);
   }
 
   async create({ groupId }) {
@@ -181,5 +193,9 @@ export default class NewGlipPosts extends GlipPosts {
 
   get pageInfos() {
     return this.state.pageInfos;
+  }
+
+  get fetchTimeMap() {
+    return this.state.fetchTimes;
   }
 }

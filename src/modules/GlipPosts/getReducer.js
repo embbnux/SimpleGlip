@@ -56,6 +56,24 @@ export function getGlipPostsPageInfoReducer(types) {
   };
 }
 
+export function getGlipPostsFetchTimeReducer(types) {
+  return (state = {}, { type, groupId }) => {
+    let newState;
+    switch (type) {
+      case types.fetchSuccess:
+        newState = {
+          ...state,
+        };
+        newState[groupId] = Date.now();
+        return newState;
+      case types.resetSuccess:
+        return {};
+      default:
+        return state;
+    }
+  };
+}
+
 export function getGlipPostsStoreReducer(types) {
   return (state = {}, {
     type, groupId, records, record, oldRecordId, isSendByMe, lastPageToken
@@ -118,5 +136,6 @@ export default function getGlipPostsReducer(types, reducers = {}) {
     createStatus: getGlipPostsCreateStatusReducer(types),
     postInputs: getGlipPostsInputsReducer(types),
     pageInfos: getGlipPostsPageInfoReducer(types),
+    fetchTimes: getGlipPostsFetchTimeReducer(types),
   });
 }

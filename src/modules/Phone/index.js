@@ -16,7 +16,9 @@ import RateLimiter from 'ringcentral-integration/modules/RateLimiter';
 import Storage from 'ringcentral-integration/modules/Storage';
 import AccountExtension from 'ringcentral-integration/modules/AccountExtension';
 import Subscription from 'ringcentral-integration/modules/Subscription';
+import ExtensionInfo from 'ringcentral-integration/modules/ExtensionInfo';
 import TabManager from 'ringcentral-integration/modules/TabManager';
+import RolesAndPermissions from 'ringcentral-integration/modules/RolesAndPermissions';
 import Contacts from 'ringcentral-integration/modules/Contacts';
 import Auth from 'ringcentral-integration/modules/Auth';
 import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
@@ -49,6 +51,8 @@ import Notification from '../../lib/notification';
     { provide: 'RateLimiter', useClass: RateLimiter },
     { provide: 'Subscription', useClass: Subscription },
     { provide: 'AccountExtension', useClass: AccountExtension },
+    { provide: 'RolesAndPermissions', useClass: RolesAndPermissions },
+    { provide: 'ExtensionInfo', useClass: ExtensionInfo },
     { provide: 'Contacts', useClass: Contacts },
     { provide: 'GlipContacts', useClass: GlipContacts },
     {
