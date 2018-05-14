@@ -3786,8 +3786,8 @@ modify-babel-preset@^1.0.0:
     require-relative "^0.8.7"
 
 moment@^2.19.2:
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
+  version "2.22.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
 ms@0.7.1:
   version "0.7.1"
@@ -4545,8 +4545,8 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
 prettier@^1.7.0:
-  version "1.10.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.10.2.tgz#1af8356d1842276a99a5b5529c82dd9e9ad3cc93"
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.12.1.tgz#c1ad20e803e7749faf905a409d2367e06bbe7325"
 
 private@^0.1.6, private@^0.1.7:
   version "0.1.8"
@@ -4687,10 +4687,6 @@ querystringify@0.0.x:
 querystringify@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-1.0.0.tgz#6286242112c5b712fa654e526652bf6a13ff05cb"
-
-ramda@^0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.24.1.tgz#c3b7755197f35b8dc3502228262c4c91ddb6b857"
 
 ramda@^0.25.0:
   version "0.25.0"
@@ -5167,7 +5163,7 @@ requires-port@1.0.x, requires-port@1.x.x, requires-port@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
 
-reselect@2.5.4:
+reselect@^2.5.4:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-2.5.4.tgz#b7d23fdf00b83fa7ad0279546f8dbbbd765c7047"
 
@@ -5207,18 +5203,18 @@ ringcentral-client@^1.0.0-beta.1:
     form-data "^2.1.2"
     isomorphic-fetch "^2.2.1"
 
-ringcentral-integration@^0.7.46:
+"ringcentral-integration@https://github.com/embbnux/ringcentral-js-widget#commons-release":
   version "0.7.46"
-  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.7.46.tgz#d3654c5969798d2cb7e6b6f163bfd6cac8ddf916"
+  resolved "https://github.com/embbnux/ringcentral-js-widget#80478e734e232d7ac04df3aa9395b4c39a4270a0"
   dependencies:
     file-loader "^0.11.2"
     json-mask "^0.3.8"
     moment "^2.19.2"
     phoneformat.js "^1.0.3"
     prettier "^1.7.0"
-    ramda "^0.24.1"
+    ramda "^0.25.0"
     redux "^3.5.2"
-    reselect "2.5.4"
+    reselect "^2.5.4"
     ringcentral-web-phone "^0.4.5"
     url-loader "^0.5.8"
     uuid "^3.0.1"

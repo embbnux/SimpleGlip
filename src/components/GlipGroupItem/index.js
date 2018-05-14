@@ -102,7 +102,6 @@ export default function GlipGroup({
       onClick={goToGroup}
     >
       <GlipGroupAvatar
-        avatars={group.avatars}
         persons={group.detailMembers}
         alt={group.id}
         className={styles.avatar}

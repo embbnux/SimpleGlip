@@ -8,9 +8,6 @@ function GroupAvatar({ persons, className, unread }) {
   let image;
   if (persons.length <= 2) {
     let noMes = persons.filter(p => !p.isMe);
-    if (noMes.length === 0) {
-      noMes = persons;
-    }
     const person = noMes && noMes[0];
     image =
       (
