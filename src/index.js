@@ -22,6 +22,13 @@ const apiConfig = {
 
 const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
+let mobile;
+if (typeof pathParams.mobile === 'undefined') {
+  mobile = !window.matchMedia("(min-width: 650px)").matches;
+} else {
+  mobile = !!pathParams.mobile;
+}
+const preloadPosts = pathParams.preloadPosts === 'false' ? false : pathParams.preloadPosts;
 
 const phone = createPhone({
   apiConfig,
@@ -30,6 +37,8 @@ const phone = createPhone({
   appVersion,
   redirectUri,
   stylesUri,
+  mobile,
+  preloadPosts,
 });
 
 const store = createStore(phone.reducer);
@@ -42,6 +51,7 @@ ReactDOM.render(
   <App
     phone={phone}
     hostingUrl={hostingUrl}
+    mobile={mobile}
   />,
   document.querySelector('div#viewport'),
 );

@@ -12,6 +12,7 @@ import getAlertRenderer from '../../components/AlertRenderer';
 
 import MainView from '../MainView';
 import AppView from '../AppView';
+import MobileView from '../MobileView';
 import SideView from '../../components/SideView';
 
 import GlipGroups from '../GlipGroups';
@@ -24,7 +25,94 @@ import WelcomePage from '../WelcomePage';
 export default function App({
   phone,
   hostingUrl,
+  mobile,
 }) {
+  if (mobile) {
+    return (
+      <PhoneProvider phone={phone}>
+        <Provider store={phone.store} >
+          <Router history={phone.routerInteraction.history} >
+            <Route
+              component={routerProps => (
+                <AppView
+                  hostingUrl={hostingUrl}
+                >
+                  {routerProps.children}
+                  <AlertContainer
+                    callingSettingsUrl="/settings/calling"
+                    regionSettingsUrl="/settings/region"
+                    getAdditionalRenderer={getAlertRenderer}
+                  />
+                </AppView>
+              )} >
+              <Route
+                path="/"
+                component={WelcomePage}
+              />
+              <Route
+                path="/"
+                component={routerProps => (
+                  <MobileView>
+                    {routerProps.children}
+                  </MobileView>
+                )}
+              >
+                <Route
+                  path="/glip"
+                  component={() => <GlipGroups mobile={mobile} />}
+                />
+                <Route
+                  path="/contacts"
+                  component={ContactsPage}
+                />
+                <Route
+                  path="/settings"
+                  component={GlipSettings}
+                />
+              </Route>
+              <Route
+                path="/glip/persons/:personId"
+                component={
+                  routerProps => (
+                    <GlipPersonProfile
+                      params={routerProps.params}
+                      onBackClick={() => {
+                        phone.routerInteraction.push('/glip');
+                      }}
+                    />
+                  )
+                }
+              />
+              <Route
+                path="/glip/groups/:groupId"
+                component={
+                  routerProps => (
+                    <GlipChat
+                      params={routerProps.params}
+                      onBackClick={() => {
+                        phone.routerInteraction.push('/glip');
+                      }}
+                    />
+                  )
+                }
+              />
+              <Route
+                path="/contacts/:contactType/:contactId"
+                component={routerProps => (
+                  <GlipContactDetail
+                    params={routerProps.params}
+                    onBackClick={() => {
+                      phone.routerInteraction.push('/contacts');
+                    }}
+                  />
+                )}
+              />
+            </Route>
+          </Router>
+        </Provider>
+      </PhoneProvider>
+    );
+  }
   return (
     <PhoneProvider phone={phone}>
       <Provider store={phone.store} >

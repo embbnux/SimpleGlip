@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
 
 import styles from './styles.scss';
+import leftArrow from '../../assets/images/left_arrow.png';
 
 import GlipPostList from '../GlipPostList';
 import GlipChatForm from '../GlipChatForm';
@@ -35,8 +36,13 @@ export default class GlipChatPage extends Component {
       uploadFile,
       viewProfile,
       loadNextPage,
+      onBackClick,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
+    const backIcon =
+      typeof onBackClick === 'function' ? (
+        <img src={leftArrow} className={styles.backIcon} onClick={onBackClick} />
+      ) : null
     return (
       <div
         className={classnames(
@@ -45,6 +51,7 @@ export default class GlipChatPage extends Component {
         )}
       >
         <div className={styles.header}>
+          {backIcon}
           <GlipGroupName group={group} showNumber />
         </div>
         <div className={styles.content}>
@@ -86,6 +93,7 @@ GlipChatPage.propTypes = {
   uploadFile: PropTypes.func.isRequired,
   dateTimeFormatter: PropTypes.func.isRequired,
   atRender: PropTypes.func,
+  onBackClick: PropTypes.func,
   viewProfile: PropTypes.func.isRequired,
   loadNextPage: PropTypes.func.isRequired,
 };
@@ -98,4 +106,5 @@ GlipChatPage.defaultProps = {
   textValue: '',
   showSpinner: false,
   atRender: undefined,
+  onBackClick: undefined,
 };

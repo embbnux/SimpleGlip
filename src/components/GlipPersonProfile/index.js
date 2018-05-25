@@ -6,6 +6,7 @@ import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
 import Button from 'ringcentral-widgets/components/Button';
 
 import defaultAvatar from '../../assets/images/default_avatar.png';
+import leftArrow from '../../assets/images/left_arrow.png';
 import styles from './styles.scss';
 
 export default class PersonProfile extends Component {
@@ -46,6 +47,7 @@ export default class PersonProfile extends Component {
       person,
       isMe,
       showSpinner,
+      onBackClick,
     } = this.props;
 
     if (!person) {
@@ -53,6 +55,10 @@ export default class PersonProfile extends Component {
     }
 
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
+    const backIcon =
+      typeof onBackClick === 'function' ? (
+        <img src={leftArrow} className={styles.backIcon} onClick={onBackClick} />
+      ) : null
     return (
       <div
         className={classnames(
@@ -60,6 +66,7 @@ export default class PersonProfile extends Component {
           className,
         )}
       >
+        {backIcon}
         <div className={styles.avatar}>
           <img src={person.avatar || defaultAvatar} alt={person.id} />
         </div>

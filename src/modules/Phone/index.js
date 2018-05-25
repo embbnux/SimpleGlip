@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import SDK from 'ringcentral';
 import RingCentralClient from 'ringcentral-client';
+import { hashHistory } from 'react-router'
 
 import { ModuleFactory } from 'ringcentral-integration/lib/di';
 import RcModule from 'ringcentral-integration/lib/RcModule';
@@ -62,6 +63,11 @@ import Notification from '../../lib/notification';
     },
     { provide: 'DateTimeFormat', useClass: DateTimeFormat },
     { provide: 'RouterInteraction', useClass: RouterInteraction },
+    {
+      provide: 'RouterInteractionOptions',
+      useValue: { history: hashHistory },
+      spread: true,
+    },
     { provide: 'Auth', useClass: Auth },
     { provide: 'Environment', useClass: Environment },
     { provide: 'GlipCompany', useClass: GlipCompany },
@@ -95,9 +101,12 @@ export default class BasePhone extends RcModule {
     super(options);
     const {
       appConfig,
+      moduleOptions,
     } = options;
     this._appConfig = appConfig;
     this._notification = new Notification();
+    this._mobile = moduleOptions.mobile;
+    this._redirectUriAfterLogin = null;
   }
 
   initialize() {
@@ -116,26 +125,43 @@ export default class BasePhone extends RcModule {
       });
     });
     this.store.subscribe(() => {
-      if (this.auth.ready) {
-        if (
-          this.routerInteraction.currentPath !== '/' &&
-          !this.auth.loggedIn
-        ) {
-          this.routerInteraction.push('/');
-        } else if (
-          (
-            this.routerInteraction.currentPath === '/' ||
-            this.routerInteraction.currentPath === '/glip'
-          ) &&
-          this.auth.loggedIn &&
-          this.glipGroups.ready
-        ) {
-          if (this.glipGroups.currentGroupId) {
-            this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
-            return;
-          }
-          this.routerInteraction.push('/glip/persons/me');
+      if (!this.auth.ready) {
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath !== '/' &&
+        !this.auth.loggedIn
+      ) {
+        this._redirectUriAfterLogin = this.routerInteraction.currentPath;
+        this.routerInteraction.push('/');
+        return;
+      }
+      if (!(this.auth.loggedIn && this.glipGroups.ready)) {
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath === '/'
+      ) {
+        if (this._redirectUriAfterLogin) {
+          this.routerInteraction.push(this._redirectUriAfterLogin);
+          return;
         }
+        if (this._mobile) {
+          this.routerInteraction.push('/glip');
+          return;
+        }
+        this.routerInteraction.push('/glip/persons/me');
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath === '/glip' &&
+        !this._mobile
+      ) {
+        if (this.glipGroups.currentGroupId) {
+          this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
+          return;
+        }
+        this.routerInteraction.push('/glip/persons/me');
       }
     });
   }
@@ -160,10 +186,12 @@ export function createPhone({
   appVersion,
   redirectUri,
   stylesUri,
+  mobile,
+  preloadPosts,
 }) {
   @ModuleFactory({
     providers: [
-      { provide: 'ModuleOptions', useValue: { prefix }, spread: true },
+      { provide: 'ModuleOptions', useValue: { prefix, mobile }, spread: true },
       {
         provide: 'SdkConfig',
         useValue: {
@@ -189,6 +217,11 @@ export function createPhone({
           webphoneLogLevel: 1,
         },
       },
+      {
+        provide: 'GLipGroupsOptions',
+        useValue: { preloadPosts },
+        spread: true
+      }
     ]
   })
   class Phone extends BasePhone {}

@@ -16,10 +16,18 @@ export default class GlipPostList extends PureComponent {
   }
 
   componentDidMount() {
+    this._mounted = true;
     this._scrollToLastMessage();
   }
 
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
   componentDidUpdate(prevProps) {
+    if (!this._mounted) {
+      return;
+    }
     if (
       prevProps.groupId !== this.props.groupId
     ) {

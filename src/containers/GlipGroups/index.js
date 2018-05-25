@@ -8,11 +8,12 @@ function mapToProps(_, {
   phone: {
     glipGroups,
   },
+  mobile,
 }) {
   return {
     groups: glipGroups.groupsWithUnread,
-    currentGroupId: glipGroups.currentGroupId,
-    seachFilter: glipGroups.seachFilter,
+    currentGroupId: mobile ? null : glipGroups.currentGroupId,
+    searchFilter: glipGroups.searchFilter,
     currentPage: glipGroups.pageNumber,
   };
 }
