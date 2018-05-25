@@ -12,7 +12,7 @@ export default class GlipGroupsPanel extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      searchString: props.seachFilter,
+      searchString: props.searchFilter,
     };
     this.updateSeachString = (e) => {
       const searchString = e.target.value;
@@ -64,7 +64,7 @@ export default class GlipGroupsPanel extends PureComponent {
 GlipGroupsPanel.propTypes = {
   groups: PropTypes.array,
   className: PropTypes.string,
-  seachFilter: PropTypes.string,
+  searchFilter: PropTypes.string,
   currentGroupId: PropTypes.string,
   goToGroup: PropTypes.func.isRequired,
   updateSearchFilter: PropTypes.func.isRequired,
@@ -77,7 +77,7 @@ GlipGroupsPanel.propTypes = {
 GlipGroupsPanel.defaultProps = {
   groups: [],
   className: undefined,
-  seachFilter: '',
+  searchFilter: '',
   currentGroupId: undefined,
   showSpinner: false,
   currentPage: 1,

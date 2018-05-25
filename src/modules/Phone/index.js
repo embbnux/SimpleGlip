@@ -1,6 +1,7 @@
 import 'whatwg-fetch';
 import SDK from 'ringcentral';
 import RingCentralClient from 'ringcentral-client';
+import { hashHistory } from 'react-router'
 
 import { ModuleFactory } from 'ringcentral-integration/lib/di';
 import RcModule from 'ringcentral-integration/lib/RcModule';
@@ -62,6 +63,11 @@ import Notification from '../../lib/notification';
     },
     { provide: 'DateTimeFormat', useClass: DateTimeFormat },
     { provide: 'RouterInteraction', useClass: RouterInteraction },
+    {
+      provide: 'RouterInteractionOptions',
+      useValue: { history: hashHistory },
+      spread: true,
+    },
     { provide: 'Auth', useClass: Auth },
     { provide: 'Environment', useClass: Environment },
     { provide: 'GlipCompany', useClass: GlipCompany },
@@ -95,9 +101,11 @@ export default class BasePhone extends RcModule {
     super(options);
     const {
       appConfig,
+      moduleOptions,
     } = options;
     this._appConfig = appConfig;
     this._notification = new Notification();
+    this._mobile = moduleOptions.mobile;
   }
 
   initialize() {
@@ -125,11 +133,15 @@ export default class BasePhone extends RcModule {
         } else if (
           (
             this.routerInteraction.currentPath === '/' ||
-            this.routerInteraction.currentPath === '/glip'
+            (this.routerInteraction.currentPath === '/glip' && !this._mobile)
           ) &&
           this.auth.loggedIn &&
           this.glipGroups.ready
         ) {
+          if (this._mobile) {
+            this.routerInteraction.push('/glip');
+            return;
+          }
           if (this.glipGroups.currentGroupId) {
             this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
             return;
@@ -160,10 +172,12 @@ export function createPhone({
   appVersion,
   redirectUri,
   stylesUri,
+  mobile,
+  preloadPosts,
 }) {
   @ModuleFactory({
     providers: [
-      { provide: 'ModuleOptions', useValue: { prefix }, spread: true },
+      { provide: 'ModuleOptions', useValue: { prefix, mobile }, spread: true },
       {
         provide: 'SdkConfig',
         useValue: {
@@ -189,6 +203,11 @@ export function createPhone({
           webphoneLogLevel: 1,
         },
       },
+      {
+        provide: 'GLipGroupsOptions',
+        useValue: { preloadPosts },
+        spread: true
+      }
     ]
   })
   class Phone extends BasePhone {}
