@@ -106,6 +106,7 @@ export default class BasePhone extends RcModule {
     this._appConfig = appConfig;
     this._notification = new Notification();
     this._mobile = moduleOptions.mobile;
+    this._redirectUriAfterLogin = null;
   }
 
   initialize() {
@@ -124,30 +125,43 @@ export default class BasePhone extends RcModule {
       });
     });
     this.store.subscribe(() => {
-      if (this.auth.ready) {
-        if (
-          this.routerInteraction.currentPath !== '/' &&
-          !this.auth.loggedIn
-        ) {
-          this.routerInteraction.push('/');
-        } else if (
-          (
-            this.routerInteraction.currentPath === '/' ||
-            (this.routerInteraction.currentPath === '/glip' && !this._mobile)
-          ) &&
-          this.auth.loggedIn &&
-          this.glipGroups.ready
-        ) {
-          if (this._mobile) {
-            this.routerInteraction.push('/glip');
-            return;
-          }
-          if (this.glipGroups.currentGroupId) {
-            this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
-            return;
-          }
-          this.routerInteraction.push('/glip/persons/me');
+      if (!this.auth.ready) {
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath !== '/' &&
+        !this.auth.loggedIn
+      ) {
+        this._redirectUriAfterLogin = this.routerInteraction.currentPath;
+        this.routerInteraction.push('/');
+        return;
+      }
+      if (!(this.auth.loggedIn && this.glipGroups.ready)) {
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath === '/'
+      ) {
+        if (this._redirectUriAfterLogin) {
+          this.routerInteraction.push(this._redirectUriAfterLogin);
+          return;
         }
+        if (this._mobile) {
+          this.routerInteraction.push('/glip');
+          return;
+        }
+        this.routerInteraction.push('/glip/persons/me');
+        return;
+      }
+      if (
+        this.routerInteraction.currentPath === '/glip' &&
+        !this._mobile
+      ) {
+        if (this.glipGroups.currentGroupId) {
+          this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
+          return;
+        }
+        this.routerInteraction.push('/glip/persons/me');
       }
     });
   }
