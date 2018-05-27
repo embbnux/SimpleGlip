@@ -25,13 +25,14 @@ import Auth from 'ringcentral-integration/modules/Auth';
 import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
 import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
 import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
-import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
+// import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
 import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
 import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
+import GlipGroups from '../GlipGroups';
 
 import Notification from '../../lib/notification';
 
