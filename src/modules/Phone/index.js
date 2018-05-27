@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import SDK from 'ringcentral';
 import RingCentralClient from 'ringcentral-client';
-import { hashHistory } from 'react-router'
+import { hashHistory } from 'react-router';
 
 import { ModuleFactory } from 'ringcentral-integration/lib/di';
 import RcModule from 'ringcentral-integration/lib/RcModule';

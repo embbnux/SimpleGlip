@@ -52,7 +52,7 @@ export default class NewGlipGroups extends GlipGroups {
       members,
       isPublic: true,
       description: ''
-    })
-    return group.id
+    });
+    return group.id;
   }
 }
