@@ -33,6 +33,7 @@ import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
 import GlipGroups from '../GlipGroups';
+import Adapter from '../Adapter';
 
 import Notification from '../../lib/notification';
 
@@ -95,6 +96,7 @@ import Notification from '../../lib/notification';
         { dep: 'SdkConfig', useParam: true, },
       ],
     },
+    { provide: 'Adapter', useClass: Adapter },
   ]
 })
 export default class BasePhone extends RcModule {
