@@ -47,14 +47,14 @@ export default class Adapter extends RcModule {
         type: this.actionTypes.resetSuccess,
       });
     } else {
-      const match = this._routerInteraction.currentPath.match(/\/glip\/groups\/(\d+)/)
+      const match = this._routerInteraction.currentPath.match(/\/glip\/groups\/(\d+)/);
       const groupId = match === null ? null : parseInt(match[1]);
-      if(groupId !== this._lastGroupId) {
+      if (groupId !== this._lastGroupId) {
         this._postMessage({
           type: 'rc-glip-group-changed',
           groupId
         });
-        this._lastGroupId = groupId
+        this._lastGroupId = groupId;
       }
     }
   }
