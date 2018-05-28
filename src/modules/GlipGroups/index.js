@@ -17,16 +17,18 @@ export default class NewGlipGroups extends GlipGroups {
         currentGroupId: getCurrentGroupIdReducer(this.actionTypes)
       });
     }
+
+    this._mobile = options.mobile;
   }
 
   _onDataReady() {
     if (this._glipPersons) {
       this._glipPersons.loadPersons(this.groupMemberIds);
     }
-    if (!this.currentGroupId && this.currentGroupIdFromStorage) {
+    if (!this.currentGroupId && this.currentGroupIdFromStorage && !this._mobile) {
       this.updateCurrentGroupId(this.currentGroupIdFromStorage);
     }
-    if (!this.currentGroupId && !this.currentGroupIdFromStorage) {
+    if (!this.currentGroupId && !this.currentGroupIdFromStorage && !this._mobile) {
       this.updateCurrentGroupId(this.groups[0] && this.groups[0].id);
     }
     if (this._preloadPosts) {
