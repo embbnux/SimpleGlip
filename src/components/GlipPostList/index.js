@@ -46,7 +46,7 @@ export default class GlipPostList extends PureComponent {
   }
 
   _onScroll = async () => {
-    if (!this._listRef) {
+    if (!this._listRef || !this._mounted) {
       return;
     }
     const currentScrollTop = this._listRef.scrollTop;
@@ -59,6 +59,9 @@ export default class GlipPostList extends PureComponent {
         loadingNextPage: true
       });
       await this.props.loadNextPage();
+      if (!this._mounted) {
+        return;
+      }
       this.setState({
         loadingNextPage: false
       });
