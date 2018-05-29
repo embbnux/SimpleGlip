@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from 'ringcentral-widgets/components/SearchInput';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
+import Modal from 'ringcentral-widgets/components/Modal';
 
 import GlipGroupList from '../GlipGroupList';
 
@@ -13,6 +14,7 @@ export default class GlipGroupsPanel extends PureComponent {
     super(props);
     this.state = {
       searchString: props.searchFilter,
+      showTeamCreationModal: false,
     };
     this.updateSeachString = (e) => {
       const searchString = e.target.value;
@@ -20,6 +22,12 @@ export default class GlipGroupsPanel extends PureComponent {
         searchString,
       });
       this.props.updateSearchFilter(searchString);
+    };
+    this.toggleShowTeamCreationModal = () => {
+      console.log('click');
+      this.setState(preState => ({
+        showTeamCreationModal: !preState.showTeamCreationModal,
+      }));
     };
   }
 
@@ -44,6 +52,12 @@ export default class GlipGroupsPanel extends PureComponent {
             onChange={this.updateSeachString}
             placeholder={'Searching'}
           />
+          <div
+            className={styles.addTeam}
+            onClick={this.toggleShowTeamCreationModal}
+          >
+            +
+          </div>
         </div>
         <div className={styles.content}>
           <GlipGroupList
@@ -55,6 +69,14 @@ export default class GlipGroupsPanel extends PureComponent {
             atRender={atRender}
           />
         </div>
+        <Modal
+          onConfirm={() => {}}
+          onCancel={this.toggleShowTeamCreationModal}
+          currentLocale="en-US"
+          show={this.state.showTeamCreationModal}
+        >
+          Test
+        </Modal>
         {spinner}
       </div>
     );
