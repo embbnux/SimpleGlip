@@ -6,8 +6,14 @@ This is simple version of RingCentral Glip with RESTful API.
 
 Built with:
 
-* [RingCentral Commons](https://github.com/ringcentral/ringcentral-js-integration-commons/) and
-* [RingCentral Widgets](https://github.com/ringcentral/ringcentral-js-widgets)
+* [RingCentral Commons](https://github.com/ringcentral/ringcentral-js-widgets/tree/master/packages/ringcentral-integration)
+* [RingCentral Widgets](https://github.com/ringcentral/ringcentral-js-widgets/tree/master/packages/ringcentral-widgets)
+
+![SimpleGlip Preview](https://user-images.githubusercontent.com/7036536/40632915-6ae9f09a-631e-11e8-96f8-29121837967c.jpeg)
+
+## Visit Online
+
+Visit app [website](https://embbnux.github.io/SimpleGlip/) in github pages.
 
 ## Dependences
 
@@ -15,10 +21,6 @@ Built with:
 * webpack 2
 * react
 * redux
-
-## Visit Online
-
-Visit [website](https://embbnux.github.io/SimpleGlip/) in github pages.
 
 ## How to develop based on this app
 
