@@ -24,11 +24,17 @@ export default class GlipGroupsPanel extends PureComponent {
       this.props.updateSearchFilter(searchString);
     };
     this.toggleShowTeamCreationModal = () => {
-      console.log('click');
       this.setState(preState => ({
         showTeamCreationModal: !preState.showTeamCreationModal,
       }));
     };
+    this.createGlipGroup = (data) => {
+      if(data.teamName === '' || data.selectedContacts.length === 0) {
+        return
+      }
+      this.toggleShowTeamCreationModal();
+      this.props.createTeam(data);
+    }
   }
 
   render() {
@@ -77,6 +83,7 @@ export default class GlipGroupsPanel extends PureComponent {
           updateFilter={updateContactSearchFilter}
           searchFilter={contactSearchFilter}
           onCancel={this.toggleShowTeamCreationModal}
+          onConfirm={this.createGlipGroup}
           show={this.state.showTeamCreationModal}
         />
         {spinner}

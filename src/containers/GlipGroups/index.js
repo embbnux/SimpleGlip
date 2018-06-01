@@ -56,8 +56,8 @@ function mapToFunctions(_, {
     updateContactSearchFilter: (searchFilter) => {
       contacts.updateFilter({ searchFilter });
     },
-    createTeam: () => {
-      const groupId = null;
+    createTeam: async ({ teamName, selectedContacts }) => {
+      const groupId = await glipGroups.createTeam(teamName, selectedContacts.map(sc => sc.email));
       routerInteraction.push(`/glip/groups/${groupId}`);
     }
   };
