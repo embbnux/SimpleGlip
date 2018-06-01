@@ -42,21 +42,19 @@ export default class Adapter extends RcModule {
       this.store.dispatch({
         type: this.actionTypes.initSuccess
       });
-      this._lastGroupId = this._glipGroups.currentGroupId;
     } else if (this._shouldReset()) {
       this.store.dispatch({
         type: this.actionTypes.resetSuccess,
       });
-    } else if (
-      this._glipGroups.ready &&
-      this._lastGroupId !== this._glipGroups.currentGroupId
-    ) {
-      this._lastGroupId = this._glipGroups.currentGroupId;
-      if (this._routerInteraction.currentPath !== '/glip') {
+    } else {
+      const match = this._routerInteraction.currentPath.match(/\/glip\/groups\/(\d+)/)
+      const groupId = match === null ? null : parseInt(match[1]);
+      if(groupId !== this._lastGroupId) {
         this._postMessage({
           type: 'rc-glip-group-changed',
-          groupId: this._glipGroups.currentGroupId
+          groupId
         });
+        this._lastGroupId = groupId
       }
     }
   }
