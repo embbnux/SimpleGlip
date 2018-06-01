@@ -7,6 +7,7 @@ import GlipGroupsPanel from '../../components/GlipGroupsPanel';
 function mapToProps(_, {
   phone: {
     glipGroups,
+    contacts,
   },
   mobile,
 }) {
@@ -15,6 +16,8 @@ function mapToProps(_, {
     currentGroupId: mobile ? null : glipGroups.currentGroupId,
     searchFilter: glipGroups.searchFilter,
     currentPage: glipGroups.pageNumber,
+    filteredContacts: contacts.filteredContacts,
+    contactSearchFilter: contacts.searchFilter,
   };
 }
 function mapToFunctions(_, {
@@ -22,6 +25,7 @@ function mapToFunctions(_, {
     routerInteraction,
     glipGroups,
     glipPersons,
+    contacts,
   }
 }) {
   return {
@@ -49,6 +53,13 @@ function mapToFunctions(_, {
       }
       return `@${name}`;
     },
+    updateContactSearchFilter: (searchFilter) => {
+      contacts.updateFilter({ searchFilter });
+    },
+    createTeam: async ({ teamName, selectedContacts }) => {
+      const groupId = await glipGroups.createTeam(teamName, selectedContacts.map(sc => sc.email));
+      routerInteraction.push(`/glip/groups/${groupId}`);
+    }
   };
 }
 

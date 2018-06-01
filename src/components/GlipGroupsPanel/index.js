@@ -5,6 +5,7 @@ import SearchInput from 'ringcentral-widgets/components/SearchInput';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
 
 import GlipGroupList from '../GlipGroupList';
+import GlipTeamCreationModal from '../GlipTeamCreation';
 
 import styles from './styles.scss';
 
@@ -13,6 +14,7 @@ export default class GlipGroupsPanel extends PureComponent {
     super(props);
     this.state = {
       searchString: props.searchFilter,
+      showTeamCreationModal: false,
     };
     this.updateSeachString = (e) => {
       const searchString = e.target.value;
@@ -21,6 +23,18 @@ export default class GlipGroupsPanel extends PureComponent {
       });
       this.props.updateSearchFilter(searchString);
     };
+    this.toggleShowTeamCreationModal = () => {
+      this.setState(preState => ({
+        showTeamCreationModal: !preState.showTeamCreationModal,
+      }));
+    };
+    this.createGlipGroup = (data) => {
+      if(data.teamName === '' || data.selectedContacts.length === 0) {
+        return
+      }
+      this.toggleShowTeamCreationModal();
+      this.props.createTeam(data);
+    }
   }
 
   render() {
@@ -33,6 +47,9 @@ export default class GlipGroupsPanel extends PureComponent {
       onNextPage,
       atRender,
       goToGroup,
+      filteredContacts,
+      updateContactSearchFilter,
+      contactSearchFilter,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -44,6 +61,12 @@ export default class GlipGroupsPanel extends PureComponent {
             onChange={this.updateSeachString}
             placeholder={'Searching'}
           />
+          <div
+            className={styles.addTeam}
+            onClick={this.toggleShowTeamCreationModal}
+          >
+            +
+          </div>
         </div>
         <div className={styles.content}>
           <GlipGroupList
@@ -55,6 +78,14 @@ export default class GlipGroupsPanel extends PureComponent {
             atRender={atRender}
           />
         </div>
+        <GlipTeamCreationModal
+          filteredContacts={filteredContacts}
+          updateFilter={updateContactSearchFilter}
+          searchFilter={contactSearchFilter}
+          onCancel={this.toggleShowTeamCreationModal}
+          onConfirm={this.createGlipGroup}
+          show={this.state.showTeamCreationModal}
+        />
         {spinner}
       </div>
     );
