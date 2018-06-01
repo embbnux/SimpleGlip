@@ -12,9 +12,14 @@ export default class GlipTeamCreationModal extends Component {
     this.state = {
       selectedContacts: [],
       teamName: '',
+      creating: false,
+      error: null
     };
 
     this.updateSeachString = (e) => {
+      this.setState({
+        error: null
+      });
       const searchString = e.target.value;
       this.props.updateFilter(searchString);
     };
@@ -22,7 +27,8 @@ export default class GlipTeamCreationModal extends Component {
     this.updateTeamName = (e) => {
       const name = e.target.value;
       this.setState({
-        teamName: name
+        teamName: name,
+        error: null
       });
     };
 
@@ -35,21 +41,51 @@ export default class GlipTeamCreationModal extends Component {
 
     this.onCancel = () => {
       this.props.updateFilter('');
-      this.props.onCancel();
+      this.props.closeModal();
+      this.setState({
+        selectedContacts: [],
+        teamName: ''
+      });
     };
 
-    this.onConfirm = () => {
-      this.props.updateFilter('');
-      this.props.onConfirm(this.state);
+    this.onConfirm = async () => {
+      if (this.state.creating) {
+        return;
+      }
+      if (this.state.teamName === '') {
+        this.setState({ error: 'Please enter a valid team name.' });
+        return;
+      }
+      if (this.state.selectedContacts.length === 0) {
+        this.setState({ error: 'Please select team number.' });
+        return;
+      }
+      this.setState({ creating: true });
+      try {
+        await this.props.createTeam(this.state);
+        this.props.updateFilter('');
+        this.setState({
+          selectedContacts: [],
+          teamName: '',
+          creating: false
+        });
+        this.props.closeModal();
+      } catch (e) {
+        console.log(e.message);
+        this.setState({ error: e.message, creating: false });
+      }
     };
 
     this.addContact = (contact) => {
+      this.setState({
+        error: null
+      });
       const oldIndex = this.state.selectedContacts
-                           .findIndex((c) => c.email === contact.email);
+                           .findIndex(c => c.email === contact.email);
       if (oldIndex > -1) {
         return;
       }
-      const contacts =
+
       this.setState({
         selectedContacts: [{
           name: contact.name,
@@ -75,8 +111,15 @@ export default class GlipTeamCreationModal extends Component {
         show={this.props.show}
         title="Create Team"
         textCancel="Close"
-        textConfirm="Create"
+        textConfirm={this.state.creating ? 'Creating' : 'Create'}
       >
+        {
+          this.state.error ? (
+            <div className={styles.errorMessage}>
+              {this.state.error}
+            </div>
+          ) : null
+        }
         <TextInput
           className={styles.teamName}
           value={this.state.teamName}
@@ -91,10 +134,16 @@ export default class GlipTeamCreationModal extends Component {
         />
         <div className={styles.selectedContacts}>
           {
-            this.state.selectedContacts.map((contact) => (
-              <span className={styles.selectedContactItem} key={contact.email}>
+            this.state.selectedContacts.map(contact => (
+              <span
+                className={styles.selectedContactItem}
+                key={contact.email}
+              >
                 {contact.name}
-                <span className={styles.closeIcon} onClick={() => this.removeContact(contact.email)}>
+                <span
+                  className={styles.closeIcon}
+                  onClick={() => this.removeContact(contact.email)}
+                >
                   x
                 </span>
               </span>
@@ -103,8 +152,12 @@ export default class GlipTeamCreationModal extends Component {
         </div>
         <div className={styles.contacts}>
           {
-            contacts.map((contact) => (
-              <div className={styles.contactItem} key={contact.email} onClick={() => this.addContact(contact)}>
+            contacts.map(contact => (
+              <div
+                className={styles.contactItem}
+                key={contact.email}
+                onClick={() => this.addContact(contact)}
+              >
                 <div className={styles.contactName} title={contact.name}>{contact.name}</div>
                 <div className={styles.contactEmail} title={contact.email}>{contact.email}</div>
               </div>
@@ -115,3 +168,12 @@ export default class GlipTeamCreationModal extends Component {
     );
   }
 }
+
+GlipTeamCreationModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  createTeam: PropTypes.func.isRequired,
+  updateFilter: PropTypes.func.isRequired,
+  searchFilter: PropTypes.string.isRequired,
+  filteredContacts: PropTypes.array.isRequired
+};
