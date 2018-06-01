@@ -56,6 +56,7 @@ export default class GlipTeamCreationModal extends Component {
           email: contact.email
         }].concat(this.state.selectedContacts)
       });
+      this.props.updateFilter('');
     };
   }
 
