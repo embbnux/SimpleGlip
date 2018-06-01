@@ -28,13 +28,6 @@ export default class GlipGroupsPanel extends PureComponent {
         showTeamCreationModal: !preState.showTeamCreationModal,
       }));
     };
-    this.createGlipGroup = (data) => {
-      if(data.teamName === '' || data.selectedContacts.length === 0) {
-        return
-      }
-      this.toggleShowTeamCreationModal();
-      this.props.createTeam(data);
-    }
   }
 
   render() {
@@ -82,8 +75,8 @@ export default class GlipGroupsPanel extends PureComponent {
           filteredContacts={filteredContacts}
           updateFilter={updateContactSearchFilter}
           searchFilter={contactSearchFilter}
-          onCancel={this.toggleShowTeamCreationModal}
-          onConfirm={this.createGlipGroup}
+          closeModal={this.toggleShowTeamCreationModal}
+          createTeam={this.props.createTeam}
           show={this.state.showTeamCreationModal}
         />
         {spinner}
@@ -103,6 +96,10 @@ GlipGroupsPanel.propTypes = {
   currentPage: PropTypes.number,
   onNextPage: PropTypes.func,
   atRender: PropTypes.func,
+  createTeam: PropTypes.func.isRequired,
+  filteredContacts: PropTypes.array,
+  updateContactSearchFilter: PropTypes.func.isRequired,
+  contactSearchFilter: PropTypes.string,
 };
 
 GlipGroupsPanel.defaultProps = {
@@ -114,4 +111,6 @@ GlipGroupsPanel.defaultProps = {
   currentPage: 1,
   onNextPage: undefined,
   atRender: undefined,
+  filteredContacts: [],
+  contactSearchFilter: ''
 };
