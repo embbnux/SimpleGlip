@@ -44,4 +44,15 @@ export default class NewGlipGroups extends GlipGroups {
   get currentGroupIdFromStorage() {
     return this.state.currentGroupId;
   }
+
+  async createTeam(name, members) {
+    const group = await this._client.glip().groups().post({
+      type: 'Team',
+      name,
+      members,
+      isPublic: true,
+      description: ''
+    })
+    return group.id
+  }
 }

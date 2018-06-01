@@ -38,6 +38,11 @@ export default class GlipTeamCreationModal extends Component {
       this.props.onCancel();
     };
 
+    this.onConfirm = () => {
+      this.props.updateFilter('');
+      this.props.onConfirm(this.state);
+    };
+
     this.addContact = (contact) => {
       const oldIndex = this.state.selectedContacts
                            .findIndex((c) => c.email === contact.email);
@@ -63,7 +68,7 @@ export default class GlipTeamCreationModal extends Component {
     }
     return (
       <Modal
-        onConfirm={() => {}}
+        onConfirm={this.onConfirm}
         onCancel={this.onCancel}
         currentLocale="en-US"
         show={this.props.show}
