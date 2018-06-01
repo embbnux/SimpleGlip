@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from 'ringcentral-widgets/components/SearchInput';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
-import Modal from 'ringcentral-widgets/components/Modal';
 
 import GlipGroupList from '../GlipGroupList';
+import GlipTeamCreationModal from '../GlipTeamCreation';
 
 import styles from './styles.scss';
 
@@ -41,6 +41,9 @@ export default class GlipGroupsPanel extends PureComponent {
       onNextPage,
       atRender,
       goToGroup,
+      filteredContacts,
+      updateContactSearchFilter,
+      contactSearchFilter,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     return (
@@ -69,14 +72,13 @@ export default class GlipGroupsPanel extends PureComponent {
             atRender={atRender}
           />
         </div>
-        <Modal
-          onConfirm={() => {}}
+        <GlipTeamCreationModal
+          filteredContacts={filteredContacts}
+          updateFilter={updateContactSearchFilter}
+          searchFilter={contactSearchFilter}
           onCancel={this.toggleShowTeamCreationModal}
-          currentLocale="en-US"
           show={this.state.showTeamCreationModal}
-        >
-          Test
-        </Modal>
+        />
         {spinner}
       </div>
     );
