@@ -80,6 +80,7 @@ export default class GlipTeamCreationModal extends Component {
           className={styles.teamName}
           value={this.state.teamName}
           onChange={this.updateTeamName}
+          placeholder={'Team name'}
         />
         <SearchInput
           className={styles.searchInput}
