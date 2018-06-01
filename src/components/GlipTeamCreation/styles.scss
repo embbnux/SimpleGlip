@@ -69,3 +69,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.teamName {
+  border-radius: 15px;
+  border: solid 1px #e9e9e9;
+  margin: 16px 0;
+  padding: 6px 0;
+  width: 256px;
+  ::placeholder {
+    color: #bbb;
+  }
+}
