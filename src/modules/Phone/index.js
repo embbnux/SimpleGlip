@@ -160,11 +160,18 @@ export default class BasePhone extends RcModule {
         this.routerInteraction.currentPath === '/glip' &&
         !this._mobile
       ) {
-        if (this.glipGroups.currentGroupId) {
+        if (this.glipGroups.currentGroupId && this.glipGroups.currentGroup.id) {
           this.routerInteraction.push(`/glip/groups/${this.glipGroups.currentGroupId}`);
           return;
         }
         this.routerInteraction.push('/glip/persons/me');
+      }
+      if (
+        this.glipGroups.currentGroupId &&
+        !this.glipGroups.currentGroup.id &&
+        this.routerInteraction.currentPath === `/glip/groups/${this.glipGroups.currentGroupId}`
+      ) {
+        this.routerInteraction.push('/glip');
       }
     });
   }
