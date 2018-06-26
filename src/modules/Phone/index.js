@@ -114,7 +114,7 @@ export default class BasePhone extends RcModule {
 
   initialize() {
     this.glipPosts.addNewPostListener((post) => {
-      if (this.glipGroups.currentGroupId === post.groupId) {
+      if (this.glipGroups.currentGroupId === post.groupId && !document.hidden) {
         return;
       }
       const creator = this.glipPersons.personsMap[post.creatorId];
@@ -123,7 +123,8 @@ export default class BasePhone extends RcModule {
         text: post.text,
         icon: creator && creator.avatar,
         onClick: () => {
-          this.glipGroups.updateCurrentGroupId(post.groupId);
+          this.routerInteraction.push(`/glip/groups/${post.groupId}`);
+          window.focus();
         }
       });
     });
