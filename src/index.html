@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Simple Glip</title>
   <meta name="description" content="A light Glip client">
+  <meta name="theme-color" content="#8888ff"/>
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
@@ -20,6 +21,7 @@
 </head>
 
 <body>
+  <noscript>Please enable javascript before using this app.</noscript>
   <div id='viewport'>
     <p id="appLoading">
       Loading...
@@ -27,9 +29,13 @@
   </div>
   <script>
     if (navigator.serviceWorker != null) {
-      navigator.serviceWorker.register('./service-worker.js')
-      .then(function (registration) {
-        console.log('Registered events at scope: ', registration.scope);
+      var version = '0.0.5';
+      navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
+        if (localStorage.getItem('sw_version') !== version) {
+          registration.update().then(function () {
+            localStorage.setItem('sw_version', version);
+          });
+        }
       });
     }
   </script>
