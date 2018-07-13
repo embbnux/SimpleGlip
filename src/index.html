@@ -29,7 +29,7 @@
   </div>
   <script>
     if (navigator.serviceWorker != null) {
-      var version = '0.0.7';
+      var version = '0.0.8';
       navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
         if (localStorage.getItem('sw_version') !== version) {
           registration.update().then(function () {

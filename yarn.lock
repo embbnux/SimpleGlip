@@ -5608,7 +5608,7 @@ react-transition-group@^2.2.0, react-transition-group@^2.2.1:
     prop-types "^15.5.8"
     warning "^3.0.0"
 
-react-virtualized@^9.19.1:
+react-virtualized@^9.19.1, react-virtualized@^9.20.1:
   version "9.20.1"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.20.1.tgz#02dc08fe9070386b8c48e2ac56bce7af0208d22d"
   dependencies:

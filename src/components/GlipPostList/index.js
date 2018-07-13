@@ -20,10 +20,6 @@ export default class GlipPostList extends PureComponent {
     this._scrollToLastMessage();
   }
 
-  componentWillUnmount() {
-    this._mounted = false;
-  }
-
   componentDidUpdate(prevProps) {
     if (!this._mounted) {
       return;
@@ -31,12 +27,15 @@ export default class GlipPostList extends PureComponent {
     if (
       prevProps.groupId !== this.props.groupId
     ) {
+      this._scrollUp = false;
       this._scrollToLastMessage();
     } else if (prevProps.posts.length !== this.props.posts.length) {
       const prevLastPost = prevProps.posts[prevProps.posts.length - 1] || {};
       const lastPost = this.props.posts[this.props.posts.length - 1] || {};
       if (lastPost.id !== prevLastPost.id || prevProps.posts.length > this.props.posts.length) {
-        this._scrollToLastMessage();
+        if (!this._scrollUp) {
+          this._scrollToLastMessage();
+        }
       } else if (this._listRef && this._scrollHeight !== this._listRef.scrollHeight) {
         this._listRef.scrollTop =
           this._listRef.scrollTop + (this._listRef.scrollHeight - this._scrollHeight);
@@ -45,12 +44,24 @@ export default class GlipPostList extends PureComponent {
     this._scrollHeight = this._listRef.scrollHeight;
   }
 
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
   _onScroll = async () => {
     if (!this._listRef || !this._mounted) {
       return;
     }
     const currentScrollTop = this._listRef.scrollTop;
     this._scrollHeight = this._listRef.scrollHeight;
+    const clientHeight = this._listRef.clientHeight;
+    if (currentScrollTop < this._scrollTop && currentScrollTop < this._scrollHeight - 200) {
+      // user scroll up
+      this._scrollUp = true;
+    } else if (currentScrollTop + clientHeight > this._scrollHeight - 200) {
+      // user scroll down to bottom
+      this._scrollUp = false;
+    }
     if (
       currentScrollTop < 20 &&
       this._scrollTop >= 20
