@@ -1,5 +1,7 @@
 import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
 import { Module } from 'ringcentral-integration/lib/di';
+import getter from 'ringcentral-integration/lib/getter';
+import { createSelector } from 'reselect';
 
 import getReducer, {
   getCurrentGroupIdReducer,
@@ -55,4 +57,19 @@ export default class NewGlipGroups extends GlipGroups {
     });
     return group.id;
   }
+
+  @getter
+  groups = createSelector(
+    () => this.filteredGroups,
+    (filteredGroups) => {
+      const sortedGroups =
+        filteredGroups.sort((a, b) => {
+          if (a.updatedTime === b.updatedTime) return 0;
+          return a.updatedTime > b.updatedTime ?
+            -1 :
+            1;
+        });
+      return sortedGroups;
+    },
+  )
 }

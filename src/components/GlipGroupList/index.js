@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import { List } from 'react-virtualized';
+
 import styles from './styles.scss';
 
 import GlipGroupItem from '../GlipGroupItem';
@@ -8,71 +9,60 @@ import GlipGroupItem from '../GlipGroupItem';
 export default class GlipGroupList extends PureComponent {
   constructor(props) {
     super(props);
-    this._downwards = false;
-
-    this._onScroll = (e) => {
-      this._detectNextPage(e.target);
-    };
+    this._rowHeight = 75;
+    this._list = React.createRef();
   }
 
-  componentDidMount() {
-    this._nextTimeOut = setTimeout(() => {
-      this._detectNextPage(this._rootElem);
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    if (this._nextTimeOut) {
-      clearTimeout(this._nextTimeOut);
-    }
-  }
-
-  _detectNextPage(el) {
-    if (!el) {
-      return;
-    }
-    if (this._downwards) {
-      if ((el.scrollTop + el.clientHeight) > (el.scrollHeight - 20)) {
-        this._downwards = false;
-        const { currentPage, onNextPage } = this.props;
-        if (typeof onNextPage === 'function') {
-          onNextPage(currentPage + 1);
-        }
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.groups !== prevProps.groups ||
+      this.props.currentGroupId !== prevProps.currentGroupId
+    ) {
+      if (this._list && this._list.current) {
+        this._list.current.forceUpdateGrid();
       }
-    } else if ((el.scrollTop + el.clientHeight) < (el.scrollHeight - 30)) {
-      this._downwards = true;
     }
+  }
+
+  _rowRenderer = ({
+    index,
+    key,
+    style,
+  }) => {
+    const group = this.props.groups[index];
+    return (
+      <div
+        key={key}
+        style={style}
+      >
+        <GlipGroupItem
+          group={group}
+          active={group.id === this.props.currentGroupId}
+          goToGroup={() => { this.props.goToGroup(group.id); }}
+          atRender={this.props.atRender}
+          className={styles.item}
+        />
+      </div>
+    );
   }
 
   render() {
     const {
       groups,
+      width,
+      height,
       className,
-      currentGroupId,
-      goToGroup,
-      atRender,
     } = this.props;
     return (
-      <div
-        className={classnames(
-          styles.root,
-          className,
-        )}
-        onScroll={this._onScroll}
-        ref={(el) => { this._rootElem = el; }}
-      >
-        {
-          groups.map(group => (
-            <GlipGroupItem
-              group={group}
-              key={group.id}
-              active={group.id === currentGroupId}
-              goToGroup={() => { goToGroup(group.id); }}
-              atRender={atRender}
-            />
-          ))
-        }
-      </div>
+      <List
+        ref={this._list}
+        className={className}
+        width={width}
+        height={height}
+        rowCount={groups.length}
+        rowHeight={75}
+        rowRenderer={this._rowRenderer}
+      />
     );
   }
 }
@@ -82,16 +72,14 @@ GlipGroupList.propTypes = {
   groups: PropTypes.array,
   goToGroup: PropTypes.func.isRequired,
   currentGroupId: PropTypes.string,
-  currentPage: PropTypes.number,
-  onNextPage: PropTypes.func,
   atRender: PropTypes.func,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
 };
 
 GlipGroupList.defaultProps = {
   className: undefined,
   groups: [],
   currentGroupId: undefined,
-  currentPage: 1,
-  onNextPage: undefined,
   atRender: undefined,
 };

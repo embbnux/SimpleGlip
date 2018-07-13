@@ -8,12 +8,14 @@ function mapToProps(_, {
   phone: {
     glipGroups,
     contacts,
+    routerInteraction,
   },
   mobile,
 }) {
+  const isInChat = routerInteraction.currentPath.indexOf('/glip/groups') > -1;
   return {
     groups: glipGroups.groupsWithUnread,
-    currentGroupId: mobile ? null : glipGroups.currentGroupId,
+    currentGroupId: (!isInChat || mobile) ? null : glipGroups.currentGroupId,
     searchFilter: glipGroups.searchFilter,
     currentPage: glipGroups.pageNumber,
     filteredContacts: contacts.filteredContacts,

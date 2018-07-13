@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from 'ringcentral-widgets/components/SearchInput';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
+import debounce from 'ringcentral-integration/lib/debounce';
 
 import GlipGroupList from '../GlipGroupList';
 import GlipTeamCreationModal from '../GlipTeamCreation';
@@ -15,6 +16,8 @@ export default class GlipGroupsPanel extends PureComponent {
     this.state = {
       searchString: props.searchFilter,
       showTeamCreationModal: false,
+      contentHeight: 0,
+      contentWidth: 0,
     };
     this.updateSeachString = (e) => {
       const searchString = e.target.value;
@@ -28,6 +31,44 @@ export default class GlipGroupsPanel extends PureComponent {
         showTeamCreationModal: !preState.showTeamCreationModal,
       }));
     };
+    this._contentWrapper = React.createRef();
+    this._mounted = false;
+  }
+
+  componentDidMount() {
+    this._mounted = true;
+    this._calculateContentSize();
+    window.addEventListener('resize', this._onResize);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  _onResize = debounce(() => {
+    if (this._mounted) {
+      this._calculateContentSize();
+    }
+  }, 300)
+
+  _calculateContentSize() {
+    if (
+      this._contentWrapper &&
+      this._contentWrapper.current &&
+      this._contentWrapper.current.getBoundingClientRect
+    ) {
+      const rect = this._contentWrapper.current.getBoundingClientRect();
+      this.setState({
+        contentHeight: rect.bottom - rect.top,
+        contentWidth: rect.right - rect.left,
+      });
+      return;
+    }
+    this.setState({
+      contentHeight: 0,
+      contentWidth: 0
+    });
   }
 
   render() {
@@ -61,7 +102,7 @@ export default class GlipGroupsPanel extends PureComponent {
             +
           </div>
         </div>
-        <div className={styles.content}>
+        <div className={styles.content} ref={this._contentWrapper}>
           <GlipGroupList
             groups={groups}
             goToGroup={goToGroup}
@@ -69,6 +110,8 @@ export default class GlipGroupsPanel extends PureComponent {
             onNextPage={onNextPage}
             currentPage={currentPage}
             atRender={atRender}
+            width={this.state.contentWidth}
+            height={this.state.contentHeight}
           />
         </div>
         <GlipTeamCreationModal
