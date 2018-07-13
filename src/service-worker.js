@@ -72,6 +72,9 @@ self.addEventListener('fetch', function (e) {
   if (e.request.url.indexOf('manifest.json') > -1) {
     return;
   }
+  if (e.request.url.indexOf('s3.amazonaws.com') > -1) {
+    return;
+  }
   if (self.navigator.onLine && e.request.headers.get('accept').indexOf('application/json') > -1) {
     e.respondWith(
       fetchAndCache(e.request)
