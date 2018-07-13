@@ -27,6 +27,7 @@ import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
 import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
 // import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
 import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
+import LocalForageStorage from 'ringcentral-integration/lib/LocalForageStorage';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
@@ -97,6 +98,14 @@ import Notification from '../../lib/notification';
       ],
     },
     { provide: 'Adapter', useClass: Adapter },
+    {
+      provide: 'StorageOptions',
+      useValue: {
+        StorageProvider: LocalForageStorage, // IndexedDB
+        disableAllowInactiveTabsWrite: true,
+      },
+      spread: true
+    },
   ]
 })
 export default class BasePhone extends RcModule {

@@ -1,1 +1,1 @@
-export default 'rc-widget';
+export default 'rc-widget-glip';

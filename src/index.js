@@ -24,7 +24,7 @@ const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
 let mobile;
 if (typeof pathParams.mobile === 'undefined') {
-  mobile = !window.matchMedia("(min-width: 650px)").matches;
+  mobile = !window.matchMedia('(min-width: 650px)').matches;
 } else {
   mobile = !!pathParams.mobile;
 }
