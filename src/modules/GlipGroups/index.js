@@ -1,6 +1,8 @@
 import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
 import { Module } from 'ringcentral-integration/lib/di';
 import getter from 'ringcentral-integration/lib/getter';
+import sleep from 'ringcentral-integration/lib/sleep';
+
 import { createSelector } from 'reselect';
 
 import getReducer, {
@@ -36,6 +38,28 @@ export default class NewGlipGroups extends GlipGroups {
     if (this._preloadPosts) {
       this._preloadedPosts = {};
       this._preloadGroupPosts();
+    }
+  }
+
+  async _preloadGroupPosts(force) {
+    const groups = this.groups.slice(0, 20);
+    for (const group of groups) {
+      if (!this._glipPosts) {
+        break;
+      }
+      if (this._preloadedPosts[group.id]) {
+        continue;
+      }
+      this._preloadedPosts[group.id] = true;
+      if (!this._glipPosts.postsMap[group.id] || force) {
+        await sleep(this._preloadPostsDelayTtl);
+        if (!this._glipPosts.postsMap[group.id] || force) {
+          await this._glipPosts.fetchPosts(group.id);
+        }
+      }
+      if (!this._glipPosts.readTimeMap[group.id]) {
+        this._glipPosts.updateReadTime(group.id, (Date.now() - (1000 * 3600 * 2)));
+      }
     }
   }
 
