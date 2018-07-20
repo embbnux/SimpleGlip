@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap_white.css';
+import 'rc-editor-mention/assets/index.css';
+import Mention, { Nav, toString, toEditorState, getMentions } from 'rc-editor-mention';
 
 import EmojiSelect from '../EmojiSelect';
 
@@ -14,17 +16,31 @@ export default class GlipChatForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: props.textValue,
+      value: toEditorState(props.textValue),
+      suggestions: []
     };
-    this._onInputChange = (e) => {
-      const text = e.currentTarget.value;
-      this.setState({ text });
+    this._onInputChange = (editorState) => {
+      // const text = e.currentTarget.value;
+      this.setState({ value: editorState });
       if (typeof this.props.onTextChange === 'function') {
-        this.props.onTextChange(text);
+        this.props.onTextChange(toString(editorState));
       }
     };
+
+    this._onSearchChange = (value) => {
+      console.log(value);
+      const suggestions = this.props.members.map(suggestion =>
+        <Nav style={{ height: 34 }} value={suggestion.email} key={suggestion.id} >
+          <span>{suggestion.firstName} {suggestion.lastName}</span>
+        </Nav>);
+      this.setState({
+        suggestions,
+      });
+    };
+
     this._onSubmit = (e) => {
-      this.props.onSubmit();
+      console.log('onSubmit');
+      // this.props.onSubmit();
       e.preventDefault();
     };
     this._onTextAreaKeyDown = (e) => {
@@ -34,6 +50,7 @@ export default class GlipChatForm extends Component {
         !e.ctrlKey &&
         !e.altKey
       ) {
+        console.log('onSubmit');
         this.props.onSubmit();
         e.preventDefault();
       }
@@ -72,7 +89,7 @@ export default class GlipChatForm extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.textValue !== nextProps.textValue) {
-      this.setState({ text: nextProps.textValue });
+      this.setState({ value: toEditorState(nextProps.textValue) });
     }
   }
 
@@ -85,9 +102,9 @@ export default class GlipChatForm extends Component {
   }
 
   _autoFocus() {
-    if (this._textInput) {
-      this._textInput.focus();
-    }
+    // if (this._textInput) {
+    //   this._textInput.focus();
+    // }
   }
 
   render() {
@@ -118,14 +135,18 @@ export default class GlipChatForm extends Component {
           </label>
         </div>
         <form onSubmit={this._onSubmit}>
-          <textarea
+          <Mention
+            style={{ width: '100%', height: 70, lineHeight: '18px' }}
+            className={styles.mentionInput}
             ref={(input) => { this._textInput = input; }}
             placeholder={placeholder}
-            value={this.state.text}
-            maxLength="1000"
+            value={this.state.value}
             onChange={this._onInputChange}
-            autoFocus
-            onKeyPressCapture={this._onTextAreaKeyDown}
+            onSearchChange={this._onSearchChange}
+            suggestions={this.state.suggestions}
+            prefix="@"
+            notFoundContent=""
+            multiLines
           />
         </form>
       </div>
@@ -141,6 +162,7 @@ GlipChatForm.propTypes = {
   onUploadFile: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   groupId: PropTypes.string,
+  members: PropTypes.array,
 };
 
 GlipChatForm.defaultProps = {
@@ -149,4 +171,5 @@ GlipChatForm.defaultProps = {
   onTextChange: undefined,
   placeholder: undefined,
   groupId: undefined,
+  members: []
 };
