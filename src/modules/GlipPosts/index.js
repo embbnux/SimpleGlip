@@ -1,15 +1,31 @@
 import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
 import { Module } from 'ringcentral-integration/lib/di';
-import isBlank from 'ingcentral-integration/lib/isBlank';
+import isBlank from 'ringcentral-integration/lib/isBlank';
+
+import getReducer from './getReducer';
 
 @Module({
   deps: []
 })
 export default class NewGlipPosts extends GlipPosts {
+  constructor(options) {
+    super(options);
+    this._reducer = getReducer(this.actionTypes);
+  }
+
   async create({ groupId }) {
-    const text = this.postInputs[groupId] && this.postInputs[groupId].text;
+    let text = this.postInputs[groupId] && this.postInputs[groupId].text;
+    const mentions = this.postInputs[groupId] && this.postInputs[groupId].mentions;
     if (isBlank(text) || !groupId) {
       return;
+    }
+    if (mentions && mentions.length > 0) {
+      mentions.forEach((mention) => {
+        if (!mention.matcherId) {
+          return;
+        }
+        text = text.replace(mention.mention, `![:Person](${mention.matcherId})`);
+      });
     }
     const fakeId = `${Date.now()}`;
     const fakeRecord = {
@@ -27,7 +43,7 @@ export default class NewGlipPosts extends GlipPosts {
         groupId,
         record: fakeRecord,
       });
-      this.updatePostInput({ text: '', groupId });
+      this.updatePostInput({ text: '', groupId, mentions: [] });
       const record = await this._client.glip().groups(groupId).posts().post({
         text,
       });
@@ -45,7 +61,16 @@ export default class NewGlipPosts extends GlipPosts {
         groupId,
         oldRecordId: fakeId,
       });
-      this.updatePostInput({ text, groupId });
+      this.updatePostInput({ text, groupId, mentions });
     }
+  }
+
+  updatePostInput({ text, groupId, mentions }) {
+    this.store.dispatch({
+      type: this.actionTypes.updatePostInput,
+      groupId,
+      mentions,
+      textValue: text,
+    });
   }
 }

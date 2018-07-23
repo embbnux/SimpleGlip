@@ -5510,9 +5510,9 @@ rc-editor-core@~0.8.3:
     prop-types "^15.5.8"
     setimmediate "^1.0.5"
 
-rc-editor-mention@^1.1.7:
+"rc-editor-mention@https://github.com/embbnux/editor-mention#release":
   version "1.1.7"
-  resolved "https://registry.yarnpkg.com/rc-editor-mention/-/rc-editor-mention-1.1.7.tgz#c72d181859beda96669f4b43e19a941e68fa985b"
+  resolved "https://github.com/embbnux/editor-mention#d78cdf4cfc696d697d186bb01efc5bfcdbb317b4"
   dependencies:
     babel-runtime "^6.23.0"
     classnames "^2.2.5"

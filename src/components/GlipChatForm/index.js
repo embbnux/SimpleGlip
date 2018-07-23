@@ -16,23 +16,26 @@ export default class GlipChatForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: toEditorState(props.textValue),
-      suggestions: []
+      defaultValue: toEditorState(props.textValue),
+      suggestions: [],
     };
     this._onInputChange = (editorState) => {
-      // const text = e.currentTarget.value;
-      this.setState({ value: editorState });
       if (typeof this.props.onTextChange === 'function') {
-        this.props.onTextChange(toString(editorState));
+        const mentions = getMentions(editorState).map((mention) => {
+          const email = mention.replace('@[', '').replace(']', '');
+          const member = this.props.members.find(m => m.email === email);
+          return {
+            mention,
+            matcherId: (member && member.id),
+          };
+        });
+        this.props.onTextChange(toString(editorState), mentions);
       }
     };
 
     this._onSearchChange = (value) => {
-      console.log(value);
-      const suggestions = this.props.members.map(suggestion =>
-        <Nav style={{ height: 34 }} value={suggestion.email} key={suggestion.id} >
-          <span>{suggestion.firstName} {suggestion.lastName}</span>
-        </Nav>);
+      const members = this.props.members.filter(m => (m.firstName.toLowerCase()).indexOf(value.toLowerCase()) > -1);
+      const suggestions = this._getSuggestions(members);
       this.setState({
         suggestions,
       });
@@ -40,9 +43,10 @@ export default class GlipChatForm extends Component {
 
     this._onSubmit = (e) => {
       console.log('onSubmit');
-      // this.props.onSubmit();
+      this.props.onSubmit();
       e.preventDefault();
     };
+
     this._onTextAreaKeyDown = (e) => {
       if (
         e.key === 'Enter' &&
@@ -88,8 +92,25 @@ export default class GlipChatForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.textValue !== nextProps.textValue) {
-      this.setState({ value: toEditorState(nextProps.textValue) });
+    if (this.props.members !== nextProps.members) {
+      const suggestions = this._getSuggestions(nextProps.members);
+      this.setState({
+        suggestions,
+      });
+    }
+    if (
+      nextProps.groupId !== this.props.groupId
+    ) {
+      const suggestions = this._getSuggestions(nextProps.members);
+      this.setState({
+        suggestions,
+        defaultValue: toEditorState(nextProps.textValue)
+      });
+    }
+    if (this.props.textValue.length > 0 && nextProps.textValue.length === 0) {
+      this.setState({
+        defaultValue: toEditorState(nextProps.textValue)
+      });
     }
   }
 
@@ -98,19 +119,37 @@ export default class GlipChatForm extends Component {
       prevProps.groupId !== this.props.groupId
     ) {
       this._autoFocus();
+      if (this._metionInput) {
+        this._metionInput.reset();
+      }
+    }
+    if (this.props.textValue.length === 0 && prevProps.textValue.length > 0) {
+      if (this._metionInput) {
+        this._metionInput.reset();
+      }
     }
   }
 
+  _getSuggestions(suggestions) {
+    return suggestions.map(
+      suggestion =>
+        <Nav style={{ height: 34 }} value={`[${suggestion.email}]`} key={suggestion.id} >
+          <span>{suggestion.firstName} {suggestion.lastName}</span>
+        </Nav>
+    );
+  }
+
   _autoFocus() {
-    // if (this._textInput) {
-    //   this._textInput.focus();
-    // }
+    if (this._metionInput) {
+      this._metionInput._editor.focusEditor();
+    }
   }
 
   render() {
     const {
       className,
       placeholder,
+      mentionStyle,
     } = this.props;
 
     return (
@@ -136,17 +175,20 @@ export default class GlipChatForm extends Component {
         </div>
         <form onSubmit={this._onSubmit}>
           <Mention
-            style={{ width: '100%', height: 70, lineHeight: '18px' }}
+            style={mentionStyle}
             className={styles.mentionInput}
-            ref={(input) => { this._textInput = input; }}
+            ref={(input) => { this._metionInput = input; }}
             placeholder={placeholder}
-            value={this.state.value}
+            placement="bottom"
+            defaultValue={this.state.defaultValue}
             onChange={this._onInputChange}
             onSearchChange={this._onSearchChange}
             suggestions={this.state.suggestions}
             prefix="@"
-            notFoundContent=""
+            notFoundContent="No found."
             multiLines
+            mode="immutable"
+            onKeyDown={this._onTextAreaKeyDown}
           />
         </form>
       </div>
@@ -163,6 +205,7 @@ GlipChatForm.propTypes = {
   placeholder: PropTypes.string,
   groupId: PropTypes.string,
   members: PropTypes.array,
+  mentionStyle: PropTypes.object,
 };
 
 GlipChatForm.defaultProps = {
@@ -171,5 +214,6 @@ GlipChatForm.defaultProps = {
   onTextChange: undefined,
   placeholder: undefined,
   groupId: undefined,
-  members: []
+  members: [],
+  mentionStyle: { width: '100%', height: 70, lineHeight: '18px' }
 };
