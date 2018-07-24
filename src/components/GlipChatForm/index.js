@@ -55,7 +55,6 @@ export default class GlipChatForm extends Component {
     };
 
     this._onSubmit = (e) => {
-      console.log('onSubmit');
       this.props.onSubmit();
       e.preventDefault();
     };
@@ -67,7 +66,6 @@ export default class GlipChatForm extends Component {
         !e.ctrlKey &&
         !e.altKey
       ) {
-        console.log('onSubmit');
         this.props.onSubmit();
         e.preventDefault();
       }
