@@ -34,7 +34,20 @@ export default class GlipChatForm extends Component {
     };
 
     this._onSearchChange = (value) => {
-      const members = this.props.members.filter(m => (m.firstName.toLowerCase()).indexOf(value.toLowerCase()) > -1);
+      const members = this.props.members.filter((m) => {
+        const search = value && value.toLowerCase();
+        if (!search) {
+          return true;
+        }
+        const name = `${m.firstName} ${m.lastName}`.toLowerCase();
+        if (name.indexOf(search) > -1) {
+          return true;
+        }
+        if (m.email && m.email.indexOf(search) > -1) {
+          return true;
+        }
+        return false;
+      });
       const suggestions = this._getSuggestions(members);
       this.setState({
         suggestions,
