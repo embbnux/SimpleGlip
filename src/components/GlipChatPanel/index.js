@@ -72,6 +72,7 @@ export default class GlipChatPage extends Component {
             groupId={group.id}
             onSubmit={createPost}
             onUploadFile={uploadFile}
+            members={group.detailMembers}
           />
         </div>
         {spinner}

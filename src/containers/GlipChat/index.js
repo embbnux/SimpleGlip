@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import withPhone from 'ringcentral-widgets/lib/withPhone';
 
-import GlipChatPanel from '../..//components/GlipChatPanel';
+import GlipChatPanel from '../../components/GlipChatPanel';
 
 function mapToProps(_, {
   params,
@@ -46,10 +46,11 @@ function mapToFunctions(_, {
         groupId: glipGroups.currentGroupId,
       });
     },
-    updateText: (text) => {
+    updateText: (text, mentions) => {
       glipPosts.updatePostInput({
         text,
         groupId: glipGroups.currentGroupId,
+        mentions,
       });
     },
     uploadFile: (fileName, rawFile) => glipPosts.sendFile({
