@@ -82,3 +82,16 @@
     display: none;
   }
 }
+
+.callButton {
+  cursor: pointer;
+  width: 25px;
+  margin-left: 19px;
+  position: relative;
+  top: -4px;
+
+  img{
+    width: 17px;
+    height: auto;
+  }
+}

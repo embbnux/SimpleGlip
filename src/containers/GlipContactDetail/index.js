@@ -19,6 +19,7 @@ function mapToProps(_, {
     person,
     currentLocale: locale.currentLocale,
     isMe: contactId === 'me' || contactId === me.id,
+    canShowCall: false,
     showSpinner: !contacts.ready,
   };
 }
@@ -39,6 +40,10 @@ function mapToFunctions(_, {
       if (group) {
         routerInteraction.push(`/glip/groups/${group.id}`);
       }
+    },
+
+    startCall: async (person) => {
+      // todo
     },
   };
 }

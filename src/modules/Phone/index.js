@@ -31,6 +31,28 @@ import LocalForageStorage from 'ringcentral-integration/lib/LocalForageStorage';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
+import Webphone from 'ringcentral-integration/modules/Webphone';
+import ExtensionDevice from 'ringcentral-integration/modules/ExtensionDevice';
+import NumberValidate from 'ringcentral-integration/modules/NumberValidate';
+import DialingPlan from 'ringcentral-integration/modules/DialingPlan';
+import AccountInfo from 'ringcentral-integration/modules/AccountInfo';
+import AudioSettings from 'ringcentral-integration/modules/AudioSettings';
+import DialerUI from 'ringcentral-widgets/modules/DialerUI';
+import CallMonitor from 'ringcentral-integration/modules/CallMonitor';
+import Call from 'ringcentral-integration/modules/Call';
+import CallingSettings from 'ringcentral-integration/modules/CallingSettings';
+import ExtensionPhoneNumber from 'ringcentral-integration/modules/ExtensionPhoneNumber';
+import ForwardingNumber from 'ringcentral-integration/modules/ForwardingNumber';
+import DetailedPresence from 'ringcentral-integration/modules/DetailedPresence';
+import ContactSearch from 'ringcentral-integration/modules/ContactSearch';
+import AccountPhoneNumber from 'ringcentral-integration/modules/AccountPhoneNumber';
+
+
+import Softphone from 'ringcentral-integration/modules/Softphone';
+import Ringout from 'ringcentral-integration/modules/Ringout';
+
+import RegionSettings from 'ringcentral-integration/modules/RegionSettings';
+
 import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
 import GlipGroups from '../GlipGroups';
@@ -43,6 +65,24 @@ import Notification from '../../lib/notification';
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
 @ModuleFactory({
   providers: [
+    { provide: 'ExtensionDevice', useClass: ExtensionDevice },
+    { provide: 'Webphone', useClass: Webphone },
+    { provide: 'NumberValidate', useClass: NumberValidate },
+    { provide: 'RegionSettings', useClass: RegionSettings },
+    { provide: 'DialingPlan', useClass: DialingPlan },
+    { provide: 'AccountInfo', useClass: AccountInfo },
+    { provide: 'AudioSettings', useClass: AudioSettings },
+    { provide: 'DialerUI', useClass: DialerUI },
+    { provide: 'Call', useClass: Call },
+    { provide: 'CallMonitor', useClass: CallMonitor },
+    { provide: 'Softphone', useClass: Softphone },
+    { provide: 'Ringout', useClass: Ringout },
+    { provide: 'CallingSettings', useClass: CallingSettings },
+    { provide: 'DetailedPresence', useClass: DetailedPresence },
+    { provide: 'ExtensionPhoneNumber', useClass: ExtensionPhoneNumber },
+    { provide: 'ForwardingNumber', useClass: ForwardingNumber },
+    { provide: 'ContactSearch', useClass: ContactSearch },
+    { provide: 'AccountPhoneNumber', useClass: AccountPhoneNumber },
     { provide: 'Alert', useClass: Alert },
     { provide: 'Brand', useClass: Brand },
     { provide: 'Locale', useClass: Locale },
@@ -115,11 +155,50 @@ export default class BasePhone extends RcModule {
     const {
       appConfig,
       moduleOptions,
+      webphone,
+      callMonitor
     } = options;
     this._appConfig = appConfig;
     this._notification = new Notification();
     this._mobile = moduleOptions.mobile;
     this._redirectUriAfterLogin = null;
+    this._webphone = webphone;
+
+    webphone._onCallStartFunc = (session) => {
+      if (
+        this.routerInteraction.currentPath.indexOf('/glip/call') !== 0 &&
+        this.routerInteraction.currentPath.indexOf('/conferenceCall/mergeCtrl') !== 0
+      ) {
+        this.routerInteraction.push('/glip/call');
+      }
+    };
+
+    webphone._onCallEndFunc = () => {
+      if (this.routerInteraction.currentPath.indexOf('/glip/call') === 0) {
+        this.routerInteraction.goBack();
+      }
+    };
+
+    webphone._onCallRingFunc = () => {
+      if (this._webphone.ringSessions.length === 1) {
+        if (this.routerInteraction.currentPath !== '/glip/incomingcall') {
+          if (this._webphone.ringSessions[0].minimized) {
+            // why?
+            this._webphone.ringSessions[0].minimized = false;
+          }
+          this.routerInteraction.push('/glip/incomingcall');
+        }
+      }
+    };
+
+    // CallMonitor configuration
+    callMonitor._onRinging = async () => {
+      if (this._webphone._webphone) {
+        return;
+      }
+      // TODO refactor some of these logic into appropriate modules
+      this.routerInteraction.push('/glip/incomingcall1');
+    };
   }
 
   initialize() {

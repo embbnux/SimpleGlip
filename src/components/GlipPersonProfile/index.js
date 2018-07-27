@@ -28,6 +28,18 @@ export default class PersonProfile extends Component {
         buttonDisabled: false,
       });
     };
+    this.onStartCall = async () => {
+      this.setState({
+        buttonDisabled: true,
+      });
+      await this.props.startCall(this.props.person.id);
+      if (!this._mounted) {
+        return;
+      }
+      this.setState({
+        buttonDisabled: false,
+      });
+    };
   }
 
   componentDidMount() {
@@ -47,6 +59,7 @@ export default class PersonProfile extends Component {
       person,
       isMe,
       showSpinner,
+      canShowCall,
       onBackClick,
     } = this.props;
 
@@ -96,6 +109,19 @@ export default class PersonProfile extends Component {
             </div>
           )
         }
+        {
+          !isMe && canShowCall && (
+            <div className={styles.row}>
+              <Button
+                className={styles.callButton}
+                onClick={this.onStartCall}
+                disabled={this.state.buttonDisabled}
+              >
+                Call
+              </Button>
+            </div>
+          )
+        }
         {spinner}
       </div>
     );
@@ -106,9 +132,11 @@ PersonProfile.propTypes = {
   className: PropTypes.string,
   person: PropTypes.object,
   isMe: PropTypes.bool,
+  canShowCall: PropTypes.bool,
   showSpinner: PropTypes.bool,
   onVisit: PropTypes.func,
-  startChat: PropTypes.func.isRequired
+  startChat: PropTypes.func.isRequired,
+  startCall: PropTypes.func.isRequired,
 };
 
 PersonProfile.defaultProps = {
@@ -117,4 +145,6 @@ PersonProfile.defaultProps = {
   isMe: false,
   showSpinner: false,
   onVisit: undefined,
+  canShowCall: false,
+  startCall: () => {}
 };

@@ -34,9 +34,11 @@ export default class GlipChatPage extends Component {
       showSpinner,
       atRender,
       uploadFile,
+      openCallPageClick,
       viewProfile,
       loadNextPage,
       onBackClick,
+      glipContacts
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     const backIcon =
@@ -72,7 +74,9 @@ export default class GlipChatPage extends Component {
             groupId={group.id}
             onSubmit={createPost}
             onUploadFile={uploadFile}
+            onCallButtonClick={openCallPageClick}
             members={group.detailMembers}
+            contacts={glipContacts}
           />
         </div>
         {spinner}
@@ -85,6 +89,7 @@ GlipChatPage.propTypes = {
   className: PropTypes.string,
   group: PropTypes.object,
   posts: PropTypes.array,
+  glipContacts: PropTypes.array,
   groupId: PropTypes.string,
   textValue: PropTypes.string,
   showSpinner: PropTypes.bool,
@@ -92,6 +97,7 @@ GlipChatPage.propTypes = {
   updateText: PropTypes.func.isRequired,
   createPost: PropTypes.func.isRequired,
   uploadFile: PropTypes.func.isRequired,
+  openCallPageClick: PropTypes.func.isRequired,
   dateTimeFormatter: PropTypes.func.isRequired,
   atRender: PropTypes.func,
   onBackClick: PropTypes.func,
@@ -103,9 +109,10 @@ GlipChatPage.defaultProps = {
   className: undefined,
   groupId: null,
   group: {},
+  glipContacts: [],
   posts: [],
   textValue: '',
   showSpinner: false,
   atRender: undefined,
-  onBackClick: undefined,
+  onBackClick: undefined
 };
