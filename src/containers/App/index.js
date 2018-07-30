@@ -22,7 +22,6 @@ import GlipContactDetail from '../GlipContactDetail';
 import GlipSettings from '../GlipSettings';
 import WelcomePage from '../WelcomePage';
 
-
 export default function App({
   phone,
   hostingUrl,
@@ -37,7 +36,6 @@ export default function App({
               component={routerProps => (
                 <AppView
                   hostingUrl={hostingUrl}
-                  store={phone.store}
                 >
                   {routerProps.children}
                   <AlertContainer
