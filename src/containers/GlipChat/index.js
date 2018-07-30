@@ -32,9 +32,7 @@ function mapToFunctions(_, {
     glipPersons,
     dateTimeFormat,
     routerInteraction,
-    dialerUI,
     call,
-    store
   },
   dateTimeFormatter = time =>
     dateTimeFormat.formatDateTime({ utcTimestamp: time }),
@@ -65,13 +63,7 @@ function mapToFunctions(_, {
     }),
     openCallPageClick: ({ recipient }) => {
       if (call.isIdle && recipient) {
-        dialerUI.call({ recipient });
-        // dialerUI.onCallButtonClick();
-        store.dispatch({
-          type: 'rc-widget-glip-startCall',
-          callStarted: true,
-          direction: 'outBound'
-        });
+        call.call({ recipient, phoneNumber: recipient.phoneNumber });
       }
     },
     atRender: ({ id, type }) => {

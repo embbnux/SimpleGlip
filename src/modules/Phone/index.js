@@ -155,50 +155,11 @@ export default class BasePhone extends RcModule {
     const {
       appConfig,
       moduleOptions,
-      webphone,
-      callMonitor
     } = options;
     this._appConfig = appConfig;
     this._notification = new Notification();
     this._mobile = moduleOptions.mobile;
     this._redirectUriAfterLogin = null;
-    this._webphone = webphone;
-
-    webphone._onCallStartFunc = (session) => {
-      if (
-        this.routerInteraction.currentPath.indexOf('/glip/call') !== 0 &&
-        this.routerInteraction.currentPath.indexOf('/conferenceCall/mergeCtrl') !== 0
-      ) {
-        this.routerInteraction.push('/glip/call');
-      }
-    };
-
-    webphone._onCallEndFunc = () => {
-      if (this.routerInteraction.currentPath.indexOf('/glip/call') === 0) {
-        this.routerInteraction.goBack();
-      }
-    };
-
-    webphone._onCallRingFunc = () => {
-      if (this._webphone.ringSessions.length === 1) {
-        if (this.routerInteraction.currentPath !== '/glip/incomingcall') {
-          if (this._webphone.ringSessions[0].minimized) {
-            // why?
-            this._webphone.ringSessions[0].minimized = false;
-          }
-          this.routerInteraction.push('/glip/incomingcall');
-        }
-      }
-    };
-
-    // CallMonitor configuration
-    callMonitor._onRinging = async () => {
-      if (this._webphone._webphone) {
-        return;
-      }
-      // TODO refactor some of these logic into appropriate modules
-      this.routerInteraction.push('/glip/incomingcall1');
-    };
   }
 
   initialize() {

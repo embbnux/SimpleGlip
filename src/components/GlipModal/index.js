@@ -6,6 +6,7 @@ import Modal from 'ringcentral-widgets/components/Modal';
 
 import DialerPage from 'ringcentral-widgets/containers/DialerPage';
 import CallCtrlPage from 'ringcentral-widgets/containers/CallCtrlPage';
+import IncomingCallPage from 'ringcentral-widgets/containers/IncomingCallPage';
 
 export default class GlipModal extends PureComponent {
 
@@ -13,58 +14,32 @@ export default class GlipModal extends PureComponent {
     super(props);
 
     this.state = {
-      callStarted: false,
+      callStatus: props.callStatus,
       clickOutToClose: true
     };
-
-    this.mounted = true;
-    this._store = props.store;
-
-    if (props.store) {
-      props.store.subscribe(() => {
-        // this.setState({
-        //   callStarted: true
-        // });
-        // const state = this._store.getState();
-        // if (state.call && state.call.callStatus === 'callStatus-connectin') {
-        //   if (!this.state.callStarted) {
-        //     this.setState({
-        //       callStarted: true
-        //     });
-        //   }
-        // }
-
-        // console.log(state && !state.call_Status);
-        // if (state && !state.call_Status) {
-        //   this.setState({
-        //     callStarted: true
-        //   });
-        // }
-      });
-    }
   }
 
   componentDidMount() {
   }
 
-  showModal() {
-    this.setState({
-      callStarted: true
-    });
-  }
-
-  onAdd() {
-
-  }
-  onBackButtonClicked() {
-
-  }
-
   render() {
+    const {
+      callStatus
+    } = this.props;
     return (
       <div>
-        <Modal clickOutToClose={this.state.clickOutToClose} show={this.state.callStarted} className="active-call-modal">
-          {/* <CallCtrlPage onAdd={this.onAdd} onBackButtonClick={this.onBackButtonClicked} /> */}
+        <Modal clickOutToClose={this.state.clickOutToClose} show={callStatus && callStatus.callStarted} className="active-call-modal">
+          {
+            callStatus && callStatus.direction === 'inbound' && (
+              <IncomingCallPage onBackButtonClick={() => {}} />
+            )
+          }
+          {
+            callStatus && callStatus.direction === 'outbound' && (
+              <CallCtrlPage onAdd={() => {}} onBackButtonClick={() => { }} />
+            )
+          }
+
           <DialerPage />
         </Modal>
       </div>
@@ -73,9 +48,9 @@ export default class GlipModal extends PureComponent {
 }
 
 GlipModal.propTypes = {
-  store: PropTypes.object.required
+  callStatus: PropTypes.object
 };
 
 GlipModal.defaultProps = {
-  store: undefined
+  callStatus: { callStarted: false }
 };

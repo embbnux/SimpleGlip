@@ -7,8 +7,6 @@ import PhoneProvider from 'ringcentral-widgets/lib/PhoneProvider';
 
 import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
 import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
-import CallCtrlPage from 'ringcentral-widgets/containers/CallCtrlPage';
-import IncomingCallPage from 'ringcentral-widgets/containers/IncomingCallPage';
 
 import getAlertRenderer from '../../components/AlertRenderer';
 
@@ -28,18 +26,8 @@ import WelcomePage from '../WelcomePage';
 export default function App({
   phone,
   hostingUrl,
-  activeCall,
   mobile,
-  icon
 }) {
-  const sourceIcons = {
-    brandIcon: icon
-  };
-  const getAvatarUrl = async (contact) => {
-    const avatarUrl = await phone.contacts.getProfileImage(contact, false);
-    return avatarUrl;
-  };
-
   if (mobile) {
     return (
       <PhoneProvider phone={phone}>
@@ -98,23 +86,6 @@ export default function App({
                 }
               />
               <Route
-                path="/glip/call"
-                component={() => (
-                  <CallCtrlPage
-                    showContactDisplayPlaceholder={false}
-                    sourceIcons={sourceIcons}
-                    getAvatarUrl={getAvatarUrl}
-                    onAdd={() => {
-                      // not supported.
-                    }}
-                    onBackButtonClick={() => {
-                      phone.routerInteraction.goBack();
-                    }}
-                  >
-                  </CallCtrlPage>
-                )}
-              />
-              <Route
                 path="/glip/groups/:groupId"
                 component={
                   routerProps => (
@@ -152,7 +123,6 @@ export default function App({
             component={routerProps => (
               <AppView
                 hostingUrl={hostingUrl}
-                showDialerModal={activeCall}
               >
                 {routerProps.children}
                 <AlertContainer
@@ -198,34 +168,6 @@ export default function App({
                       <GlipChat params={routerProps.params} />
                     )
                   }
-                />
-                <Route
-                  path="call"
-                  component={() => (
-                    <CallCtrlPage
-                      showContactDisplayPlaceholder={false}
-                      sourceIcons={sourceIcons}
-                      getAvatarUrl={getAvatarUrl}
-                      onAdd={() => {
-                        // not supported
-                      }}
-                      onBackButtonClick={() => {
-                        phone.routerInteraction.goBack();
-                      }}
-                    />
-                  )}
-                />
-
-                <Route
-                  path="incomingcall"
-                  component={() => (
-                    <IncomingCallPage
-                      showContactDisplayPlaceholder={false}
-                      sourceIcons={sourceIcons}
-                      getAvatarUrl={getAvatarUrl}>
-
-                    </IncomingCallPage>
-                  )}
                 />
               </Route>
               <Route

@@ -75,7 +75,7 @@ export default class GlipChatForm extends Component {
         ) {
           this.props.onCallButtonClick({
             recipient: {
-              phoneNumber: '(650) 397-9121', // contact.phoneNumbers[0].phoneNumber,
+              phoneNumber: contact.phoneNumbers[0].phoneNumber,
               name: contact.name
             },
             personId: member.id
