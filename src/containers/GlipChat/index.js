@@ -33,7 +33,8 @@ function mapToFunctions(_, {
     dateTimeFormat,
     routerInteraction,
     dialerUI,
-    call
+    call,
+    store
   },
   dateTimeFormatter = time =>
     dateTimeFormat.formatDateTime({ utcTimestamp: time }),
@@ -62,11 +63,15 @@ function mapToFunctions(_, {
       rawFile,
       groupId: glipGroups.currentGroupId,
     }),
-    openCallPageClick: ({ recipient, personId }) => {
+    openCallPageClick: ({ recipient }) => {
       if (call.isIdle && recipient) {
-        routerInteraction.push('/glip/call');
-        dialerUI.setRecipient(recipient);
-        dialerUI.onCallButtonClick();
+        dialerUI.call({ recipient });
+        // dialerUI.onCallButtonClick();
+        store.dispatch({
+          type: 'rc-widget-glip-startCall',
+          callStarted: true,
+          direction: 'outBound'
+        });
       }
     },
     atRender: ({ id, type }) => {

@@ -9,7 +9,6 @@ import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
 import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
 import CallCtrlPage from 'ringcentral-widgets/containers/CallCtrlPage';
 import IncomingCallPage from 'ringcentral-widgets/containers/IncomingCallPage';
-import RecentActivityContainer from 'ringcentral-widgets/containers/RecentActivityContainer';
 
 import getAlertRenderer from '../../components/AlertRenderer';
 
@@ -29,6 +28,7 @@ import WelcomePage from '../WelcomePage';
 export default function App({
   phone,
   hostingUrl,
+  activeCall,
   mobile,
   icon
 }) {
@@ -49,6 +49,7 @@ export default function App({
               component={routerProps => (
                 <AppView
                   hostingUrl={hostingUrl}
+                  store={phone.store}
                 >
                   {routerProps.children}
                   <AlertContainer
@@ -151,6 +152,7 @@ export default function App({
             component={routerProps => (
               <AppView
                 hostingUrl={hostingUrl}
+                showDialerModal={activeCall}
               >
                 {routerProps.children}
                 <AlertContainer
