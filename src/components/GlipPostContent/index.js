@@ -58,8 +58,12 @@ function PostContent({ post, className, atRender }) {
       </div>
     );
   }
-  const textContent = post.text ?
-    (<Markdown text={post.text} atRender={atRender} />) : null;
+  let text = post.text;
+  if (text) {
+    text = text.replace('[code]', '```\n').replace('[/code]', '\n```\n');
+  }
+  const textContent = text ?
+    (<Markdown text={text} atRender={atRender} />) : null;
   const attachments = post.attachments ? (<Attachments attachments={post.attachments} />) : null;
   return (
     <div className={classnames(styles.root, className)}>

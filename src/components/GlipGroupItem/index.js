@@ -3,62 +3,19 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import isPicture from '../../lib/isPicture';
+import { getPostAbstract } from '../../lib/formatPost';
 
 import styles from './styles.scss';
 
 import GlipGroupAvatar from '../GlipGroupAvatar';
 import GlipGroupName from '../GlipGroupName';
 
-function simpleFormatPostText(text, atRender) {
-  if (text === undefined || text === null) {
-    return null;
-  }
-  let firstLine = text.split('\n')[0];
-  const matchedAtString = firstLine.match(/!\[:(Person|Team)\]\(\d+\)/);
-  if (matchedAtString) {
-    const atString = matchedAtString[0];
-    const id = atString.match(/\d+/)[0];
-    const type = atString.match(/!\[:\w+/)[0].replace('![:');
-    let atText;
-    if (typeof atRender === 'function') {
-      atText = atRender({ id, type });
-    } else {
-      atText = `@${id}`;
-    }
-    firstLine = firstLine.replace(/!\[:(Person|Team)\]\(\d+\)/, atText);
-    firstLine = simpleFormatPostText(firstLine, atRender);
-  }
-  return firstLine;
-}
-
-function LatestPost({ isGroup, latestPost, atRender }) {
+function LatestPost({ latestPost, members }) {
+  const isGroup = members.length > 2;
   if (!latestPost) {
     return null;
   }
-  let formatedText;
-  if (latestPost.attachments && latestPost.attachments.length > 0) {
-    const attachment = latestPost.attachments[0];
-    if (isPicture(attachment.contentUri)) {
-      formatedText = 'shared a picture';
-    } else {
-      formatedText = 'shared a file';
-    }
-  }
-
-  if (latestPost.type === 'PersonJoined') {
-    formatedText = 'joined the team';
-  }
-
-  if (latestPost.type === 'PersonsAdded') {
-    const addedPersons = latestPost.addedPersonIds.map(id =>
-      atRender({ id, type: 'Person' })
-    );
-    formatedText = `added ${addedPersons.join(' ')} to the team`;
-  }
-
-  if (!formatedText) {
-    formatedText = simpleFormatPostText(latestPost.text, atRender);
-  }
+  const formatedText = getPostAbstract(latestPost, members);
 
   if (!isGroup || !latestPost.creator) {
     return (
@@ -75,14 +32,12 @@ function LatestPost({ isGroup, latestPost, atRender }) {
 }
 
 LatestPost.propTypes = {
-  isGroup: PropTypes.bool.isRequired,
+  members: PropTypes.array.isRequired,
   latestPost: PropTypes.object,
-  atRender: PropTypes.func,
 };
 
 LatestPost.defaultProps = {
   latestPost: null,
-  atRender: undefined,
 };
 
 export default function GlipGroup({
@@ -90,7 +45,6 @@ export default function GlipGroup({
   className,
   goToGroup,
   active,
-  atRender,
 }) {
   return (
     <div
@@ -112,9 +66,8 @@ export default function GlipGroup({
           <GlipGroupName group={group} />
         </div>
         <LatestPost
-          isGroup={group.members.length > 2}
           latestPost={group.latestPost}
-          atRender={atRender}
+          members={group.detailMembers}
         />
       </div>
     </div>
@@ -126,13 +79,10 @@ GlipGroup.propTypes = {
   group: PropTypes.object,
   goToGroup: PropTypes.func.isRequired,
   active: PropTypes.bool,
-  atRender: PropTypes.func,
 };
 
 GlipGroup.defaultProps = {
   className: undefined,
   group: {},
   active: false,
-  atRender: undefined,
-
 };
