@@ -12,6 +12,17 @@ import emojiIcon from '../../assets/images/emoji.png';
 import uploadIcon from '../../assets/images/upload.png';
 import styles from './styles.scss';
 
+function isOnMobileDevice() {
+  if (typeof navigator !== 'undefined') {
+    return (
+      navigator.userAgent.match(/Android/i) ||
+      navigator.userAgent.match(/iPhone/i) ||
+      navigator.userAgent.match(/iPad/i)
+    );
+  }
+  return false;
+}
+
 export default class GlipChatForm extends Component {
   constructor(props) {
     super(props);
@@ -151,6 +162,9 @@ export default class GlipChatForm extends Component {
   }
 
   _autoFocus() {
+    if (isOnMobileDevice()) {
+      return;
+    }
     if (this._metionInput) {
       this._metionInput._editor.focusEditor();
     }
@@ -161,10 +175,11 @@ export default class GlipChatForm extends Component {
       className,
       placeholder,
       mentionStyle,
+      height,
     } = this.props;
 
     return (
-      <div className={classnames(styles.root, className)}>
+      <div className={classnames(styles.root, className)} style={{ height }} >
         <div className={styles.tools}>
           <Tooltip
             placement="top"
@@ -186,7 +201,7 @@ export default class GlipChatForm extends Component {
         </div>
         <form onSubmit={this._onSubmit}>
           <Mention
-            style={mentionStyle}
+            style={{ width: '100%', height: (height - 35), lineHeight: '18px' }}
             className={styles.mentionInput}
             ref={(input) => { this._metionInput = input; }}
             placeholder={placeholder}
@@ -201,6 +216,7 @@ export default class GlipChatForm extends Component {
             mode="immutable"
             onKeyDown={this._onTextAreaKeyDown}
           />
+          <input type="submit" className={styles.submit} />
         </form>
       </div>
     );
@@ -217,6 +233,7 @@ GlipChatForm.propTypes = {
   groupId: PropTypes.string,
   members: PropTypes.array,
   mentionStyle: PropTypes.object,
+  height: PropTypes.number,
 };
 
 GlipChatForm.defaultProps = {
@@ -226,5 +243,5 @@ GlipChatForm.defaultProps = {
   placeholder: undefined,
   groupId: undefined,
   members: [],
-  mentionStyle: { width: '100%', height: 70, lineHeight: '18px' }
+  height: 120
 };
