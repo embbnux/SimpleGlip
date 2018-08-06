@@ -19,3 +19,12 @@ input {
   @include full-size;
   background-color: $app-background-color;
 }
+
+
+.active-call-modal.Modal_container {
+  .Modal_modal {
+    height: 60%!important;
+    max-height: none!important;
+  }
+
+}

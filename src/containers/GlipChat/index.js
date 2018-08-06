@@ -9,12 +9,14 @@ function mapToProps(_, {
   phone: {
     glipGroups,
     glipPosts,
+    glipContacts,
   },
 }) {
   return {
     groupId: params.groupId,
     group: glipGroups.currentGroup,
     posts: glipGroups.currentGroupPosts,
+    glipContacts: glipContacts.contacts,
     textValue:
       (
         glipPosts.postInputs[params.groupId] &&
@@ -30,6 +32,7 @@ function mapToFunctions(_, {
     glipPersons,
     dateTimeFormat,
     routerInteraction,
+    call,
   },
   dateTimeFormatter = time =>
     dateTimeFormat.formatDateTime({ utcTimestamp: time }),
@@ -58,6 +61,11 @@ function mapToFunctions(_, {
       rawFile,
       groupId: glipGroups.currentGroupId,
     }),
+    openCallPageClick: ({ recipient }) => {
+      if (call.isIdle && recipient) {
+        call.call({ recipient, phoneNumber: recipient.phoneNumber });
+      }
+    },
     atRender: ({ id, type }) => {
       let name = id;
       if (type === 'Team') {

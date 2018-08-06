@@ -1,5 +1,6 @@
 import RcModule from 'ringcentral-integration/lib/RcModule';
 import { Module } from 'ringcentral-integration/lib/di';
+import { addPhoneToContact } from 'ringcentral-integration/lib/contactHelper';
 import getter from 'ringcentral-integration/lib/getter';
 import { createSelector } from 'reselect';
 
@@ -10,6 +11,7 @@ import getReducer from './getReducer';
   deps: [
     'AccountExtension',
     'GlipPersons',
+    'AccountPhoneNumber',
     { dep: 'GlipContactsOptions', optional: true }
   ]
 })
@@ -17,6 +19,7 @@ export default class GlipContacts extends RcModule {
   constructor({
     accountExtension,
     glipPersons,
+    accountPhoneNumber,
     ...options,
   }) {
     super({
@@ -25,6 +28,7 @@ export default class GlipContacts extends RcModule {
     });
     this._accountExtension = accountExtension;
     this._glipPersons = glipPersons;
+    this._accountPhoneNumber = accountPhoneNumber;
 
     this._reducer = getReducer(this.actionTypes);
   }
@@ -32,8 +36,9 @@ export default class GlipContacts extends RcModule {
   @getter
   contacts = createSelector(
     () => this._accountExtension.availableExtensions,
+    () => this._accountPhoneNumber.extensionToPhoneNumberMap,
     () => this._glipPersons.personsMap,
-    (extensions, personsMap) => {
+    (extensions, extensionToPhoneNumberMap, personsMap) => {
       const newContacts = [];
       const personsMapTemp = { ...personsMap };
       extensions.forEach((extension) => {
@@ -68,8 +73,17 @@ export default class GlipContacts extends RcModule {
           type: this.sourceName,
           profileImageUrl: person.avatar,
         };
+
+        const phones = extensionToPhoneNumberMap[contact.extensionNumber];
+        if (phones && phones.length > 0) {
+          phones.forEach((phone) => {
+            addPhoneToContact(contact, phone.phoneNumber, 'directPhone');
+          });
+        }
+
         newContacts.push(contact);
       });
+
       return newContacts;
     }
   )

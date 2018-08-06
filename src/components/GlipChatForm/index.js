@@ -10,6 +10,7 @@ import EmojiSelect from '../EmojiSelect';
 
 import emojiIcon from '../../assets/images/emoji.png';
 import uploadIcon from '../../assets/images/upload.png';
+import callButtonIcon from '../../assets/images/call.png';
 import styles from './styles.scss';
 
 function isOnMobileDevice() {
@@ -29,6 +30,7 @@ export default class GlipChatForm extends Component {
     this.state = {
       defaultValue: toEditorState(props.textValue),
       suggestions: [],
+      allowWebRtcCall: this._canShowCallButton(props)
     };
     this._onInputChange = (editorState) => {
       this.setState({
@@ -71,6 +73,29 @@ export default class GlipChatForm extends Component {
     this._onSubmit = (e) => {
       this.props.onSubmit();
       e.preventDefault();
+    };
+
+    this._onCallButtonClick = (e) => {
+      e.preventDefault();
+      if (this.state.allowWebRtcCall && this.props.onCallButtonClick) {
+        const member = this.props.members[1];
+        const contact = this.props.contacts && this.props.contacts.find(it => it.id === member.id);
+
+        // TODO: only use first phone.
+        if (
+          contact &&
+          contact.phoneNumbers &&
+          contact.phoneNumbers.length > 0
+        ) {
+          this.props.onCallButtonClick({
+            recipient: {
+              phoneNumber: contact.phoneNumbers[0].phoneNumber,
+              name: contact.name
+            },
+            personId: member.id
+          });
+        }
+      }
     };
 
     this._onTextAreaKeyDown = (e) => {
@@ -124,6 +149,7 @@ export default class GlipChatForm extends Component {
       const suggestions = this._getSuggestions(nextProps.members);
       this.setState({
         suggestions,
+        allowWebRtcCall: this._canShowCallButton(nextProps)
       });
     }
     if (
@@ -132,7 +158,8 @@ export default class GlipChatForm extends Component {
       const suggestions = this._getSuggestions(nextProps.members);
       this.setState({
         suggestions,
-        defaultValue: toEditorState(nextProps.textValue)
+        defaultValue: toEditorState(nextProps.textValue),
+        allowWebRtcCall: this._canShowCallButton(nextProps)
       });
     }
     if (this.props.textValue !== nextProps.textValue) {
@@ -156,6 +183,20 @@ export default class GlipChatForm extends Component {
         this._metionInput.reset();
       }
     }
+  }
+
+  _canShowCallButton = (props) => {
+    if
+      (props.members &&
+      props.members.length === 2
+    ) {
+      const contact = props.contacts &&
+          props.contacts.find(it => it.id === props.members[1].id);
+
+      return contact && contact.phoneNumbers && contact.phoneNumbers.length > 0;
+    }
+
+    return false;
   }
 
   _getSuggestions(suggestions) {
@@ -203,6 +244,11 @@ export default class GlipChatForm extends Component {
             <img alt="emoji" src={uploadIcon} />
             <input type="file" onChange={this._onSelectFile} />
           </label>
+          { this.state.allowWebRtcCall && (
+            <label className={styles.callButton} onClick={this._onCallButtonClick}>
+              <img alt="emoji" src={callButtonIcon} />
+            </label>
+          )}
         </div>
         <form onSubmit={this._onSubmit}>
           <Mention
@@ -234,9 +280,11 @@ GlipChatForm.propTypes = {
   onTextChange: PropTypes.func,
   onSubmit: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
+  onCallButtonClick: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   groupId: PropTypes.string,
   members: PropTypes.array,
+  contacts: PropTypes.array,
   height: PropTypes.number,
 };
 
@@ -247,5 +295,6 @@ GlipChatForm.defaultProps = {
   placeholder: undefined,
   groupId: undefined,
   members: [],
+  contacts: [],
   height: 120
 };

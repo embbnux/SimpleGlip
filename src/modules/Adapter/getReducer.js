@@ -3,6 +3,7 @@ import getModuleStatusReducer from 'ringcentral-integration/lib/getModuleStatusR
 
 export default function getReducer(types) {
   return combineReducers({
-    status: getModuleStatusReducer(types),
+    status: getModuleStatusReducer(types)
   });
 }
+

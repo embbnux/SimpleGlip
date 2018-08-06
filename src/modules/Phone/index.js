@@ -31,6 +31,28 @@ import LocalForageStorage from 'ringcentral-integration/lib/LocalForageStorage';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
+import Webphone from 'ringcentral-integration/modules/Webphone';
+import ExtensionDevice from 'ringcentral-integration/modules/ExtensionDevice';
+import NumberValidate from 'ringcentral-integration/modules/NumberValidate';
+import DialingPlan from 'ringcentral-integration/modules/DialingPlan';
+import AccountInfo from 'ringcentral-integration/modules/AccountInfo';
+import AudioSettings from 'ringcentral-integration/modules/AudioSettings';
+import DialerUI from 'ringcentral-widgets/modules/DialerUI';
+import CallMonitor from 'ringcentral-integration/modules/CallMonitor';
+import Call from 'ringcentral-integration/modules/Call';
+import CallingSettings from 'ringcentral-integration/modules/CallingSettings';
+import ExtensionPhoneNumber from 'ringcentral-integration/modules/ExtensionPhoneNumber';
+import ForwardingNumber from 'ringcentral-integration/modules/ForwardingNumber';
+import DetailedPresence from 'ringcentral-integration/modules/DetailedPresence';
+import ContactSearch from 'ringcentral-integration/modules/ContactSearch';
+import AccountPhoneNumber from 'ringcentral-integration/modules/AccountPhoneNumber';
+
+
+import Softphone from 'ringcentral-integration/modules/Softphone';
+import Ringout from 'ringcentral-integration/modules/Ringout';
+
+import RegionSettings from 'ringcentral-integration/modules/RegionSettings';
+
 import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
 import GlipGroups from '../GlipGroups';
@@ -44,6 +66,24 @@ import { getPostAbstract } from '../../lib/formatPost';
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
 @ModuleFactory({
   providers: [
+    { provide: 'ExtensionDevice', useClass: ExtensionDevice },
+    { provide: 'Webphone', useClass: Webphone },
+    { provide: 'NumberValidate', useClass: NumberValidate },
+    { provide: 'RegionSettings', useClass: RegionSettings },
+    { provide: 'DialingPlan', useClass: DialingPlan },
+    { provide: 'AccountInfo', useClass: AccountInfo },
+    { provide: 'AudioSettings', useClass: AudioSettings },
+    { provide: 'DialerUI', useClass: DialerUI },
+    { provide: 'Call', useClass: Call },
+    { provide: 'CallMonitor', useClass: CallMonitor },
+    { provide: 'Softphone', useClass: Softphone },
+    { provide: 'Ringout', useClass: Ringout },
+    { provide: 'CallingSettings', useClass: CallingSettings },
+    { provide: 'DetailedPresence', useClass: DetailedPresence },
+    { provide: 'ExtensionPhoneNumber', useClass: ExtensionPhoneNumber },
+    { provide: 'ForwardingNumber', useClass: ForwardingNumber },
+    { provide: 'ContactSearch', useClass: ContactSearch },
+    { provide: 'AccountPhoneNumber', useClass: AccountPhoneNumber },
     { provide: 'Alert', useClass: Alert },
     { provide: 'Brand', useClass: Brand },
     { provide: 'Locale', useClass: Locale },

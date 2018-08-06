@@ -42,7 +42,13 @@
   margin-top: 20%;
 }
 
-.chatButton {
+.row {
+  font-size: 25px;
+  color: $night;
+  margin-top: 5%;
+}
+
+.chatButton, .callButton {
   border: none;
   outline: 0;
   background-color: $primary-color;

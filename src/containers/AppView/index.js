@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 
 import withPhone from 'ringcentral-widgets/lib/withPhone';
 import OfflineModeBadge from 'ringcentral-widgets/components/OfflineModeBadge';
+
 import Environment from '../../components/Environment';
+import GlipModalPage from '../../containers/GlipModalPage';
 
 import styles from './styles.scss';
 
@@ -12,6 +14,7 @@ function AppView(props) {
   return (
     <div className={styles.root}>
       {props.children}
+      <GlipModalPage />
 
       <OfflineModeBadge
         offline={props.offline}
@@ -41,7 +44,7 @@ AppView.propTypes = {
   currentLocale: PropTypes.string.isRequired,
   offline: PropTypes.bool.isRequired,
   showOfflineAlert: PropTypes.func.isRequired,
-  redirectUri: PropTypes.string.isRequired,
+  redirectUri: PropTypes.string.isRequired
 };
 
 AppView.defaultProps = {
@@ -72,7 +75,7 @@ export default withPhone(connect((_, {
     oAuth.proxyRetryCount > 0 ||
     rateLimiter.throttling
   ),
-  redirectUri: oAuth.redirectUri
+  redirectUri: oAuth.redirectUri,
 }), (_, {
   phone: {
     environment,
