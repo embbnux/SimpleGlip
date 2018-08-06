@@ -60,6 +60,7 @@ import GlipPosts from '../GlipPosts';
 import Adapter from '../Adapter';
 
 import Notification from '../../lib/notification';
+import { getPostAbstract } from '../../lib/formatPost';
 
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md
@@ -170,7 +171,7 @@ export default class BasePhone extends RcModule {
       const creator = this.glipPersons.personsMap[post.creatorId];
       this._notification.notify({
         title: creator && creator.firstName,
-        text: post.text,
+        text: getPostAbstract(post, []),
         icon: creator && creator.avatar,
         onClick: () => {
           this.routerInteraction.push(`/glip/groups/${post.groupId}`);

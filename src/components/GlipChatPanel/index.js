@@ -11,7 +11,16 @@ import GlipPostList from '../GlipPostList';
 import GlipChatForm from '../GlipChatForm';
 import GlipGroupName from '../GlipGroupName';
 
+const HEADER_HEIGHT = 50;
+
 export default class GlipChatPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputHeight: props.mobile ? 100 : 110,
+    };
+  }
+
   componentDidMount() {
     this.props.loadGroup(this.props.groupId);
   }
@@ -38,13 +47,14 @@ export default class GlipChatPage extends Component {
       viewProfile,
       loadNextPage,
       onBackClick,
-      glipContacts
+      glipContacts,
+      mobile,
     } = this.props;
     const spinner = showSpinner ? (<SpinnerOverlay />) : null;
     const backIcon =
-      typeof onBackClick === 'function' ? (
-        <img src={leftArrow} className={styles.backIcon} onClick={onBackClick} />
-      ) : null
+      mobile ? (
+        <img src={leftArrow} alt="Back" className={styles.backIcon} onClick={onBackClick} />
+      ) : null;
     return (
       <div
         className={classnames(
@@ -52,11 +62,14 @@ export default class GlipChatPage extends Component {
           className,
         )}
       >
-        <div className={styles.header}>
+        <div className={styles.header} style={{ height: HEADER_HEIGHT }}>
           {backIcon}
           <GlipGroupName group={group} showNumber />
         </div>
-        <div className={styles.content}>
+        <div
+          className={styles.content}
+          style={{ height: `calc(100% - ${this.state.inputHeight + HEADER_HEIGHT}px)`}}
+        >
           <GlipPostList
             posts={posts}
             atRender={atRender}
@@ -67,18 +80,19 @@ export default class GlipChatPage extends Component {
             loadNextPage={loadNextPage}
           />
         </div>
-        <div className={styles.inputArea}>
-          <GlipChatForm
-            textValue={textValue}
-            onTextChange={updateText}
-            groupId={group.id}
-            onSubmit={createPost}
-            onUploadFile={uploadFile}
-            onCallButtonClick={openCallPageClick}
-            members={group.detailMembers}
-            contacts={glipContacts}
-          />
-        </div>
+        <GlipChatForm
+          className={styles.inputArea}
+          height={this.state.inputHeight}
+          textValue={textValue}
+          onTextChange={updateText}
+          groupId={group.id}
+          onSubmit={createPost}
+          onUploadFile={uploadFile}
+          onCallButtonClick={openCallPageClick}
+          members={group.detailMembers}
+          mobile={mobile}
+          contacts={glipContacts}
+        />
         {spinner}
       </div>
     );
@@ -103,6 +117,7 @@ GlipChatPage.propTypes = {
   onBackClick: PropTypes.func,
   viewProfile: PropTypes.func.isRequired,
   loadNextPage: PropTypes.func.isRequired,
+  mobile: PropTypes.bool,
 };
 
 GlipChatPage.defaultProps = {
@@ -114,5 +129,6 @@ GlipChatPage.defaultProps = {
   textValue: '',
   showSpinner: false,
   atRender: undefined,
-  onBackClick: undefined
+  onBackClick: undefined,
+  mobile: false
 };

@@ -75,6 +75,9 @@ self.addEventListener('fetch', function (e) {
   if (e.request.url.indexOf('s3.amazonaws.com') > -1) {
     return;
   }
+  if (e.request.cache === 'only-if-cached' && e.request.mode !== 'same-origin') {
+    return;
+  }
   if (self.navigator.onLine && e.request.headers.get('accept').indexOf('application/json') > -1) {
     e.respondWith(
       fetchAndCache(e.request)

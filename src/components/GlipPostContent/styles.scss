@@ -13,6 +13,7 @@
   background: $egg;
   word-break: break-word;
   position: relative;
+  max-width: 100%;
 
   &:after {
     content: '';

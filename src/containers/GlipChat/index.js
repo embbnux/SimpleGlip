@@ -67,9 +67,10 @@ function mapToFunctions(_, {
       }
     },
     atRender: ({ id, type }) => {
-      let name;
+      let name = id;
       if (type === 'Team') {
-        name = glipGroups.currentGroup && glipGroups.currentGroup.name;
+        const group = glipGroups.allGroups.find(g => g.id === id);
+        name = group && group.name;
       } else {
         const person = glipPersons.personsMap[id];
         name = (
@@ -81,6 +82,8 @@ function mapToFunctions(_, {
         e.preventDefault();
         if (type === 'Person') {
           routerInteraction.push(`/glip/persons/${id}`);
+        } else if (type === 'Team') {
+          routerInteraction.push(`/glip/groups/${id}`);
         }
       };
       return (

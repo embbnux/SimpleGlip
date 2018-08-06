@@ -39,7 +39,6 @@ export default class GlipGroupList extends PureComponent {
           group={group}
           active={group.id === this.props.currentGroupId}
           goToGroup={() => { this.props.goToGroup(group.id); }}
-          atRender={this.props.atRender}
           className={styles.item}
         />
       </div>
@@ -72,7 +71,6 @@ GlipGroupList.propTypes = {
   groups: PropTypes.array,
   goToGroup: PropTypes.func.isRequired,
   currentGroupId: PropTypes.string,
-  atRender: PropTypes.func,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
 };
@@ -81,5 +79,4 @@ GlipGroupList.defaultProps = {
   className: undefined,
   groups: [],
   currentGroupId: undefined,
-  atRender: undefined,
 };

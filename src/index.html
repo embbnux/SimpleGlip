@@ -29,8 +29,10 @@
   </div>
   <script>
     if (navigator.serviceWorker != null) {
-      var version = '0.0.10';
-      navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
+      var version = '0.0.15';
+      navigator.serviceWorker.register('./service-worker.js', {
+        scope: '/SimpleGlip/',
+      }).then(function (registration) {
         if (localStorage.getItem('sw_version') !== version) {
           registration.update().then(function () {
             localStorage.setItem('sw_version', version);

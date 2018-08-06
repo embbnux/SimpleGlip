@@ -79,7 +79,6 @@ export default class GlipGroupsPanel extends PureComponent {
       showSpinner,
       currentPage,
       onNextPage,
-      atRender,
       goToGroup,
       filteredContacts,
       updateContactSearchFilter,
@@ -109,7 +108,6 @@ export default class GlipGroupsPanel extends PureComponent {
             currentGroupId={currentGroupId}
             onNextPage={onNextPage}
             currentPage={currentPage}
-            atRender={atRender}
             width={this.state.contentWidth}
             height={this.state.contentHeight}
           />
@@ -138,7 +136,6 @@ GlipGroupsPanel.propTypes = {
   showSpinner: PropTypes.bool,
   currentPage: PropTypes.number,
   onNextPage: PropTypes.func,
-  atRender: PropTypes.func,
   createTeam: PropTypes.func.isRequired,
   filteredContacts: PropTypes.array,
   updateContactSearchFilter: PropTypes.func.isRequired,
@@ -153,7 +150,6 @@ GlipGroupsPanel.defaultProps = {
   showSpinner: false,
   currentPage: 1,
   onNextPage: undefined,
-  atRender: undefined,
   filteredContacts: [],
   contactSearchFilter: ''
 };

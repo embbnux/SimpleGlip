@@ -3,7 +3,7 @@
 
 .root {
   @include full-size;
-  padding: 0;
+  padding: 0 20px;
 
   textarea {
     font-size: 13px;
@@ -28,13 +28,13 @@
   display: block;
   box-sizing: border-box;
   width: 100%;
-  height: 70px;
   border: none;
 }
 
 .tools {
-  height: 30px;
+  height: 35px;
   padding-top: 7px;
+  box-sizing: border-box;
 }
 
 .emoji {
@@ -94,4 +94,8 @@
     width: 17px;
     height: auto;
   }
+}
+
+.submit {
+  margin-left: -1000px;
 }

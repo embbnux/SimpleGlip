@@ -13,6 +13,17 @@ import uploadIcon from '../../assets/images/upload.png';
 import callButtonIcon from '../../assets/images/call.png';
 import styles from './styles.scss';
 
+function isOnMobileDevice() {
+  if (typeof navigator !== 'undefined') {
+    return (
+      navigator.userAgent.match(/Android/i) ||
+      navigator.userAgent.match(/iPhone/i) ||
+      navigator.userAgent.match(/iPad/i)
+    );
+  }
+  return false;
+}
+
 export default class GlipChatForm extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +33,9 @@ export default class GlipChatForm extends Component {
       allowWebRtcCall: this._canShowCallButton(props)
     };
     this._onInputChange = (editorState) => {
+      this.setState({
+        defaultValue: editorState
+      });
       if (typeof this.props.onTextChange === 'function') {
         const mentions = getMentions(editorState).map((mention) => {
           const email = mention.replace('@[', '').replace(']', '');
@@ -97,15 +111,18 @@ export default class GlipChatForm extends Component {
     };
 
     this._onSelectEmoji = (emoji) => {
-      this.setState((preState) => {
-        const nexText = preState.text ? `${preState.text} ${emoji} ` : `${emoji} `;
-        if (typeof this.props.onTextChange === 'function') {
-          this.props.onTextChange(nexText);
-        }
-        return {
-          text: nexText
-        };
+      const newText = this.props.textValue ? `${this.props.textValue} ${emoji} ` : `${emoji} `;
+      if (typeof this.props.onTextChange === 'function') {
+        this.props.onTextChange(newText);
+      }
+      this.setState({
+        defaultValue: toEditorState(newText),
       });
+      setTimeout(() => {
+        if (this._metionInput) {
+          this._metionInput.reset();
+        }
+      }, 10);
     };
 
     this._onSelectFile = (e) => {
@@ -145,7 +162,7 @@ export default class GlipChatForm extends Component {
         allowWebRtcCall: this._canShowCallButton(nextProps)
       });
     }
-    if (this.props.textValue.length > 0 && nextProps.textValue.length === 0) {
+    if (this.props.textValue !== nextProps.textValue) {
       this.setState({
         defaultValue: toEditorState(nextProps.textValue)
       });
@@ -192,6 +209,9 @@ export default class GlipChatForm extends Component {
   }
 
   _autoFocus() {
+    if (isOnMobileDevice()) {
+      return;
+    }
     if (this._metionInput) {
       this._metionInput._editor.focusEditor();
     }
@@ -201,11 +221,11 @@ export default class GlipChatForm extends Component {
     const {
       className,
       placeholder,
-      mentionStyle,
+      height,
     } = this.props;
 
     return (
-      <div className={classnames(styles.root, className)}>
+      <div className={classnames(styles.root, className)} style={{ height }} >
         <div className={styles.tools}>
           <Tooltip
             placement="top"
@@ -232,7 +252,7 @@ export default class GlipChatForm extends Component {
         </div>
         <form onSubmit={this._onSubmit}>
           <Mention
-            style={mentionStyle}
+            style={{ width: '100%', height: (height - 35), lineHeight: '18px' }}
             className={styles.mentionInput}
             ref={(input) => { this._metionInput = input; }}
             placeholder={placeholder}
@@ -247,6 +267,7 @@ export default class GlipChatForm extends Component {
             mode="immutable"
             onKeyDown={this._onTextAreaKeyDown}
           />
+          <input type="submit" className={styles.submit} />
         </form>
       </div>
     );
@@ -264,7 +285,7 @@ GlipChatForm.propTypes = {
   groupId: PropTypes.string,
   members: PropTypes.array,
   contacts: PropTypes.array,
-  mentionStyle: PropTypes.object,
+  height: PropTypes.number,
 };
 
 GlipChatForm.defaultProps = {
@@ -275,5 +296,5 @@ GlipChatForm.defaultProps = {
   groupId: undefined,
   members: [],
   contacts: [],
-  mentionStyle: { width: '100%', height: 70, lineHeight: '18px' }
+  height: 120
 };
