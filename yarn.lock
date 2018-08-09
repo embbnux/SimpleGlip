@@ -2,6 +2,20 @@
 # yarn lockfile v1
 
 
+"@ringcentral-integration/glip-widgets@https://github.com/embbnux/ringcentral-js-widget#glip-widgets-release":
+  version "0.0.1"
+  resolved "https://github.com/embbnux/ringcentral-js-widget#61f274805afc5407b317eb07acc4846b13f0df54"
+  dependencies:
+    classnames "^2.2.5"
+    core-js "^2.5.6"
+    immutable "^3.7.4"
+    prop-types "^15.5.10"
+    ramda "^0.25.0"
+    rc-editor-mention "https://github.com/embbnux/editor-mention#release"
+    react-emojione "^5.0.0"
+    react-markdown "^3.1.4"
+    react-virtualized "^9.19.1"
+
 "@ringcentral-integration/i18n@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@ringcentral-integration/i18n/-/i18n-2.0.0.tgz#df3f98ff16336b6380f26b470fbef308db64b334"
@@ -3456,10 +3470,6 @@ interpret@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.3.tgz#cbc35c62eeee73f19ab7b10a801511401afc0f90"
 
-intl@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/intl/-/intl-1.2.5.tgz#82244a2190c4e419f8371f5aa34daa3420e2abde"
-
 invariant@^2.0.0, invariant@^2.1.0, invariant@^2.2.0, invariant@^2.2.1, invariant@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.2.tgz#9e1f56ac0acdb6bf303306f338be3b204ae60360"
@@ -5664,7 +5674,7 @@ react-transition-group@^2.2.0, react-transition-group@^2.2.1:
     prop-types "^15.5.8"
     warning "^3.0.0"
 
-react-virtualized@^9.19.1, react-virtualized@^9.20.1:
+react-virtualized@^9.19.1:
   version "9.20.1"
   resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.20.1.tgz#02dc08fe9070386b8c48e2ac56bce7af0208d22d"
   dependencies:
@@ -6034,9 +6044,9 @@ ringcentral-client@^1.0.0-beta.1:
     form-data "^2.1.2"
     isomorphic-fetch "^2.2.1"
 
-ringcentral-integration@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/ringcentral-integration/-/ringcentral-integration-0.8.1.tgz#b4aa4119ab87dd0324efaa31c5fe382278e4027c"
+"ringcentral-integration@https://github.com/ringcentral/ringcentral-js-widgets#commons-release":
+  version "0.8.3"
+  resolved "https://github.com/ringcentral/ringcentral-js-widgets#1d1fcf00d013df1d1f085b2fd828e5da2203e316"
   dependencies:
     file-loader "^1.1.11"
     json-mask "^0.3.8"
@@ -6057,9 +6067,9 @@ ringcentral-web-phone@^0.4.5:
   dependencies:
     sip.js "^0.7.8"
 
-ringcentral-widgets@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/ringcentral-widgets/-/ringcentral-widgets-0.8.1.tgz#ddb42d2d8c19fe57bccb148ce2a1acf0fa4185fa"
+"ringcentral-widgets@https://github.com/ringcentral/ringcentral-js-widgets#widgets-release":
+  version "0.8.3"
+  resolved "https://github.com/ringcentral/ringcentral-js-widgets#7707680622e89ba38044a243c0bb656e3dfe6064"
   dependencies:
     animate.css "^3.5.2"
     classnames "^2.2.5"

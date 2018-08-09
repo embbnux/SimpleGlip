@@ -6,6 +6,8 @@ import { hashHistory } from 'react-router';
 import { ModuleFactory } from 'ringcentral-integration/lib/di';
 import RcModule from 'ringcentral-integration/lib/RcModule';
 
+import { getPostAbstract } from '@ringcentral-integration/glip-widgets/lib/formatPost';
+
 import Alert from 'ringcentral-integration/modules/Alert';
 import Brand from 'ringcentral-integration/modules/Brand';
 
@@ -25,20 +27,18 @@ import Auth from 'ringcentral-integration/modules/Auth';
 import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
 import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
 import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
-// import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
-// import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
+import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
+import GlipPosts from 'ringcentral-integration/modules/GlipPosts';
 import LocalForageStorage from 'ringcentral-integration/lib/LocalForageStorage';
 
 import RouterInteraction from 'ringcentral-widgets/modules/RouterInteraction';
 
 import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
-import GlipGroups from '../GlipGroups';
-import GlipPosts from '../GlipPosts';
+
 import Adapter from '../Adapter';
 
 import Notification from '../../lib/notification';
-import { getPostAbstract } from '../../lib/formatPost';
 
 // user Dependency Injection with decorator to create a phone class
 // https://github.com/ringcentral/ringcentral-js-integration-commons/blob/master/docs/dependency-injection.md

@@ -5,8 +5,9 @@ import classnames from 'classnames';
 import SpinnerOverlay from 'ringcentral-widgets/components/SpinnerOverlay';
 import Button from 'ringcentral-widgets/components/Button';
 
-import defaultAvatar from '../../assets/images/default_avatar.png';
-import leftArrow from '../../assets/images/left_arrow.png';
+import defaultAvatar from '@ringcentral-integration/glip-widgets/assets/images/default_avatar.png';
+import leftArrow from '@ringcentral-integration/glip-widgets/assets/images/left_arrow.png';
+
 import styles from './styles.scss';
 
 export default class PersonProfile extends Component {

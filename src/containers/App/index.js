@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute } from 'react-router';
+import { Router, Route } from 'react-router';
 
 import PhoneProvider from 'ringcentral-widgets/lib/PhoneProvider';
 
 import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
 import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
+import GlipGroups from '@ringcentral-integration/glip-widgets/containers/GlipGroups';
+import GlipChat from '@ringcentral-integration/glip-widgets/containers/GlipChat';
 
 import getAlertRenderer from '../../components/AlertRenderer';
 
@@ -15,8 +17,6 @@ import AppView from '../AppView';
 import MobileView from '../MobileView';
 import SideView from '../../components/SideView';
 
-import GlipGroups from '../GlipGroups';
-import GlipChat from '../GlipChat';
 import GlipPersonProfile from '../GlipPersonProfile';
 import GlipContactDetail from '../GlipContactDetail';
 import GlipSettings from '../GlipSettings';
@@ -59,7 +59,15 @@ export default function App({
               >
                 <Route
                   path="/glip"
-                  component={() => <GlipGroups mobile={mobile} />}
+                  component={
+                    () =>
+                      <GlipGroups
+                        hiddenCurrentGroup
+                        onSelectGroup={(id) => {
+                          phone.routerInteraction.push(`/glip/groups/${id}`);
+                        }}
+                      />
+                  }
                 />
                 <Route
                   path="/contacts"
@@ -93,6 +101,16 @@ export default function App({
                       onBackClick={() => {
                         phone.routerInteraction.push('/glip');
                       }}
+                      onViewPersonProfile={
+                        (id) => {
+                          phone.routerInteraction.push(`/glip/persons/${id}`);
+                        }
+                      }
+                      onViewGroup={
+                        (id) => {
+                          phone.routerInteraction.push(`/glip/groups/${id}`);
+                        }
+                      }
                     />
                   )
                 }
@@ -147,7 +165,16 @@ export default function App({
                 path="/glip"
                 component={routerProps => (
                   <SideView
-                    side={<GlipGroups />}
+                    side={
+                      <GlipGroups
+                        hiddenCurrentGroup={
+                          routerProps.location.pathname.indexOf('/glip/groups') === -1
+                        }
+                        onSelectGroup={(id) => {
+                          phone.routerInteraction.push(`/glip/groups/${id}`);
+                        }}
+                      />
+                    }
                   >
                     {routerProps.children}
                   </SideView>
@@ -164,7 +191,19 @@ export default function App({
                   path="groups/:groupId"
                   component={
                     routerProps => (
-                      <GlipChat params={routerProps.params} />
+                      <GlipChat
+                        params={routerProps.params}
+                        onViewPersonProfile={
+                          (id) => {
+                            phone.routerInteraction.push(`/glip/persons/${id}`);
+                          }
+                        }
+                        onViewGroup={
+                          (id) => {
+                            phone.routerInteraction.push(`/glip/groups/${id}`);
+                          }
+                        }
+                      />
                     )
                   }
                 />
