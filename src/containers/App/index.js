@@ -96,8 +96,8 @@ export default function App({
                 component={
                   routerProps => (
                     <GlipChat
+                      mobile
                       params={routerProps.params}
-                      mobile={mobile}
                       onBackClick={() => {
                         phone.routerInteraction.push('/glip');
                       }}
