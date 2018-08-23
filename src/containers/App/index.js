@@ -192,6 +192,7 @@ export default function App({
                   component={
                     routerProps => (
                       <GlipChat
+                        mobile={false}
                         params={routerProps.params}
                         onViewPersonProfile={
                           (id) => {
@@ -242,4 +243,5 @@ export default function App({
 App.propTypes = {
   phone: PropTypes.object.isRequired,
   hostingUrl: PropTypes.string.isRequired,
+  mobile: PropTypes.bool.isRequired,
 };
