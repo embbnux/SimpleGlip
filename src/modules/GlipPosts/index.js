@@ -17,13 +17,14 @@ export default class NewGlipPosts extends GlipPosts {
         glipPostsRegExp.test(message.event) ||
         glipGroupRegExp.test(message.event)
       ) &&
-      message.body
+      message.body &&
+      message.body.eventType
     ) {
       const {
         eventType,
         ...post
       } = message.body;
-      if (eventType.indexOf('Post') !== 0) {
+      if (eventType && eventType.indexOf('Post') !== 0) {
         return;
       }
       this.store.dispatch({

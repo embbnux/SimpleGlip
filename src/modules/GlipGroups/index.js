@@ -11,7 +11,8 @@ export default class NewGlipGroups extends GlipGroups {
     if (
       message &&
       glipGroupRegExp.test(message.event) &&
-      message.body
+      message.body &&
+      message.body.eventType
     ) {
       const {
         eventType,
