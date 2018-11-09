@@ -29,7 +29,7 @@
   </div>
   <script>
     if (navigator.serviceWorker != null) {
-      var version = '0.0.16';
+      var version = '0.0.17';
       navigator.serviceWorker.register('./service-worker.js', {
         scope: '/SimpleGlip/',
       }).then(function (registration) {
@@ -38,6 +38,8 @@
             localStorage.setItem('sw_version', version);
           });
         }
+      }).catch(function (error) {
+        console.error(error);
       });
     }
   </script>
