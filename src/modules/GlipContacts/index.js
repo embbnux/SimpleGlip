@@ -8,22 +8,22 @@ import getReducer from './getReducer';
 
 @Module({
   deps: [
-    'AccountExtension',
+    'AccountDirectory',
     'GlipPersons',
     { dep: 'GlipContactsOptions', optional: true }
   ]
 })
 export default class GlipContacts extends RcModule {
   constructor({
-    accountExtension,
+    accountDirectory,
     glipPersons,
-    ...options,
+    ...options
   }) {
     super({
       ...options,
       actionTypes,
     });
-    this._accountExtension = accountExtension;
+    this._accountDirectory = accountDirectory;
     this._glipPersons = glipPersons;
 
     this._reducer = getReducer(this.actionTypes);
@@ -31,7 +31,7 @@ export default class GlipContacts extends RcModule {
 
   @getter
   contacts = createSelector(
-    () => this._accountExtension.availableExtensions,
+    () => this._accountDirectory.availableExtensions,
     () => this._glipPersons.personsMap,
     (extensions, personsMap) => {
       const newContacts = [];
@@ -88,7 +88,7 @@ export default class GlipContacts extends RcModule {
 
   _shouldInit() {
     return (
-      this._accountExtension.ready &&
+      this._accountDirectory.ready &&
       this._glipPersons.ready &&
       this.pending
     );
@@ -97,7 +97,7 @@ export default class GlipContacts extends RcModule {
   _shouldReset() {
     return (
       (
-        !this._accountExtension.ready ||
+        !this._accountDirectory.ready ||
         !this._glipPersons.ready
       ) &&
       this.ready

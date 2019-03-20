@@ -19,7 +19,7 @@ export default class Adapter extends RcModule {
     auth,
     glipGroups,
     routerInteraction,
-    ...options,
+    ...options
   }) {
     super({
       actionTypes,

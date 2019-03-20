@@ -17,7 +17,7 @@ import GlobalStorage from 'ringcentral-integration/modules/GlobalStorage';
 import Locale from 'ringcentral-integration/modules/Locale';
 import RateLimiter from 'ringcentral-integration/modules/RateLimiter';
 import Storage from 'ringcentral-integration/modules/Storage';
-import AccountExtension from 'ringcentral-integration/modules/AccountExtension';
+import AccountDirectory from 'ringcentral-integration/modules/AccountDirectory';
 import Subscription from 'ringcentral-integration/modules/Subscription';
 import ExtensionInfo from 'ringcentral-integration/modules/ExtensionInfo';
 import TabManager from 'ringcentral-integration/modules/TabManager';
@@ -57,7 +57,7 @@ import Notification from '../../lib/notification';
     { provide: 'Storage', useClass: Storage },
     { provide: 'RateLimiter', useClass: RateLimiter },
     { provide: 'Subscription', useClass: Subscription },
-    { provide: 'AccountExtension', useClass: AccountExtension },
+    { provide: 'AccountDirectory', useClass: AccountDirectory },
     { provide: 'RolesAndPermissions', useClass: RolesAndPermissions },
     { provide: 'ExtensionInfo', useClass: ExtensionInfo },
     { provide: 'Contacts', useClass: Contacts },
@@ -109,6 +109,16 @@ import Notification from '../../lib/notification';
         disableAllowInactiveTabsWrite: true,
       },
       spread: true
+    },
+    {
+      provide: 'AccountDirectoryOptions',
+      useValue: {
+        polling: true,
+        disableCache: false,
+        needCheckStatus: false,
+        showNotActivated: true,
+      },
+      spread: true,
     },
   ]
 })

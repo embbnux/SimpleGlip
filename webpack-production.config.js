@@ -21,24 +21,17 @@ if (fs.existsSync(apiConfigFile)) {
 const version = packageConfig.version;
 
 const config = {
+  mode: 'production',
   entry: {
-    index: './src/index.js',
-    proxy: './src/proxy.js',
-    redirect: './src/redirect.js',
+    index: ['@babel/polyfill', './src/index.js'],
+    proxy: ['@babel/polyfill', './src/proxy.js'],
+    redirect: ['@babel/polyfill', './src/redirect.js'],
   },
   output: {
     path: buildPath,
     filename: '[name].js',
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      output: {
-        comments: false,
-      },
-    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),

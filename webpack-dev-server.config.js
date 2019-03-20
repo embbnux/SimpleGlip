@@ -20,10 +20,11 @@ if (fs.existsSync(apiConfigFile)) {
 const version = packageConfig.version;
 
 const config = {
+  mode: 'development',
   entry: {
-    index: './src/index.js',
-    proxy: './src/proxy.js',
-    redirect: './src/redirect.js',
+    index: ['@babel/polyfill', './src/index.js'],
+    proxy: ['@babel/polyfill', './src/proxy.js'],
+    redirect: ['@babel/polyfill', './src/redirect.js'],
   },
   devServer: {
     contentBase: buildPath,
@@ -70,8 +71,15 @@ const config = {
         test: /\.svg/,
         exclude: /font|src(\/|\\)assets(\/|\\)images/,
         use: [
-          'babel-loader',
-          'react-svg-loader',
+          {
+            loader: 'babel-loader'
+          },
+          {
+            loader: 'react-svg-loader',
+            options: {
+              jsx: true
+            }
+          }
         ],
       },
       {
