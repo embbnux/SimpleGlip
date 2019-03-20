@@ -70,8 +70,7 @@
     "whatwg-fetch": "^2.0.3"
   },
   "resolutions": {
-    "immutable": "3.7.6",
-    "@babel/core": "7.3.4"
+    "immutable": "3.7.6"
   },
   "engines": {
     "node": ">=8"
