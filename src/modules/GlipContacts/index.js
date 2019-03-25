@@ -45,13 +45,16 @@ export default class GlipContacts extends RcModule {
         if (glipPerson) {
           delete personsMapTemp[extension.id];
         }
+        let name = extension.name;
+        if (!name) {
+          name = `${extension.firstName || '' } ${extension.lastName || '' }`
+        }
         const contact = {
           id: `${extension.id}`,
-          name: extension.name,
-          extensionNumber: extension.ext,
-          phoneNumbers: [{ phoneNumber: extension.ext, phoneType: 'extension' }],
+          name,
+          extensionNumber: extension.extensionNumber,
+          phoneNumbers: [{ phoneNumber: extension.extensionNumber, phoneType: 'extension' }],
           emails: extension.contact ? [extension.contact.email] : [],
-          ...extension.contact,
           ...glipPerson,
           type: this.sourceName,
           profileImageUrl: glipPerson && glipPerson.avatar,
