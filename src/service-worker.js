@@ -55,6 +55,9 @@ self.addEventListener('fetch', function (e) {
   if (e.request.url.indexOf('pubnub.com') > -1) {
     return;
   }
+  if (e.request.url.indexOf('pndsn.com') > -1) {
+    return;
+  }
   if (e.request.url.indexOf('manifest.json') > -1) {
     return;
   }
