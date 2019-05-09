@@ -27,6 +27,7 @@ const config = {
     redirect: ['@babel/polyfill', './src/redirect.js'],
   },
   devServer: {
+    host: '0.0.0.0',
     contentBase: buildPath,
     hot: true,
     inline: true,
