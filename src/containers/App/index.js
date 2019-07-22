@@ -26,12 +26,13 @@ export default function App({
   phone,
   hostingUrl,
   mobile,
+  showHeader,
 }) {
   if (mobile) {
     return (
       <PhoneProvider phone={phone}>
-        <Provider store={phone.store} >
-          <Router history={phone.routerInteraction.history} >
+        <Provider store={phone.store}>
+          <Router history={phone.routerInteraction.history}>
             <Route
               component={routerProps => (
                 <AppView
@@ -51,22 +52,33 @@ export default function App({
               />
               <Route
                 path="/"
-                component={routerProps => (
-                  <MobileView>
-                    {routerProps.children}
-                  </MobileView>
-                )}
+                component={(routerProps) => {
+                  if (!showHeader) {
+                    return (
+                      <div style={{ height: '100%', width: '100%'}}>
+                        {routerProps.children}
+                      </div>
+                    );
+                  }
+                  return (
+                    <MobileView>
+                      {routerProps.children}
+                    </MobileView>
+                  );
+                }}
               >
                 <Route
                   path="/glip"
                   component={
                     () =>
-                      <GlipGroups
-                        hiddenCurrentGroup
-                        onSelectGroup={(id) => {
-                          phone.routerInteraction.push(`/glip/groups/${id}`);
-                        }}
-                      />
+                      (
+                        <GlipGroups
+                          hiddenCurrentGroup
+                          onSelectGroup={(id) => {
+                            phone.routerInteraction.push(`/glip/groups/${id}`);
+                          }}
+                        />
+                      )
                   }
                 />
                 <Route
@@ -178,7 +190,8 @@ export default function App({
                   >
                     {routerProps.children}
                   </SideView>
-                )} >
+                )}
+              >
                 <Route
                   path="persons/:personId"
                   component={
@@ -244,4 +257,9 @@ App.propTypes = {
   phone: PropTypes.object.isRequired,
   hostingUrl: PropTypes.string.isRequired,
   mobile: PropTypes.bool.isRequired,
+  showHeader: PropTypes.bool,
+};
+
+App.defaultProps = {
+  showHeader: true,
 };

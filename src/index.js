@@ -23,7 +23,7 @@ const apiConfig = {
 const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
 const authorizationCode = pathParams.authorizationCode;
-
+const showHeader = pathParams.showHeader;
 let mobile;
 if (typeof pathParams.mobile === 'undefined') {
   mobile = !window.matchMedia('(min-width: 650px)').matches;
@@ -55,7 +55,7 @@ ReactDOM.render(
     phone={phone}
     hostingUrl={hostingUrl}
     mobile={mobile}
+    showHeader={showHeader !== 'false'}
   />,
   document.querySelector('div#viewport'),
 );
-
