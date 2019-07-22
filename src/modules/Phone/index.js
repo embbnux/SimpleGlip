@@ -24,7 +24,7 @@ import TabManager from 'ringcentral-integration/modules/TabManager';
 import RolesAndPermissions from 'ringcentral-integration/modules/RolesAndPermissions';
 import Contacts from 'ringcentral-integration/modules/Contacts';
 import Auth from 'ringcentral-integration/modules/Auth';
-import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
+// import OAuth from 'ringcentral-widgets/modules/ProxyFrameOAuth';
 import GlipCompany from 'ringcentral-integration/modules/GlipCompany';
 import GlipPersons from 'ringcentral-integration/modules/GlipPersons';
 // import GlipGroups from 'ringcentral-integration/modules/GlipGroups';
@@ -37,6 +37,7 @@ import Environment from '../Environment';
 import GlipContacts from '../GlipContacts';
 import GlipGroups from '../GlipGroups';
 import GlipPosts from '../GlipPosts';
+import OAuth from '../OAuth';
 
 import Adapter from '../Adapter';
 
@@ -222,6 +223,7 @@ export function createPhone({
   stylesUri,
   mobile,
   preloadPosts,
+  authorizationCode,
 }) {
   @ModuleFactory({
     providers: [
@@ -239,7 +241,7 @@ export function createPhone({
         useValue: { name: brandConfig.appName, version: appVersion },
       },
       { provide: 'BrandOptions', useValue: brandConfig, spread: true },
-      { provide: 'OAuthOptions', useValue: { redirectUri }, spread: true },
+      { provide: 'OAuthOptions', useValue: { redirectUri, authorizationCode }, spread: true },
       { provide: 'InteractionOptions', useValue: { stylesUri }, spread: true },
       {
         provide: 'WebphoneOptions',

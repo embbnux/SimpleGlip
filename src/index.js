@@ -22,6 +22,8 @@ const apiConfig = {
 
 const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
+const authorizationCode = pathParams.authorizationCode;
+
 let mobile;
 if (typeof pathParams.mobile === 'undefined') {
   mobile = !window.matchMedia('(min-width: 650px)').matches;
@@ -39,6 +41,7 @@ const phone = createPhone({
   stylesUri,
   mobile,
   preloadPosts,
+  authorizationCode,
 });
 
 const store = createStore(phone.reducer);
