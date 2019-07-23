@@ -2,7 +2,6 @@ var cacheStorageKey = 'simple-glip-pwa';
 var offlineRequestStorageKey = 'simple-glip-pwa-offline';
 
 var cacheList = [
-  '/',
   'index.js',
   'assets/images/favicon.png',
   'assets/images/favicon192.jpg',

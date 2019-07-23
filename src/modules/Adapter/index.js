@@ -33,8 +33,13 @@ export default class Adapter extends RcModule {
     this._reducer = getReducer(this.actionTypes);
 
     this._lastGroupId = null;
+    this._currentPath = null;
   }
-  // your codes here
+
+  initialize() {
+    window.addEventListener('message', msg => this._onMessage(msg));
+    this.store.subscribe(() => this._onStateChange());
+  }
 
   // Codes on state change
   async _onStateChange() {
@@ -47,16 +52,9 @@ export default class Adapter extends RcModule {
         type: this.actionTypes.resetSuccess,
       });
     } else {
-      const match = this._routerInteraction.currentPath.match(/\/glip\/groups\/(\d+)/);
-      const groupId = match === null ? null : parseInt(match[1]);
-      if (groupId !== this._lastGroupId) {
-        this._postMessage({
-          type: 'rc-glip-group-changed',
-          groupId
-        });
-        this._lastGroupId = groupId;
-      }
+      this._onGroupChanged();
     }
+    this._checkLoginStatus();
   }
 
   _shouldInit() {
@@ -75,6 +73,51 @@ export default class Adapter extends RcModule {
       ) &&
       this.ready
     );
+  }
+
+  _onMessage(event) {
+    const data = event.data;
+    if (data) {
+      switch (data.type) {
+        case 'rc-adapter-logout':
+          if (this._auth.loggedIn) {
+            this._auth.logout();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
+  _onGroupChanged() {
+    if (this._currentPath === this._routerInteraction.currentPath) {
+      return;
+    }
+    this._currentPath = this._routerInteraction.currentPath;
+    const match = this._currentPath.match(/\/glip\/groups\/(\d+)/);
+    const groupId = match === null ? null : parseInt(match[1]);
+    if (groupId !== this._lastGroupId) {
+      this._postMessage({
+        type: 'rc-glip-group-changed',
+        groupId
+      });
+      this._lastGroupId = groupId;
+    }
+  }
+
+  _checkLoginStatus() {
+    if (!this._auth.ready) {
+      return;
+    }
+    if (this._loggedIn === this._auth.loggedIn) {
+      return;
+    }
+    this._loggedIn = this._auth.loggedIn;
+    this._postMessage({
+      type: 'rc-login-status-notify',
+      loggedIn: this._loggedIn,
+    });
   }
 
   get status() {
