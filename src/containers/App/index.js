@@ -7,6 +7,7 @@ import PhoneProvider from 'ringcentral-widgets/lib/PhoneProvider';
 
 import AlertContainer from 'ringcentral-widgets/containers/AlertContainer';
 import ContactsPage from 'ringcentral-widgets/containers/ContactsPage';
+import SimpleWelcomePage from 'ringcentral-widgets/containers/WelcomePage';
 import GlipGroups from '@ringcentral-integration/glip-widgets/containers/GlipGroups';
 import GlipChat from '@ringcentral-integration/glip-widgets/containers/GlipChat';
 
@@ -27,6 +28,7 @@ export default function App({
   hostingUrl,
   mobile,
   showHeader,
+  simpleLoginPage,
 }) {
   if (mobile) {
     return (
@@ -48,7 +50,7 @@ export default function App({
               )} >
               <Route
                 path="/"
-                component={WelcomePage}
+                component={simpleLoginPage ? SimpleWelcomePage : WelcomePage}
               />
               <Route
                 path="/"
@@ -258,8 +260,10 @@ App.propTypes = {
   hostingUrl: PropTypes.string.isRequired,
   mobile: PropTypes.bool.isRequired,
   showHeader: PropTypes.bool,
+  simpleLoginPage: PropTypes.bool,
 };
 
 App.defaultProps = {
   showHeader: true,
+  simpleLoginPage: false,
 };

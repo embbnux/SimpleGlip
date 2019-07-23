@@ -24,6 +24,7 @@ const redirectUri = defaultApiConfig.redirectUri || pathParams.redirectUri;
 const stylesUri = pathParams.stylesUri;
 const authorizationCode = pathParams.authorizationCode;
 const showHeader = pathParams.showHeader;
+const simpleLoginPage = pathParams.simpleLoginPage;
 let mobile;
 if (typeof pathParams.mobile === 'undefined') {
   mobile = !window.matchMedia('(min-width: 650px)').matches;
@@ -56,6 +57,7 @@ ReactDOM.render(
     hostingUrl={hostingUrl}
     mobile={mobile}
     showHeader={showHeader !== 'false'}
+    simpleLoginPage={!!simpleLoginPage}
   />,
   document.querySelector('div#viewport'),
 );
