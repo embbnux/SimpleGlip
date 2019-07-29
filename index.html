@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Simple Glip</title>
+  <meta name="description" content="A light Glip client">
+  <meta name="theme-color" content="#8888ff"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1, minimum-scale=1"
+  >
+  <link rel="shortcut icon" href="./assets/images/favicon.png">
+  <link rel="manifest" href="./manifest.json" />
+  <style>
+    #appLoading {
+      text-align: center;
+      padding-top: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>Please enable javascript before using this app.</noscript>
+  <div id='viewport'>
+    <p id="appLoading">
+      Loading...
+    </p>
+  </div>
+  <script>
+    if (navigator.serviceWorker != null) {
+      var version = '0.0.24';
+      navigator.serviceWorker.register('./service-worker.js', {
+        scope: '/SimpleGlip/',
+      }).then(function (registration) {
+        if (localStorage.getItem('sw_version') !== version) {
+          registration.update().then(function () {
+            localStorage.setItem('sw_version', version);
+          });
+        }
+      }).catch(function (error) {
+        console.error(error);
+      });
+    }
+  </script>
+  <script src="index.js"></script>
+</body>
+</html>
