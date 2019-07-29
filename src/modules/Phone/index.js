@@ -88,13 +88,6 @@ import Notification from '../../lib/notification';
       spread: true,
     },
     {
-      provide: 'EnvironmentOptions',
-      useFactory: ({ sdkConfig }) => sdkConfig,
-      deps: [
-        { dep: 'SdkConfig' },
-      ],
-    },
-    {
       provide: 'Client',
       useFactory: ({ sdkConfig }) =>
         new RingCentralClient(new SDK(sdkConfig)),
@@ -120,6 +113,10 @@ import Notification from '../../lib/notification';
         showNotActivated: true,
       },
       spread: true,
+    },
+    {
+      provide: 'EnvironmentOptions',
+      useFactory: () => ({}),
     },
   ]
 })

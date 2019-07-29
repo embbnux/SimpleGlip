@@ -9,13 +9,15 @@ import {
 } from './getReducer';
 
 @Module({
+  name: 'DemoEnvironment',
   deps: [
     'Client',
     'GlobalStorage',
+    'SdkConfig',
     { dep: 'EnvironmentOptions', optional: true }
   ]
 })
-export default class DomoEnvironment extends Environment {
+export default class DemoEnvironment extends Environment {
   constructor({
     client,
     globalStorage,
@@ -47,9 +49,13 @@ export default class DomoEnvironment extends Environment {
     };
     if (enabled) {
       newConfig.server = server;
-      if (!isBlank(appKey) && !isBlank(appSecret)) {
+      if (!isBlank(appKey)) {
         newConfig.appKey = appKey;
-        newConfig.appSecret = appSecret;
+        if (!isBlank(appSecret)) {
+          newConfig.appSecret = appSecret;
+        } else {
+          delete newConfig.appSecret;
+        }
       }
     }
     return newConfig;
